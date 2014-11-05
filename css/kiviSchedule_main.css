@@ -26,6 +26,9 @@
     display: none;
 }
 /*wp styles-fixes*/ 
-.post-type-post-type-team #post-body-content .titlediv{
-    height:38px;
+.post-type-post-type-team #normal-sortables,
+.post-type-post-type-hall #normal-sortables,
+.post-type-post-type-club #normal-sortables,
+.post-type-post-type-program #normal-sortables{
+    display: none;
 }

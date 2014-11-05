@@ -49,7 +49,6 @@ jQuery(document).ready(function($) {
             },
             success: function(data) {
                 var i = 0;
-                console.log(data);
                 var date = JSON.parse(data);
                 var select_club_content;
                 for (i in date) {
@@ -84,7 +83,6 @@ jQuery(document).ready(function($) {
             },
             success: function(data) {
                 var i = 0;
-                console.log(data);
                 $('#add-new-chedule-row').css('display', 'inline-block');
                 $('#schedule_table1').html(data);
             }
@@ -127,7 +125,6 @@ jQuery(document).ready(function($) {
                 console.log(response);
             },
             success: function(data) {
-                console.log(data);
             }
         });
     });

@@ -19,7 +19,7 @@ while ($query_club->have_posts()) {
             <label for="hall_city">Город</label>
         </th>
         <td>
-            <select id = "hall_city_id" name="hall_city_id">
+            <select id = "select_cities" name="hall_city_id">
                 <?php
                 foreach ($towns as $town => $town_id) {
                     @get_post_meta($post->ID, 'hall_city_id', true) == $town ? $selected = 'selected' : $selected = '';
@@ -35,14 +35,8 @@ while ($query_club->have_posts()) {
             <label for="hall_group">Группа</label>
         </th>
         <td>
-            <select id = "hall_club_id" name="hall_club_id">
-                <?php
-                foreach ($clubs as $club_id => $club) {
-                    @get_post_meta($post->ID, 'hall_club_id', true) == $club_id ? $selected = 'selected' : $selected = '';
-                    ?>
-                    <option value="<?php echo $club_id; ?>" <?php echo $selected; ?> > <?php echo $club; ?> </option>
-                <?php }
-                ?>
+            <select id = "select_clubs" name="hall_club_id">
+                <option><?php echo $clubs [@get_post_meta($post->ID, 'hall_club_id', true)]; ?></option>
             </select>
         </td>
     </tr> 

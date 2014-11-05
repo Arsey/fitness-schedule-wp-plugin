@@ -97,7 +97,7 @@ if (!class_exists('Post_Type_Program')) {
         public function add_meta_boxes() {
             // Add this metabox to every selected post
             add_meta_box(
-                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE), 'Дополнительная информация о программах', array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Дополнительная информация о программах'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

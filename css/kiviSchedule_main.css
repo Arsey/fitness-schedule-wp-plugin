@@ -25,3 +25,7 @@
 #add-new-chedule-row{
     display: none;
 }
+/*wp styles-fixes*/ 
+.post-type-post-type-team #post-body-content .titlediv{
+    height:38px;
+}

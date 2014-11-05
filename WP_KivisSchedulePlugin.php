@@ -41,7 +41,7 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
             add_action('admin_menu', array(&$this, 'add_menu'));
 
             /* ajax actions */
-            add_action("wp_ajax_fetch_clubs_by_city", array(&$this, "ajax_fetch_clubs_by_city"));
+            add_action("wp_ajax_fetch_clubs_by_city", array(&$this, "fetch_clubs_by_city"));
             add_action("wp_ajax_fetch_hall_by_club", array(&$this, "fetch_hall_by_club"));
             add_action("wp_ajax_fetch_schedule_data", array(&$this, "fetch_schedule_data"));
             add_action("wp_ajax_save_schedule_data", array(&$this, "save_schedule_data"));
@@ -106,15 +106,14 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
 
         static function fetch_clubs_by_city($city_id = null)
         {
+            /* get city_id from request if it is AJAX request */
             if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_city_id']))
                 $city_id = $_REQUEST['kivischedule_city_id'];
 
             $clubs_array = array();
 
-            $args = array(
-                'post_type' => 'post-type-club',
-            );
-
+            $args = array('post_type' => 'post-type-club');
+            /* add query by club_city_id meta key */
             if ($city_id) {
                 $args['meta_query'] = array(
                     array(
@@ -122,9 +121,9 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
                         'value' => $city_id
                     )
                 );
-                if (is_array($city_id)) {
+
+                if (is_array($city_id))
                     $args['meta_query'][0][0]['compare'] = 'IN';
-                }
             }
 
             $query = new WP_Query($args);
@@ -142,7 +141,6 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
                     $club[$key] = $arr[0];
                 }
                 $clubs_array[] = $club;
-
             }
 
             if (defined('DOING_AJAX') && DOING_AJAX)
@@ -151,24 +149,43 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
             return $clubs_array;
         }
 
-        function fetch_hall_by_club()
+        static function fetch_club_schedule($club_id)
         {
-            if (isset($_REQUEST['kivischedule_club_id'])) {
-                $club_post_id = $_REQUEST['kivischedule_club_id'];
-                $halls_array = array();
-                $query = new WP_Query(array('post_type' => 'post-type-hall'));
-                while ($query->have_posts()) {
-                    $query->the_post();
-                    $this_post_id = get_the_id();
-                    $club_id = get_post_meta($this_post_id, 'hall_club_id', true);
-                    if ($club_id == $club_post_id) {
-                        $hall_title = get_the_title();
-                        $halls_array[] = array('hall_name' => $hall_title, 'hall_id' => $this_post_id);
-                    }
-                }
-                echo json_encode($halls_array);
-                die();
+            return $halls = self::fetch_hall_by_club($club_id);
+        }
+
+        static function fetch_hall_by_club($club_id = null)
+        {
+            /* get city_id from request if it is AJAX request */
+            if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_club_id']))
+                $club_id = $_REQUEST['kivischedule_club_id'];
+
+            $halls_array = array();
+
+            $args = array('post_type' => 'post-type-hall');
+            /* add query by club_city_id meta key */
+            if ($club_id) {
+                $args['meta_query'] = array(
+                    array(
+                        'key' => 'hall_club_id',
+                        'value' => $club_id
+                    )
+                );
             }
+
+            $query = new WP_Query($args);
+            while ($query->have_posts()) {
+                $query->the_post();
+                $halls_array[] = array(
+                    'hall_name' => get_the_title(),
+                    'hall_id' => get_the_id()
+                );
+            }
+
+            if (defined('DOING_AJAX') && DOING_AJAX)
+                exit(json_encode($halls_array));
+
+            return $halls_array;
         }
 
         function fetch_schedule_data()

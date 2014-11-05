@@ -12,7 +12,7 @@ while ($query->have_posts()) {
 <table class="form-table">
     <tr valign="top">
         <th  width="30%">
-            <label for="meta_a">Город</label>
+            <label for="meta_a"><?php echo __( 'Город ' ); ?></label>
         </th>
         <td>
             <select id ="club_city_id" name="club_city_id">
@@ -28,7 +28,7 @@ while ($query->have_posts()) {
     </tr>
     <tr>
         <th>
-            <label for="club_phone"> Телефон </label>
+            <label for="club_phone"> <?php echo __( 'Телефон ' ); ?> </label>
         </th>
         <td>
             <input id="club_phone" name="club_phone" type="text" value="<?php echo @get_post_meta($post->ID, 'club_phone', true); ?>" />
@@ -36,7 +36,7 @@ while ($query->have_posts()) {
     </tr>
     <tr>
         <th>
-            <label for="club_is_active"> Активный </label>
+            <label for="club_is_active"> <?php echo __( 'Активный ' ); ?>  </label>
         </th>
         <td>
             <?php @get_post_meta($post->ID, 'club_is_active', true) !== "" ? $selected = 'checked' : $selected = ''; ?>

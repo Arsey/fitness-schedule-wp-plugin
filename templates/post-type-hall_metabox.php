@@ -16,7 +16,7 @@ while ($query_club->have_posts()) {
 <table class="form-table">
     <tr valign="top">
         <th  width="30%" class="metabox_label_column">
-            <label for="hall_city">Город</label>
+            <label for="hall_city"> <?php echo __( 'Город ' ); ?> </label>
         </th>
         <td>
             <select id = "select_cities" name="hall_city_id">
@@ -32,7 +32,7 @@ while ($query_club->have_posts()) {
     </tr>
     <tr valign="top">
         <th  width="30%" class="metabox_label_column">
-            <label for="hall_group">Группа</label>
+            <label for="hall_group"><?php echo __( 'Группа ' ); ?></label>
         </th>
         <td>
             <select id = "select_clubs" name="hall_club_id">

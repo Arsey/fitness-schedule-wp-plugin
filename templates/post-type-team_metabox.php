@@ -2,7 +2,7 @@
 <table class="form-table">
     <tr valign="top">
         <th  width="30%" class="metabox_label_column">
-            <label for="team_group">Группа</label>
+            <label for="team_group"><?php echo __( 'Группа ' ); ?></label>
         </th>
         <td>
             <?php $teams = $this->team_group?>
@@ -19,7 +19,7 @@
     </tr>
     <tr>
         <th>
-            <label for="program_description"> Описание </label>
+            <label for="program_description"> <?php echo __( 'Описание ' ); ?> </label>
         </th>
         <td>
             <textarea rows="5" cols="50" id="team_description" name="team_description" ><?php echo @get_post_meta($post->ID, 'team_description', true); ?></textarea>
@@ -27,7 +27,7 @@
     </tr>
     <tr>
         <th>
-            <label for="team_is_active"> Активный </label>
+            <label for="team_is_active"> <?php echo __( 'Активный ' ); ?> </label>
         </th>
         <td>
             <?php @get_post_meta($post->ID, 'team_is_active', true) !== "" ? $selected = 'checked' : $selected = ''; ?>

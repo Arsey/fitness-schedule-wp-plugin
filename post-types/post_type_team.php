@@ -3,7 +3,7 @@
 if (!class_exists('Post_Type_Team')) {
 
     /**
-     * A PostTypeCity class that provides 2 additional meta fields
+     * A PostTypeTeam class that provides 2 additional meta fields
      */
     class Post_Type_Team {
 
@@ -45,7 +45,11 @@ if (!class_exists('Post_Type_Team')) {
             register_post_type(self::POST_TYPE, array(
                 'labels' => array(
                     'name' => __('Команды'),
-                    'singular_name' => __('Команда')
+                    'singular_name' => __('Команда'),
+                    'add_new' => __('Добавить команду'),
+                    'view_item' => __('Просмотреть'),
+                    'search_items' => __('Найти команду'),
+                    'add_new_item' => __('Добавить команду')
                 ),
                 'public' => true,
                 'has_archive' => true,
@@ -112,5 +116,5 @@ if (!class_exists('Post_Type_Team')) {
 // END public function add_inner_meta_boxes($post)
     }
 
-    // END class Post_Type_City
-} // END if(!class_exists('Post_Type_City'))
+    // END class Post_Type_Team
+} // END if(!class_exists('Post_Type_Team'))

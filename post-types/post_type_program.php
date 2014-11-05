@@ -3,7 +3,7 @@
 if (!class_exists('Post_Type_Program')) {
 
     /**
-     * A PostTypeCity class that provides 2 additional meta fields
+     * A PostTypeProgram class that provides 2 additional meta fields
      */
     class Post_Type_Program {
 
@@ -43,7 +43,11 @@ if (!class_exists('Post_Type_Program')) {
             register_post_type(self::POST_TYPE, array(
                 'labels' => array(
                     'name' => __('Программа'),
-                    'singular_name' => __('Программы')
+                    'singular_name' => __('Программы'),
+                    'add_new' => __('Добавить программу'),
+                    'view_item' => __('Просмотреть'),
+                    'search_items' => __('Найти программу'),
+                    'add_new_item' => __('Добавить программу')
                 ),
                 'public' => true,
                 'has_archive' => true,
@@ -110,5 +114,5 @@ if (!class_exists('Post_Type_Program')) {
 // END public function add_inner_meta_boxes($post)
     }
 
-    // END class Post_Type_City
-} // END if(!class_exists('Post_Type_City'))
+    // END class Post_Type_Program
+} // END if(!class_exists('Post_Type_Program'))

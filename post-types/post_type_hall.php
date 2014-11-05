@@ -3,7 +3,7 @@
 if (!class_exists('Post_Type_Hall')) {
 
     /**
-     * A PostTypeCity class that provides 2 additional meta fields
+     * A PostTypeHall class that provides 2 additional meta fields
      */
     class Post_Type_Hall {
 
@@ -43,7 +43,11 @@ if (!class_exists('Post_Type_Hall')) {
             register_post_type(self::POST_TYPE, array(
                 'labels' => array(
                     'name' => __('Залы'),
-                    'singular_name' => __('Зал')
+                    'singular_name' => __('Зал'),
+                    'add_new' => __('Добавить зал'),
+                    'view_item' => __('Просмотреть'),
+                    'search_items' => __('Найти зал'),
+                    'add_new_item' => __('Добавить зал')
                 ),
                 'public' => true,
                 'has_archive' => true,
@@ -110,5 +114,5 @@ if (!class_exists('Post_Type_Hall')) {
 // END public function add_inner_meta_boxes($post)
     }
 
-    // END class Post_Type_City
-} // END if(!class_exists('Post_Type_City'))
+    // END class Post_Type_Hall
+} // END if(!class_exists('Post_Type_Hall'))

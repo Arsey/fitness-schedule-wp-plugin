@@ -44,7 +44,11 @@ if (!class_exists('Post_Type_Club')) {
             register_post_type(self::POST_TYPE, array(
                 'labels' => array(
                     'name' => __('Клубы'),
-                    'singular_name' => __('Клуб')
+                    'singular_name' => __('Клуб'),
+                    'add_new' => __('Добавить клуб'),
+                    'view_item' => __('Просмотреть'),
+                    'search_items' => __('Найти клуб'),
+                    'add_new_item' => __('Добавить клуб')
                 ),
                 'public' => true,
                 'has_archive' => true,

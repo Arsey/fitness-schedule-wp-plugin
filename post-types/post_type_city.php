@@ -38,7 +38,12 @@ if (!class_exists('Post_Type_City')) {
             register_post_type(self::POST_TYPE, array(
                 'labels' => array(
                     'name' => __('Города'),
-                    'singular_name' => __('Город')
+                    'singular_name' => __('Город'),
+                    'title' => __('Название Города'),
+                    'add_new' => __('Добавить город'),
+                    'view_item' => __('Просмотреть'),
+                    'search_items' => __('Найти город'),
+                    'add_new_item' => __('Добавить город')
                 ),
                 'public' => true,
                 'has_archive' => true,
@@ -88,7 +93,7 @@ if (!class_exists('Post_Type_City')) {
         public function add_meta_boxes() {
             // Add this metabox to every selected post
             add_meta_box(
-                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE),'', array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE), '', array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

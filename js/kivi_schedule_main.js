@@ -1,7 +1,9 @@
 jQuery(document).ready(function($) {
     $('.timePicker').timepicker({'timeFormat': 'H:i:s'});
+     $('#advanced-sortables .inside').append('<div id="ajaxBusy"><img src="'+img_path.template_url+'/ajax-loader.gif"></div>');
     $('#select_cities').change(function() {
         var city_id = $(this).find('option:selected').val();
+        $('#ajaxBusy').css('display', 'block'); 
         $.ajax({
             type: "POST",
             data: {
@@ -25,6 +27,7 @@ jQuery(document).ready(function($) {
                 $('#select_clubs').html("");
                 $('#select_halls').html("");
                 $('#select_clubs').html(select_club_content);
+                $('#ajaxBusy').css('display', 'none'); 
             }
         });
     }).click(function() {
@@ -33,6 +36,7 @@ jQuery(document).ready(function($) {
         }
     });
     $('#select_clubs').change(function() {
+        $('#ajaxBusy').css('display', 'block'); 
         var club_id = $(this).find('option:selected').val();
         $.ajax({
             type: "POST",
@@ -59,6 +63,7 @@ jQuery(document).ready(function($) {
                 }
                 $('#select_halls').html("");
                 $('#select_halls').html(select_club_content);
+                $('#ajaxBusy').css('display', 'none'); 
             }
         });
     }).click(function() {
@@ -133,10 +138,4 @@ jQuery(document).ready(function($) {
         $('.db_add_row').css('display', 'table-row');
     })
 
-
 });
-//$(document).ajaxStart(function(){ 
- // $('#ajaxBusy').show(); 
-//}).ajaxStop(function(){ 
- // $('#ajaxBusy').hide();
-//});

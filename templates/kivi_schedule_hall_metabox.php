@@ -16,27 +16,31 @@ while ($query_club->have_posts()) {
 <table class="form-table">
     <tr valign="top">
         <th  width="30%" class="metabox_label_column">
-            <label for="hall_city"> <?php echo __( 'City ' ); ?> </label>
+            <label for="hall_city"> <?php echo __('City '); ?> </label>
         </th>
         <td>
             <select id = "select_cities" name="hall_city_id">
                 <?php
-                foreach ($towns as $town => $town_id) {
-                    @get_post_meta($post->ID, 'hall_city_id', true) == $town ? $selected = 'selected' : $selected = '';
-                    ?>
-                    <option value="<?php echo $town; ?>" <?php echo $selected; ?> > <?php echo $town_id; ?> </option>
-                <?php }
+                if (isset($towns)) {
+                    foreach ($towns as $town => $town_id) {
+                        @get_post_meta($post->ID, 'hall_city_id', true) == $town ? $selected = 'selected' : $selected = '';
+                        ?>
+                        <option value="<?php echo $town; ?>" <?php echo $selected; ?> > <?php echo $town_id; ?> </option>
+                    <?php
+                    }
+                }
                 ?>
             </select>
         </td>
     </tr>
     <tr valign="top">
         <th  width="30%" class="metabox_label_column">
-            <label for="hall_group"><?php echo __( 'Group ' ); ?></label>
+            <label for="hall_group"><?php echo __('Group '); ?></label>
         </th>
         <td>
             <select id = "select_clubs" name="hall_club_id">
-                <option><?php echo $clubs [@get_post_meta($post->ID, 'hall_club_id', true)]; ?></option>
+                <?php isset($clubs [@get_post_meta($post->ID, 'hall_club_id', true)]) ? $selected_city = $clubs [@get_post_meta($post->ID, 'hall_club_id', true)]:$selected_city =''?>
+                <option><?php echo $selected_city ; ?></option>
             </select>
         </td>
     </tr> 

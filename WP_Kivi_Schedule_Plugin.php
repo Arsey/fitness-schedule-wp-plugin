@@ -64,6 +64,11 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             wp_enqueue_style('jonthornton-jquery-timepicker', plugins_url('/js/jonthornton-jquery-timepicker/jquery.timepicker.css', __FILE__));
             wp_enqueue_style('jquery-week-calendar-master', plugins_url('/js/jquery-week-calendar-master/jquery.weekcalendar.css', __FILE__));
             wp_enqueue_style('jkivi_schedule_main-style', plugins_url('/css/kivi_schedule_main.css', __FILE__));
+
+            $img_path = array('template_url' => plugins_url('fitness-schedule-wp-plugin/img/'));
+            wp_register_script('imgicons-config', plugins_url('/js/kivi_schedule_main.js', __FILE__), array()); // Custom scripts
+            wp_enqueue_script('imgicons-config');
+            wp_localize_script('imgicons-config', 'img_path', $img_path);
         }
 
         function add_menu() {

@@ -32,3 +32,23 @@
 .post-type-post-type-program #normal-sortables{
     display: none;
 }
+/*Simple ajax spinner*/
+
+#ajaxBusy{
+    position: absolute;
+    top:0;
+    left:0;
+    background:#333;
+    opacity:0.5;
+    width:100%;
+    height:100%;
+    z-index: 1000;
+    display:none;
+}
+#ajaxBusy img{
+    position: absolute;
+    width:20px;
+    height:20px;
+    top:0;left:0;bottom:0;right:0;
+    margin:auto;
+}

@@ -41,11 +41,13 @@ if (!class_exists('Post_Type_Program')) {
 // END public function init()
 
         /**
-         * Create the post type
+         * Create the post type and taxonomy
          */
         public function create_post_type()
         {
-            register_post_type(self::POST_TYPE, array(
+            register_post_type(
+                self::POST_TYPE,
+                array(
                     'labels' => array(
                         'name' => __('Программа'),
                         'singular_name' => __('Программы'),
@@ -58,10 +60,42 @@ if (!class_exists('Post_Type_Program')) {
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
                     'supports' => array(
-                        'title', 'thumbnail'
+                        'title',
+                        'thumbnail'
                     ),
+                    'taxonomies' => array('kiwi_schedule_program_category'),
                 )
             );
+
+            $labels = array(
+                'name' => _x('Categories', 'kiwi_schedule_program'),
+                'singular_name' => _x('Category', 'kiwi_schedule_program'),
+                'search_items' => _x('Search Categories', 'kiwi_schedule_program'),
+                'popular_items' => _x('Popular Categories', 'kiwi_schedule_program'),
+                'all_items' => _x('All Categories', 'kiwi_schedule_program'),
+                'parent_item' => _x('Parent Category', 'kiwi_schedule_program'),
+                'parent_item_colon' => _x('Parent Category:', 'kiwi_schedule_program'),
+                'edit_item' => _x('Edit Category', 'kiwi_schedule_program'),
+                'update_item' => _x('Update Category', 'kiwi_schedule_program'),
+                'add_new_item' => _x('Add New Category', 'kiwi_schedule_program'),
+                'new_item_name' => _x('New Category Name', 'kiwi_schedule_program'),
+                'separate_items_with_commas' => _x('Separate categories with commas', 'kiwi_schedule_program'),
+                'add_or_remove_items' => _x('Add or remove categories', 'kiwi_schedule_program'),
+                'choose_from_most_used' => _x('Choose from the most used categories', 'kiwi_schedule_program'),
+                'menu_name' => _x('Categories', 'kiwi_schedule_program'),
+            );
+
+            $args = array(
+                'labels' => $labels,
+                'public' => true,
+                'show_in_nav_menus' => true,
+                'show_ui' => true,
+                'show_tagcloud' => false,
+                'hierarchical' => true,
+                'query_var' => true
+            );
+
+            register_taxonomy('kiwi_schedule_program_category', array(self::POST_TYPE), $args);
         }
 
         /**

@@ -1,6 +1,6 @@
 <div id="shcedule">
     <?php
-    $query_programm = new WP_Query(array('post_type' => 'post-type-program'));
+    $query_programm = new WP_Query(array('post_type' => 'kivi_schedule-pt-program'));
     $programs = array();
     while ($query_programm->have_posts()) {
         $query_programm->the_post();
@@ -10,7 +10,7 @@
     <div id="shcedule_filters">
         <?php
         global $wpdb;
-        $query = new WP_Query(array('post_type' => 'post-type-city'));
+        $query = new WP_Query(array('post_type' => 'kivi_schedule-pt-city'));
         $towns = array();
 
         while ($query->have_posts()) {

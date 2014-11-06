@@ -1,12 +1,12 @@
 <?php
 global $wpdb;
-$query = new WP_Query(array('post_type' => 'post-type-city'));
+$query = new WP_Query(array('post_type' => 'kivi_schedule_city'));
 $towns = array();
 while ($query->have_posts()) {
     $query->the_post();
     $towns[get_the_id()] = get_the_title();
 }
-$query_club = new WP_Query(array('post_type' => 'post-type-club'));
+$query_club = new WP_Query(array('post_type' => 'kivi_schedule_club'));
 $clubs = array();
 while ($query_club->have_posts()) {
     $query_club->the_post();
@@ -16,7 +16,7 @@ while ($query_club->have_posts()) {
 <table class="form-table">
     <tr valign="top">
         <th  width="30%" class="metabox_label_column">
-            <label for="hall_city"> <?php echo __( 'Город ' ); ?> </label>
+            <label for="hall_city"> <?php echo __( 'City ' ); ?> </label>
         </th>
         <td>
             <select id = "select_cities" name="hall_city_id">
@@ -32,7 +32,7 @@ while ($query_club->have_posts()) {
     </tr>
     <tr valign="top">
         <th  width="30%" class="metabox_label_column">
-            <label for="hall_group"><?php echo __( 'Группа ' ); ?></label>
+            <label for="hall_group"><?php echo __( 'Group ' ); ?></label>
         </th>
         <td>
             <select id = "select_clubs" name="hall_club_id">

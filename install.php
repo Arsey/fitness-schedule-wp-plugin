@@ -1,8 +1,8 @@
 <?php
 
-function kiviSchedule_install() {
-    global $wpdb, $kiviSchedule_settings;
-    $table_create_query = 'CREATE TABLE IF NOT EXISTS ' . $kiviSchedule_settings['kiviSchedule_table'] . ' (
+function kivi_schedule_install() {
+    global $wpdb, $kivi_schedule_settings;
+    $table_create_query = 'CREATE TABLE IF NOT EXISTS ' . $kivi_schedule_settings['kivi_schedule_table'] . ' (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
    `time` TIME NOT NULL,
   `hall_id` INT(11) NOT NULL,

@@ -7,7 +7,7 @@ if (!class_exists('Post_Type_Club')) {
      */
     class Post_Type_Club {
 
-        const POST_TYPE = "post-type-club";
+        const POST_TYPE = "kivi_schedule_club";
 
         private $_meta = array(
             'club_city_id',
@@ -43,12 +43,12 @@ if (!class_exists('Post_Type_Club')) {
         public function create_post_type() {
             register_post_type(self::POST_TYPE, array(
                 'labels' => array(
-                    'name' => __('Клубы'),
-                    'singular_name' => __('Клуб'),
-                    'add_new' => __('Добавить клуб'),
-                    'view_item' => __('Просмотреть'),
-                    'search_items' => __('Найти клуб'),
-                    'add_new_item' => __('Добавить клуб')
+                    'name' => __('Clubs'),
+                    'singular_name' => __('Club'),
+                    'add_new' => __('Add Club'),
+                    'view_item' => __('View'),
+                    'search_items' => __('Find Club'),
+                    'add_new_item' => __('Add Club')
                 ),
                 'public' => true,
                 'has_archive' => true,
@@ -98,7 +98,7 @@ if (!class_exists('Post_Type_Club')) {
         public function add_meta_boxes() {
             // Add this metabox to every selected post
             add_meta_box(
-                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Информация о клубах'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional club info'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

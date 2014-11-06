@@ -135,8 +135,8 @@ jQuery(document).ready(function($) {
 
 
 });
-$(document).ajaxStart(function(){ 
+//$(document).ajaxStart(function(){ 
  // $('#ajaxBusy').show(); 
-}).ajaxStop(function(){ 
+//}).ajaxStop(function(){ 
  // $('#ajaxBusy').hide();
-});
+//});

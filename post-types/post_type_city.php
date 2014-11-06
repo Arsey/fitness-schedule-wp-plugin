@@ -7,7 +7,7 @@ if (!class_exists('Post_Type_City')) {
      */
     class Post_Type_City {
 
-        const POST_TYPE = "post-type-city";
+        const POST_TYPE = "kivi_schedule_city";
 
         /**
          * The Constructor
@@ -37,13 +37,13 @@ if (!class_exists('Post_Type_City')) {
         public function create_post_type() {
             register_post_type(self::POST_TYPE, array(
                 'labels' => array(
-                    'name' => __('Города'),
-                    'singular_name' => __('Город'),
-                    'title' => __('Название Города'),
-                    'add_new' => __('Добавить город'),
-                    'view_item' => __('Просмотреть'),
-                    'search_items' => __('Найти город'),
-                    'add_new_item' => __('Добавить город')
+                    'name' => __('Cities'),
+                    'singular_name' => __('City'),
+                    'title' => __('City Name'),
+                    'add_new' => __('Add City'),
+                    'view_item' => __('View'),
+                    'search_items' => __('Find City'),
+                    'add_new_item' => __('Add City')
                 ),
                 'public' => true,
                 'has_archive' => true,

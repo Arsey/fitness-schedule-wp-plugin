@@ -7,7 +7,7 @@ if (!class_exists('Post_Type_Hall')) {
      */
     class Post_Type_Hall {
 
-        const POST_TYPE = "post-type-hall";
+        const POST_TYPE = "kivi_schedule_hall";
 
         private $_meta = array(
             'hall_club_id',
@@ -42,12 +42,12 @@ if (!class_exists('Post_Type_Hall')) {
         public function create_post_type() {
             register_post_type(self::POST_TYPE, array(
                 'labels' => array(
-                    'name' => __('Залы'),
-                    'singular_name' => __('Зал'),
-                    'add_new' => __('Добавить зал'),
-                    'view_item' => __('Просмотреть'),
-                    'search_items' => __('Найти зал'),
-                    'add_new_item' => __('Добавить зал')
+                    'name' => __('Halls'),
+                    'singular_name' => __('Hall'),
+                    'add_new' => __('Add Hall'),
+                    'view_item' => __('View'),
+                    'search_items' => __('Find Hall'),
+                    'add_new_item' => __('Add Hall')
                 ),
                 'public' => true,
                 'has_archive' => true,
@@ -97,7 +97,7 @@ if (!class_exists('Post_Type_Hall')) {
         public function add_meta_boxes() {
             // Add this metabox to every selected post
             add_meta_box(
-                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Зал'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Hall'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

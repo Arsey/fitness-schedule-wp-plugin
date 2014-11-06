@@ -35,8 +35,10 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
             $Post_Type_Hall = new Post_Type_Hall();
 
             /* Actions */
+            add_action('init', array(&$this, 'function_init'));
             add_action('admin_enqueue_scripts', array(&$this, 'add_style_js'));
             add_action('admin_menu', array(&$this, 'add_menu'));
+                        add_filter('nav_menu_css_class', array(&$this, 'special_nav_class'), 10, 2);
 
             /* ajax actions */
             add_action("wp_ajax_fetch_clubs_by_city", array(&$this, "fetch_clubs_by_city"));
@@ -47,9 +49,6 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
             /* ajax action that returns the list of cities */
             add_action("wp_ajax_nopriv_ksp_fetch_cities", array(&$this, "fetch_cities"));
             add_action("wp_ajax_ksp_fetch_cities", array(&$this, "ajax_fetch_cities"));
-            
-            /*Filters*/
-            add_filter('nav_menu_css_class' , array(&$this,'special_nav_class') , 10 , 2);
         }
 
         function add_style_js() {
@@ -81,9 +80,15 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
             include_once 'view/schedule_post_types.php';
         }
 
-        function special_nav_class($classes, $item) {
-            if (in_array('current-menu-item', $classes)) {
-                $classes[] = 'active ';
+        function function_init() {
+
+        }
+
+        function special_nav_class() {
+            echo 'atat';
+            echo $item;
+            if (is_single() && $item->title == 'post-type-city') {
+                $classes[] = 'active';
             }
             return $classes;
         }

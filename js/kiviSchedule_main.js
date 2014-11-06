@@ -135,3 +135,8 @@ jQuery(document).ready(function($) {
 
 
 });
+$(document).ajaxStart(function(){ 
+ // $('#ajaxBusy').show(); 
+}).ajaxStop(function(){ 
+ // $('#ajaxBusy').hide();
+});

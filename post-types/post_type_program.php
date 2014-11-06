@@ -5,7 +5,8 @@ if (!class_exists('Post_Type_Program')) {
     /**
      * A PostTypeProgram class that provides 2 additional meta fields
      */
-    class Post_Type_Program {
+    class Post_Type_Program
+    {
 
         const POST_TYPE = "post-type-program";
 
@@ -17,7 +18,8 @@ if (!class_exists('Post_Type_Program')) {
         /**
          * The Constructor
          */
-        public function __construct() {
+        public function __construct()
+        {
             // register actions
             add_action('init', array(&$this, 'init'));
             add_action('admin_init', array(&$this, 'admin_init'));
@@ -28,7 +30,8 @@ if (!class_exists('Post_Type_Program')) {
         /**
          * hook into WP's init action hook
          */
-        public function init() {
+        public function init()
+        {
             // Initialize Post Type
             $this->create_post_type();
             add_action('save_post', array(&$this, 'save_post'));
@@ -39,30 +42,32 @@ if (!class_exists('Post_Type_Program')) {
         /**
          * Create the post type
          */
-        public function create_post_type() {
+        public function create_post_type()
+        {
             register_post_type(self::POST_TYPE, array(
-                'labels' => array(
-                    'name' => __('Программа'),
-                    'singular_name' => __('Программы'),
-                    'add_new' => __('Добавить программу'),
-                    'view_item' => __('Просмотреть'),
-                    'search_items' => __('Найти программу'),
-                    'add_new_item' => __('Добавить программу')
-                ),
-                'public' => true,
-                'has_archive' => true,
-                'show_in_menu' => 'time_table',
-                'supports' => array(
-                    'title', 'thumbnail',
-                ),
-                    )
+                    'labels' => array(
+                        'name' => __('Программа'),
+                        'singular_name' => __('Программы'),
+                        'add_new' => __('Добавить программу'),
+                        'view_item' => __('Просмотреть'),
+                        'search_items' => __('Найти программу'),
+                        'add_new_item' => __('Добавить программу')
+                    ),
+                    'public' => true,
+                    'has_archive' => true,
+                    'show_in_menu' => 'time_table',
+                    'supports' => array(
+                        'title', 'thumbnail', 'editor'
+                    ),
+                )
             );
         }
 
         /**
          * Save the metaboxes for this custom post type
          */
-        public function save_post($post_id) {
+        public function save_post($post_id)
+        {
             // verify if this is an auto save routine. 
             // If it is our form has not been submitted, so we dont want to do anything
             if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -84,7 +89,8 @@ if (!class_exists('Post_Type_Program')) {
         /**
          * hook into WP's admin_init action hook
          */
-        public function admin_init() {
+        public function admin_init()
+        {
             // Add metaboxes
             add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
         }
@@ -94,10 +100,11 @@ if (!class_exists('Post_Type_Program')) {
         /**
          * hook into WP's add_meta_boxes action hook
          */
-        public function add_meta_boxes() {
+        public function add_meta_boxes()
+        {
             // Add this metabox to every selected post
             add_meta_box(
-                    sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Дополнительная информация о программах'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Дополнительная информация о программах'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 
@@ -106,7 +113,8 @@ if (!class_exists('Post_Type_Program')) {
         /**
          * called off of the add meta box
          */
-        public function add_inner_meta_boxes($post) {
+        public function add_inner_meta_boxes($post)
+        {
             // Render the job order metabox
             include(sprintf("%s/../templates/%s_metabox.php", dirname(__FILE__), self::POST_TYPE));
         }

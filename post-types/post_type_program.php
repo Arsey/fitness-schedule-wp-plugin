@@ -12,7 +12,8 @@ if (!class_exists('Post_Type_Program')) {
 
         private $_meta = array(
             'program_description',
-            'program_is_active'
+            'program_is_active',
+            'program_details_link'
         );
 
         /**
@@ -57,7 +58,7 @@ if (!class_exists('Post_Type_Program')) {
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
                     'supports' => array(
-                        'title', 'thumbnail', 'editor'
+                        'title', 'thumbnail'
                     ),
                 )
             );
@@ -104,7 +105,7 @@ if (!class_exists('Post_Type_Program')) {
         {
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Дополнительная информация о программах'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional program info'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

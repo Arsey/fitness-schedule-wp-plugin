@@ -224,6 +224,37 @@ if (!class_exists('WP_KivisSchedulePlugin')) {
             return $halls_array;
         }
 
+        /**
+         * return full information about programs including meta
+         */
+        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail')
+        {
+            $programs = array();
+            $query = new WP_Query(array('post_type' => 'post-type-program'));
+            while ($query->have_posts()) {
+                $query->the_post();
+
+                $program = array(
+                    'id' => get_the_ID(),
+                    'title'=>get_the_title()
+                );
+
+                $meta = get_post_meta(get_the_ID());
+                if ($meta) {
+                    foreach ($meta as $key => $arr) {
+                        $program[$key] = $arr[0];
+                    }
+                }
+
+                if ($with_thumbnails)
+                    $program['thumbnail'] = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), $thumbnail_size);
+
+                $programs[] = $program;
+            }
+
+            return $programs;
+        }
+
         function fetch_schedule_data()
         {
             global $wpdb;

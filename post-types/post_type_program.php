@@ -9,6 +9,7 @@ if (!class_exists('Post_Type_Program')) {
     {
 
         const POST_TYPE = "kivi_schedule_prog";
+        const CAT_TAXONOMY = 'kiwi_schedule_program_category';
 
         private $_meta = array(
             'program_description',
@@ -91,11 +92,11 @@ if (!class_exists('Post_Type_Program')) {
                 'show_in_nav_menus' => true,
                 'show_ui' => true,
                 'show_tagcloud' => false,
-                'hierarchical' => true,
+                'hierarchical' => false,
                 'query_var' => true
             );
 
-            register_taxonomy('kiwi_schedule_program_category', array(self::POST_TYPE), $args);
+            register_taxonomy(self::CAT_TAXONOMY, array(self::POST_TYPE), $args);
         }
 
         /**

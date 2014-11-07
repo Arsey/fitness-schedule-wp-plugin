@@ -73,7 +73,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
         function add_menu() {
             //menu
-            add_menu_page(__('Расписание'), __('Расписание'), 'switch_themes', 'time_table', array(&$this, 'menu_kivi_schedule'));
+            add_menu_page(__('Schedule'), __('Schedule'), 'switch_themes', 'time_table', array(&$this, 'menu_kivi_schedule'));
             add_submenu_page('time_table', __('Schedule'), __('Schedule'), 'manage_options', 'kivi_schedule_city', array(&$this, 'menu_kivi_schedule'));
         }
 
@@ -89,11 +89,16 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             
         }
 
-        function special_nav_class() {
-            if (is_single() && $item->title == 'kivi_schedule_city') {
-                $classes[] = 'active';
+        function special_nav_class($css_class, $page) {
+            if (get_post_type() == 'kivi_schedule_city') {
+                if ($page->ID == get_option('page_for_posts')) {
+                    foreach ($css_class as $k => $v) {
+                        if ($v == 'current_page_parent')
+                            unset($css_class[$k]);
+                    }
+                }
             }
-            return $classes;
+            return $css_class;
         }
 
         static function fetch_cities() {

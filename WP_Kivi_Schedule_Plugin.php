@@ -89,7 +89,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             
         }
 
-        function special_nav_class() {
+        function special_nav_class($classes , $item) {
             if (is_single() && $item->title == 'kivi_schedule_city') {
                 $classes[] = 'active';
             }

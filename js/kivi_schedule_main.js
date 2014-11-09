@@ -4,6 +4,27 @@ jQuery(document).ready(function($) {
         saveSchedule(rowToSave);
     });
 
+    $('.schedule-table').tablesorter({
+        textExtraction: function(node) {
+            var $node = $(node);
+            if ($node.parents('tr').hasClass('schedule-template'))
+                return 0;
+
+            var $input = $node.find('.timePicker');
+            if ($input.length === 1) {
+                var hms = $input.val();   // your input string
+                var a = hms.split(':'); // split it at the colons
+
+                // minutes are worth 60 seconds. Hours are worth 60 minutes.
+                var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
+
+                return seconds;
+            }
+
+            return 0;
+        }
+    });
+
     $('#advanced-sortables .inside').append('<div id="ajaxBusy"><img src="' + img_path.template_url + '/ajax-loader.gif"></div>');
     $('#select_cities').change(function() {
         var city_id = $(this).find('option:selected').val();
@@ -111,6 +132,14 @@ jQuery(document).ready(function($) {
         var rowToSave = $(this).parents('tr');
         saveSchedule(rowToSave);
     });
+    $('.add-new-schedule-row').click(
+            function() {
+                var scheduleTable = $(this).parents('.hall-schedule').find('.schedule-table');
+                var template = scheduleTable.find('.schedule-template');
+                var templateToInsert = template.clone(true).removeClass('schedule-template');
+                var table_row_first = $(this).parents('.hall-schedule').find('.schedule-table tbody tr:first-child');
+                templateToInsert.insertBefore(table_row_first);
+            });
 
     function saveSchedule(current_row) {
         var schedule_id = current_row.attr('data-schedule-id');
@@ -151,11 +180,39 @@ jQuery(document).ready(function($) {
                 console.log(response);
             },
             success: function(data) {
-                console.log(data);
+                current_row.attr('data-schedule-id', data);
+
+                // TODO: trigger sort
+                var $table = current_row.parents('.schedule-table');
+                $table.trigger('update');
+                var sorting = [[0, 0]];
+                $table.trigger('sorton', [sorting]);
+                //$table.find('.headerSortDown').trigger('click');
             }
         });
     }
-
+    $('.delete-schedule-row').click(
+            function() {
+        console.log('here');
+               var schedule_id = $(this).parents('tr').attr('data-schedule-id');
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        action: 'remove_schedule',
+                        schedule_id: schedule_id
+                    },
+                    url: ajaxurl,
+                    error: function(jqXHR, textStatus, errorThrown, response) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                        console.log(response);
+                    },
+                    success: function(data) {
+                    }
+                });
+            }
+    )
     $('#add-new-chedule-row').click(function() {
         //var table_row = '<tr> <td><input type="text" name="program_time"></td> <td><input type="text" name="mon_programm"></td> <td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
         $('.db_add_row').css('display', 'table-row');

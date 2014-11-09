@@ -45,6 +45,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             add_action("wp_ajax_fetch_hall_by_club", array(&$this, "fetch_hall_by_club"));
             add_action("wp_ajax_fetch_schedule_data", array(&$this, "fetch_schedule_data"));
             add_action("wp_ajax_save_schedule_data", array(&$this, "save_schedule_data"));
+            add_action("wp_ajax_fetch_schedule_data", array(&$this, "fetch_schedule_data"));
+            add_action("wp_ajax_remove_schedule", array(&$this, "remove_schedule"));
 
             /* ajax action that returns the list of cities */
             add_action("wp_ajax_nopriv_ksp_fetch_cities", array(&$this, "fetch_cities"));
@@ -58,6 +60,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             wp_enqueue_script('date', plugins_url('/js/jquery-week-calendar-master/libs/date.js', __FILE__), array('jquery'));
             wp_enqueue_script('jquery-week-calendar-master', plugins_url('/js/jquery-week-calendar-master/jquery.weekcalendar.js', __FILE__), array('jquery', 'jquery-ui-core'));
             wp_enqueue_script('jonthornton-jquery-timepicker', plugins_url('/js/jonthornton-jquery-timepicker/jquery.timepicker.min.js', __FILE__), array('jquery'));
+            wp_enqueue_script('tablesorter', plugins_url('/js/tablesorter/jquery.tablesorter.js', __FILE__), array('jquery'));
             //wp_enqueue_script('jkivi_schedule_main', plugins_url('/js/kivi_schedule_main.js', __FILE__), array('jquery'));
             //styles
             wp_enqueue_style('jonthornton-jquery-timepicker', plugins_url('/js/jonthornton-jquery-timepicker/jquery.timepicker.css', __FILE__));
@@ -301,38 +304,14 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         static function fetch_schedule_data() {
             global $wpdb;
             global $kivi_schedule_settings;
-            /*  if (isset($_REQUEST['kivischedule_hall_id'])) {
-              $hall_id = $_REQUEST['kivischedule_hall_id'];
-              $query_programm = new WP_Query(array('post_type' => Post_Type_Program::POST_TYPE));
-              $programs = array();
-              $htmlContent = '      <tr>
-              <th>Время</th>
-              <th>Понедельник</th>
-              <th>Вторник</th>
-              <th>Среда</th>
-              <th>Четверг</th>
-              <th>Пятница</th>
-              <th>Суббота</th>
-              <th>Воскресенье</th>
-              <th></th>
-              </tr>';
-              while ($query_programm->have_posts()) {
-              $query_programm->the_post();
-              $programs[get_the_id()] = get_the_title();
-              } */
+            if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_city_id'])) {
+                
+            }
             $schedule_header = '';
-            /*  $schedule_header_data = array(
-              [0] => __('Monday'),
-              [1] => __('Tuesday'),
-              [2] => __('Wednesday'),
-              [3] => __('Thursday'),
-              [4] => __('Friday'),
-              [5] => __('Saturday'),
-              [6] => __('Sunday')
-              ); */
+
             $programs = self::fetch_programs();
 
-            $schedule_header .= '<tr> <td>' . __('Time') . '</td>';
+            $schedule_header .= '<thead><tr> <th>' . __('Time') . '</th>';
             $schedule_header .= '<th>' . __('Monday') . '</th>';
             $schedule_header .= '<th>' . __('Tuesday') . '</th>';
             $schedule_header .= '<th>' . __('Wednesday') . '</th>';
@@ -340,7 +319,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             $schedule_header .= '<th>' . __('Friday') . '</th>';
             $schedule_header .= '<th>' . __('Saturday') . '</th>';
             $schedule_header .= '<th>' . __('Sunday') . '</th>';
-            $schedule_header .= '</tr>';
+            $schedule_header .= '<th>' . __('Delete') . '</th></tr></thead>';
 
             $Cities = new WP_Query(array('post_type' => Post_Type_City::POST_TYPE));
             $Cities_posts = $Cities->get_posts();
@@ -352,21 +331,37 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             $Citie_content_block = '';
 
             foreach ($Cities_posts as $city) {
-                $Citie_content_block .= '<section class="city"><h2 class="schedule-cities">' . $city->post_title . '</h2>';
+                $Citie_content_block .= '<section class="schedule-city"><h2 class="schedule-cities">' . $city->post_title . '</h2>';
                 $city_id = $city->ID;
                 foreach ($Clubs_posts as $club) {
                     $club_id = $club->ID;
                     $club_city_id = get_post_meta($club_id, 'club_city_id');
                     if ($club_city_id[0] == $city_id) {
-                        $Citie_content_block .='<article class="club-name"><h3 class="schedule-clubs-in-city"> ' . $club->post_title . '</h3>';
+                        $Citie_content_block .='<article class="schedule-club-name"><h3 class="schedule-clubs-in-city"> ' . $club->post_title . '</h3>';
                         foreach ($Halls_posts as $hall) {
                             $hall_club_id = get_post_meta($hall->ID, 'hall_club_id');
                             $hall_id = $hall->ID;
                             if ($club_id == $hall_club_id[0]) {
                                 $Citie_content_block .= '<div class="hall-schedule">';
-                                $Citie_content_block .= '<h4 class="schedule-halls-in-clubs">' . $hall->post_title . '<a href="javascript:void(0)" class="add-new-chedule-row"> ' . __('Add New Schedule') . '</a></h4>';
-                                $Citie_content_block .= '<table class="Shedule_table">';
+                                $Citie_content_block .= '<h4 class="schedule-halls-in-clubs">' . $hall->post_title . '<a href="javascript:void(0)" class="add-new-schedule-row"> ' . __('Add New Schedule') . '</a></h4>';
+                                $Citie_content_block .= '<table class="schedule-table">';
                                 $Citie_content_block .= $schedule_header;
+
+                                // Schedule template
+                                $Citie_content_block .='<tbody>';
+                                $Citie_content_block .= '<tr class="schedule-template" data-schedule-id = "" data-hall-id="' . $hall_id . '" >';
+                                $Citie_content_block .= '<td><input type="text"name="sched_time" class="timePicker" value="" /></td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_1') . '</td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_2') . '</td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_3') . '</td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_4') . '</td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_5') . '</td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_6') . '</td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_7') . '</td>';
+                                $Citie_content_block .= '<td><a href="javascript:void(0)" class="delete-schedule-row"></a></td></tr>';
+
+                                //Schedule rendering
+
                                 foreach ($Schedule_data as $value) {
                                     if ($value['hall_id'] == $hall_id) {
                                         $Citie_content_block .= '<tr data-schedule-id = "' . $value['id'] . '" >';
@@ -378,9 +373,12 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                                         $Citie_content_block .= '<td>' . self::create_select_program($value['friday_program_id'], $programs, 'sched_5') . '</td>';
                                         $Citie_content_block .= '<td>' . self::create_select_program($value['saturday_program_id'], $programs, 'sched_6') . '</td>';
                                         $Citie_content_block .= '<td>' . self::create_select_program($value['sunday_program_id'], $programs, 'sched_7') . '</td>';
-                                        $Citie_content_block .= '</tr>';
+                                        $Citie_content_block .= '<td><a href="javascript:void(0)" class="delete-schedule-row"></a></td></tr>';
                                     }
                                 }
+
+
+                                $Citie_content_block .= '</tbody>';
                                 $Citie_content_block .= '</table>';
                                 $Citie_content_block .= '</div>';
                             }
@@ -391,29 +389,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 $Citie_content_block .='</section>';
             }
             $programs[0] = "";
-            // $table_data = $wpdb->get_results('SELECT * FROM ' . $kivi_schedule_settings['kivi_schedule_table'] . ' ORDER BY time', ARRAY_A);
-            /*   if (isset($table_data) and ($table_data != "")) {
-              foreach ($table_data as $table_row => $data) {
-              $monday_program_id = $data['monday_program_id'];
-              $tuesday_program_id = $data['tuesday_program_id'];
-              $wednesday_program_id = $data['wednesday_program_id'];
-              $thursday_program_id = $data['thursday_program_id'];
-              $friday_program_id = $data['friday_program_id'];
-              $saturday_program_id = $data['saturday_program_id'];
-              $sunday_program_id = $data['sunday_program_id'];
-              $htmlContent .= '<tr id="' . $data['id'] . '">';
-              $htmlContent .= '<td><div class="td_content">' . $data['time'] . '</td>';
-              $htmlContent .= '<td><div class="td_content">' . $programs[$monday_program_id] . '</div></td>';
-              $htmlContent .= '<td><div class="td_content">' . $programs[$tuesday_program_id] . '</div></td>';
-              $htmlContent .= '<td><div class="td_content">' . $programs[$wednesday_program_id] . '</div></td>';
-              $htmlContent .= '<td><div class="td_content">' . $programs[$thursday_program_id] . '</div></td>';
-              $htmlContent .= '<td><div class="td_content">' . $programs[$friday_program_id] . '</div></td>';
-              $htmlContent .= '<td><div class="td_content">' . $programs[$saturday_program_id] . '</div></td>';
-              $htmlContent .= '<td><div class="td_content">' . $programs[$sunday_program_id] . '</div></td>';
-              $htmlContent .= '<td><a href="javascript:void(0)" class="save_changes_to_db">Save</a></td>';
-              $htmlContent .= '</tr>';
-              }
-              } */
+
             echo $Citie_content_block;
             // }
             // die();
@@ -436,42 +412,45 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             isset($_REQUEST['kivischedule_sched_7']) ? $sched_7 = $_REQUEST['kivischedule_sched_7'] : $sched_7 = 0;
 
             if ($schedule_id != "") {
-                if ($wpdb->update($kivi_schedule_settings['kivi_schedule_table'], array(
-                            'time' => $time,
-                            'monday_program_id' => $sched_1,
-                            'tuesday_program_id' => $sched_2,
-                            'wednesday_program_id' => $sched_3,
-                            'thursday_program_id' => $sched_4,
-                            'friday_program_id' => $sched_5,
-                            'saturday_program_id' => $sched_6,
-                            'sunday_program_id' => $sched_7), array('id' => $schedule_id), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
-                        )) {
-                    return 'success';
-                } else {
-                    echo 'error - ' . $wpdb->last_error;
-                    return 'error';
-                }
+                $wpdb->update($kivi_schedule_settings['kivi_schedule_table'], array(
+                    'time' => $time,
+                    'monday_program_id' => $sched_1,
+                    'tuesday_program_id' => $sched_2,
+                    'wednesday_program_id' => $sched_3,
+                    'thursday_program_id' => $sched_4,
+                    'friday_program_id' => $sched_5,
+                    'saturday_program_id' => $sched_6,
+                    'sunday_program_id' => $sched_7), array('id' => $schedule_id), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
+                );
+                echo $schedule_id;
             } else {
-                if ($wpdb->insert($kivi_schedule_settings['kivi_schedule_table'], array(
-                            'time' => $time,
-                            'hall_id' => $hall_id,
-                            'monday_program_id' => $sched_1,
-                            'tuesday_program_id' => $sched_2,
-                            'wednesday_program_id' => $sched_3,
-                            'thursday_program_id' => $sched_4,
-                            'friday_program_id' => $sched_5,
-                            'saturday_program_id' => $sched_6,
-                            'sunday_program_id' => $sched_7), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
-                        )
-                ) {
-                    return 'success';
-                } else {
-                    echo 'error - ' . $wpdb->last_error;
-                    return 'error';
-                }
+                $wpdb->insert($kivi_schedule_settings['kivi_schedule_table'], array(
+                    'time' => $time,
+                    'hall_id' => $hall_id,
+                    'monday_program_id' => $sched_1,
+                    'tuesday_program_id' => $sched_2,
+                    'wednesday_program_id' => $sched_3,
+                    'thursday_program_id' => $sched_4,
+                    'friday_program_id' => $sched_5,
+                    'saturday_program_id' => $sched_6,
+                    'sunday_program_id' => $sched_7), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
+                );
+
+                echo $wpdb->insert_id;
             }
 
             die();
+        }
+
+        function remove_schedule($schedule_id) {
+            global $wpdb;
+            global $kivi_schedule_settings;
+            $wpdb->query(
+                    $wpdb->prepare(
+                            "
+                DELETE FROM ".$kivi_schedule_settings['path_to_kivi_schedule_folder'].
+		" WHERE id = ".$schedule_id)
+            );
         }
 
         /**

@@ -3,21 +3,27 @@
     width:100%;
 }
 
-#schedule_table th,#schedule_table1 th, .Shedule_table th{
+#schedule_table th,#schedule_table1 th, .schedule-table th{
     background:#fff;
     padding:5px 10px;
     font-size:16px;
     border-color:#000;
 }
-#schedule_table td, #schedule_table1 td, .Shedule_table td{
+#schedule_table td, #schedule_table1 td, .schedule-table td{
     border-bottom:1px dotted #333;
     background:#fff;
     font-size:14px;
     width:15%;
 }
-#schedule_table td:first-child, #schedule_table1 td:first-child , .Shedule_table td:first-child{
+.schedule-table td select{
+    width:100%;
+}
+#schedule_table td:first-child, #schedule_table1 td:first-child , .schedule-table td:first-child{
     font-weight: bold;
     width:60px;
+}
+.schedule-table td:last-child{
+    text-align: center;
 }
 .db_add_row{
     display: none;
@@ -53,13 +59,34 @@
     margin:auto;
 }
 .current_page_item, .current-post-parent {
-  font-weight: bold;
+    font-weight: bold;
 
 }
 /*Schedule styles*/
-h3.schedule-clubs-in-city {
+.schedule-club-name{
     margin-left:30px;
 }
-h4.schedule-halls-in-clubs {
+.hall-schedule {
     margin-left:50px;
+}
+.schedule-template{
+    display:none;
+}
+.schedule-halls-in-clubs {
+    position:relative;
+}
+.add-new-schedule-row{
+    position: absolute;
+    right:20px;
+}
+.delete-schedule-row{
+    display:inline-block;
+    width:30px;
+    height:30px;
+    margin:2px;
+    background:#eee url(../img/editing-delete-icon.png) no-repeat 50% 50%;
+    background-size:20px;
+}
+.delete-schedule-row:hover{
+    background-color:#ddd;
 }

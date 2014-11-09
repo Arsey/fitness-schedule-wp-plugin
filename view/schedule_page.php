@@ -21,60 +21,6 @@
         <label for="select_clubs"> Шаг2. Выберите клуб </label> <select name="" id="select_clubs"></select>
         <label for="select_hall"> Шаг3. Выберите зал </label> <select name="" id="select_halls"></select>
     </div>
-    <table id="schedule_table">
-        <tr>
-            <th>Время</th>
-            <th>Понедельник</th>
-            <th>Вторник</th>
-            <th>Среда</th>
-            <th>Четверг</th>
-            <th>Пятница</th>
-            <th>Суббота</th>
-            <th>Воскресенье</th>
-            <th></th>
-        </tr>
-        <tr class="db_add_row">
-            <td><input type="text" name="sched_time" class="timePicker"/></td>
-            <td>
-                <select class="sched_1">
-                    <?php echo $programs_options; ?>
-                </select>
-            </td>
-            <td>
-                <select class="sched_2">
-                    <?php echo $programs_options; ?>
-                </select>
-            </td>
-            <td>
-                <select class="sched_3">
-                    <?php echo $programs_options; ?>
-                </select>
-            </td>
-            <td>
-                <select class="sched_4">
-                    <?php echo $programs_options; ?>
-                </select>
-            </td>
-            <td>
-                <select class="sched_5">
-                    <?php echo $programs_options; ?>
-                </select>
-            </td>
-            <td>
-                <select class="sched_6">
-                    <?php echo $programs_options; ?>
-                </select>
-            </td>
-            <td>
-                <select class="sched_7">
-                    <?php echo $programs_options; ?>
-                </select>
-            </td>
-            <td>
-                <a href="javascript:void(0)" class="save_sched_to_db">Save</a>
-            </td>
-        </tr>
-    </table>
     <?php 
     $data = WP_Kivi_Schedule_Plugin::fetch_schedule_data();
     ?>

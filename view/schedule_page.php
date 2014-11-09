@@ -76,6 +76,9 @@
             </td>
         </tr>
     </table>
+    <?php 
+    $data = WP_Kivi_Schedule_Plugin::fetch_schedule_data();
+    ?>
     <table id="schedule_table1">
     </table>
 </div>

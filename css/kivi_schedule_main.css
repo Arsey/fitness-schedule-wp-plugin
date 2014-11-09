@@ -56,3 +56,10 @@
   font-weight: bold;
 
 }
+/*Schedule styles*/
+h3.schedule-clubs-in-city {
+    margin-left:30px;
+}
+h4.schedule-halls-in-clubs {
+    margin-left:50px;
+}

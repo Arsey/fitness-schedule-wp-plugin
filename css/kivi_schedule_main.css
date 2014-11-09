@@ -3,19 +3,19 @@
     width:100%;
 }
 
-#schedule_table th,#schedule_table1 th{
+#schedule_table th,#schedule_table1 th, .Shedule_table th{
     background:#fff;
     padding:5px 10px;
     font-size:16px;
     border-color:#000;
 }
-#schedule_table td, #schedule_table1 td{
+#schedule_table td, #schedule_table1 td, .Shedule_table td{
     border-bottom:1px dotted #333;
     background:#fff;
     font-size:14px;
     width:15%;
 }
-#schedule_table td:first-child, #schedule_table1 td:first-child{
+#schedule_table td:first-child, #schedule_table1 td:first-child , .Shedule_table td:first-child{
     font-weight: bold;
     width:60px;
 }

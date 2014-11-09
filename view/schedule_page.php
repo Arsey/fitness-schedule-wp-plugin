@@ -20,7 +20,6 @@
 
         <label for="select_clubs"> Шаг2. Выберите клуб </label> <select name="" id="select_clubs"></select>
         <label for="select_hall"> Шаг3. Выберите зал </label> <select name="" id="select_halls"></select>
-        <a href="javascript:void(0)" id="add-new-chedule-row"> Добавить новую запись</a>
     </div>
     <table id="schedule_table">
         <tr>

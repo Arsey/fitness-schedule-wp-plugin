@@ -193,8 +193,10 @@ jQuery(document).ready(function($) {
     }
     $('.delete-schedule-row').click(
             function() {
-        console.log('here');
-               var schedule_id = $(this).parents('tr').attr('data-schedule-id');
+                console.log('here');
+                var current_row = $(this).parents('tr');
+                var schedule_id = current_row.attr('data-schedule-id');
+                current_row.remove();
                 $.ajax({
                     type: "POST",
                     data: {
@@ -209,6 +211,7 @@ jQuery(document).ready(function($) {
                         console.log(response);
                     },
                     success: function(data) {
+                console.log(data);
                     }
                 });
             }

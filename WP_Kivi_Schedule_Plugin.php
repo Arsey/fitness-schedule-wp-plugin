@@ -442,15 +442,22 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             die();
         }
 
-        function remove_schedule($schedule_id) {
+        function remove_schedule() {
             global $wpdb;
             global $kivi_schedule_settings;
-            $wpdb->query(
-                    $wpdb->prepare(
-                            "
-                DELETE FROM ".$kivi_schedule_settings['path_to_kivi_schedule_folder'].
-		" WHERE id = ".$schedule_id)
-            );
+            if (isset($_REQUEST['schedule_id'])) {
+                $schedule_id = $_REQUEST['schedule_id'];
+                echo $wpdb->prepare(
+                                "
+                DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
+                                " WHERE id = %d",  $schedule_id);
+                $wpdb->query(
+                        $wpdb->prepare(
+                                "
+                DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
+                                " WHERE id = %d",  $schedule_id)
+                );
+            }
         }
 
         /**

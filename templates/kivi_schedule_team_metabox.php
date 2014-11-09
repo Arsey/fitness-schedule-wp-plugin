@@ -1,22 +1,5 @@
 
 <table class="form-table">
-    <tr valign="top">
-        <th  width="30%" class="metabox_label_column">
-            <label for="team_group"><?php echo __( 'Group' ); ?></label>
-        </th>
-        <td>
-            <?php $teams = $this->team_group?>
-            <select id = "team_group" name="team_group">
-              <?php
-                foreach ($teams as $team) {
-                    @get_post_meta($post->ID, 'team_group', true) == $team ? $selected = 'selected' : $selected = '';
-                    ?>
-                    <option value="<?php echo $team; ?>" <?php echo $selected ?> > <?php echo $team; ?> </option>
-                <?php }
-                ?>
-            </select>
-        </td>
-    </tr>
     <tr>
         <th>
             <label for="program_description"> <?php echo __( 'Description ' ); ?> </label>

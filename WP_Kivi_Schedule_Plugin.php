@@ -295,6 +295,36 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $taxonomies;
         }
 
+        static function get_team_in_categories()
+        {
+            global $wpdb;
+            $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM wp_posts p
+                LEFT OUTER JOIN wp_term_relationships r ON r.object_id = p.ID
+                LEFT OUTER JOIN wp_term_taxonomy x ON x.term_taxonomy_id = r.term_taxonomy_id
+                LEFT OUTER JOIN wp_terms t ON t.term_id = x.term_id
+                WHERE p.post_status = 'publish'
+                AND p.post_type = '" . Post_Type_Team::POST_TYPE . "'
+                AND x.taxonomy = '" . Post_Type_Team::CAT_TAXONOMY . "'", ARRAY_A);
+
+            $taxonomies = array();
+            if ($results) {
+                foreach ($results as $r) {
+                    if (!isset($taxonomies[$r['term_id']]))
+                        $taxonomies[$r['term_id']] = array(
+                            'term_id' => $r['term_id'],
+                            'name' => $r['term_name'],
+                            'team' => array()
+                        );
+
+                    $program = array('ID' => $r['post_id'], 'post_title' => $r['post_title']);
+
+                    $taxonomies[$r['term_id']]['team'][] = $program;
+                }
+            }
+
+            return $taxonomies;
+        }
+
         function fetch_schedule_data()
         {
             global $wpdb;

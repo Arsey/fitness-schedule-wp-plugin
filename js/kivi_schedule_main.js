@@ -187,7 +187,7 @@ jQuery(document).ready(function($) {
                 $table.trigger('update');
                 var sorting = [[0, 0]];
                 $table.trigger('sorton', [sorting]);
-                //$table.find('.headerSortDown').trigger('click');
+                $table.find('.headerSortDown').trigger('click');
             }
         });
     }

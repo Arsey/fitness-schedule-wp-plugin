@@ -191,7 +191,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                     $halls_by_ids[$hall['hall_id']] = $key;
                 }
 
-                $schedule_for_all_halls = $wpdb->get_results('SELECT * FROM ' . $kivi_schedule_settings['kivi_schedule_table'] . ' WHERE hall_id IN(\'' . implode("','", $halls_ids) . '\')  ORDER BY time', ARRAY_A);
+                $schedule_for_all_halls = $wpdb->get_results('SELECT * FROM ' . $kivi_schedule_settings['kivi_schedule_table'] . ' WHERE hall_id IN(\'' . implode("','", $halls_ids) . '\')  ORDER BY TIME_TO_SEC(time) ASC', ARRAY_A);
 
                 if ($schedule_for_all_halls) {
                     foreach ($schedule_for_all_halls as $hall_schedule) {

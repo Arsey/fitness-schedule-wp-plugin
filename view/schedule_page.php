@@ -21,9 +21,11 @@
         <label for="select_clubs"> Шаг2. Выберите клуб </label> <select name="" id="select_clubs"></select>
         <label for="select_hall"> Шаг3. Выберите зал </label> <select name="" id="select_halls"></select>
     </div>
-    <?php 
-    $data = WP_Kivi_Schedule_Plugin::fetch_schedule_data();
-    ?>
+    <div id="kivischedule">
+        <?php
+        $data = WP_Kivi_Schedule_Plugin::fetch_schedule_data();
+        ?>
+    </div>
     <table id="schedule_table1">
     </table>
 </div>

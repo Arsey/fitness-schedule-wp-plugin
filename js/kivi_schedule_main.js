@@ -26,9 +26,19 @@ jQuery(document).ready(function($) {
     });
 
     $('#advanced-sortables .inside').append('<div id="ajaxBusy"><img src="' + img_path.template_url + '/ajax-loader.gif"></div>');
+    
     $('#select_cities').change(function() {
         var city_id = $(this).find('option:selected').val();
         $('#ajaxBusy').css('display', 'block');
+        $('.schedule-city, .schedule-club-name, .hall-schedule ').css('display', 'block');
+        var city_blocks = $('#kivischedule .schedule-city');
+        $.each(city_blocks, function(){
+            if($(this).attr('data-city-id') == city_id){
+                $(this).css('display', 'block')
+            } else{
+                $(this).css('display','none');
+            }
+        });
         $.ajax({
             type: "POST",
             data: {
@@ -62,7 +72,16 @@ jQuery(document).ready(function($) {
     });
     $('#select_clubs').change(function() {
         $('#ajaxBusy').css('display', 'block');
+        $('.schedule-club-name, .hall-schedule ').css('display', 'block');
         var club_id = $(this).find('option:selected').val();
+              var club_blocks = $('#kivischedule .schedule-club-name');
+        $.each(club_blocks, function(){
+            if($(this).attr('data-club-id') == club_id){
+                $(this).css('display', 'block')
+            } else{
+                $(this).css('display','none');
+            }
+        });
         $.ajax({
             type: "POST",
             data: {
@@ -97,7 +116,16 @@ jQuery(document).ready(function($) {
         }
     });
     $('#select_halls').change(function() {
+        $('.hall-schedule ').css('display', 'block');
         var hall_id = $(this).find('option:selected').val();
+           var city_blocks = $('#kivischedule .hall-schedule');
+        $.each(city_blocks, function(){
+            if($(this).attr('data-hall-id') == hall_id){
+                $(this).css('display', 'block')
+            } else{
+                $(this).css('display','none');
+            }
+        });
         $.ajax({
             type: "POST",
             data: {
@@ -114,7 +142,7 @@ jQuery(document).ready(function($) {
             success: function(data) {
                 var i = 0;
                 //$('#add-new-chedule-row').css('display', 'inline-block');
-              //  $('#schedule_table1').html(data);
+                //  $('#schedule_table1').html(data);
             }
         });
     }).click(function() {
@@ -156,7 +184,13 @@ jQuery(document).ready(function($) {
         var sched_5 = current_row.find('.sched_5 option:selected').val();
         var sched_6 = current_row.find('.sched_6 option:selected').val();
         var sched_7 = current_row.find('.sched_7 option:selected').val();
-
+        var $table = current_row.parents('.schedule-table');
+        //sorting
+        $table.trigger('update');
+        var sorting = [[0, 0]];
+        $table.trigger('sorton', [sorting]);
+        $table.find('.headerSortDown').trigger('click');
+        
         $.ajax({
             type: "POST",
             data: {
@@ -183,11 +217,7 @@ jQuery(document).ready(function($) {
                 current_row.attr('data-schedule-id', data);
 
                 // TODO: trigger sort
-                var $table = current_row.parents('.schedule-table');
-                $table.trigger('update');
-                var sorting = [[0, 0]];
-                $table.trigger('sorton', [sorting]);
-                $table.find('.headerSortDown').trigger('click');
+
             }
         });
     }
@@ -211,7 +241,7 @@ jQuery(document).ready(function($) {
                         console.log(response);
                     },
                     success: function(data) {
-                console.log(data);
+                        console.log(data);
                     }
                 });
             }

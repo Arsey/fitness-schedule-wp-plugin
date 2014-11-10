@@ -4,13 +4,14 @@
 }
 
 #schedule_table th,#schedule_table1 th, .schedule-table th{
-    background:#fff;
-    padding:5px 10px;
-    font-size:16px;
-    border-color:#000;
+    background: #F7F7F7;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-color: #000;
+    width: 100px;
 }
 #schedule_table td, #schedule_table1 td, .schedule-table td{
-    border-bottom:1px dotted #333;
+    border-bottom:1px dotted #CACACA;
     background:#fff;
     font-size:14px;
     width:15%;
@@ -18,10 +19,19 @@
 .schedule-table td select{
     width:100%;
 }
+
 #schedule_table td:first-child, #schedule_table1 td:first-child , .schedule-table td:first-child{
     font-weight: bold;
     width:60px;
 }
+.schedule-table input.timePicker{
+    width: 80px;
+}
+
+.schedule-table .schedule_program_select{
+    font-size: 12px;
+}
+
 .schedule-table td:last-child{
     text-align: center;
 }
@@ -64,10 +74,13 @@
 }
 /*Schedule styles*/
 .schedule-club-name{
-    margin-left:30px;
+    margin-left: 15px;
+    background: white;
+    padding: 1px 0px 10px 10px;
+    border-radius: 2px;
 }
 .hall-schedule {
-    margin-left:50px;
+    margin-left:25px;
 }
 .schedule-template{
     display:none;
@@ -75,6 +88,21 @@
 .schedule-halls-in-clubs {
     position:relative;
 }
+
+.schedule-halls-in-clubs  span{
+    background: #FAD646;
+    border-radius: 2px 24px;
+    padding: 5px 24px;
+    border: 1px solid #898989;
+}
+
+.schedule-table{
+    border-collapse: collapse;
+    width: 1000px;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 12px rgb(218, 218, 218);
+}
+
 .add-new-schedule-row{
     position: absolute;
     right:20px;
@@ -92,5 +120,7 @@
 }
 
 #shcedule .schedule-city{
-
+    padding: 1px 10px 5px 9px;
+    margin: 10px auto;
+    border-radius: 2px;
 }

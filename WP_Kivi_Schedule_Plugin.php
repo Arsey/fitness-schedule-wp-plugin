@@ -378,19 +378,19 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             $Citie_content_block = '';
 
             foreach ($Cities_posts as $city) {
-                $Citie_content_block .= '<section class="schedule-city"><h2 class="schedule-cities">' . $city->post_title . '</h2>';
+                $Citie_content_block .= '<section class="schedule-city"><h2 class="schedule-cities">' . _x('City','kiwi_schedule_cities') .' '. $city->post_title . '</h2>';
                 $city_id = $city->ID;
                 foreach ($Clubs_posts as $club) {
                     $club_id = $club->ID;
                     $club_city_id = get_post_meta($club_id, 'club_city_id');
                     if ($club_city_id[0] == $city_id) {
-                        $Citie_content_block .= '<article class="schedule-club-name"><h3 class="schedule-clubs-in-city"> ' . $club->post_title . '</h3>';
+                        $Citie_content_block .= '<article class="schedule-club-name"><h3 class="schedule-clubs-in-city"> ' . _x('Club','kiwi_schedule_clubs') .' '. $club->post_title . '</h3>';
                         foreach ($Halls_posts as $hall) {
                             $hall_club_id = get_post_meta($hall->ID, 'hall_club_id');
                             $hall_id = $hall->ID;
                             if ($club_id == $hall_club_id[0]) {
                                 $Citie_content_block .= '<div class="hall-schedule">';
-                                $Citie_content_block .= '<h4 class="schedule-halls-in-clubs">' . $hall->post_title . '<a href="javascript:void(0)" class="add-new-schedule-row"> ' . __('Add New Schedule') . '</a></h4>';
+                                $Citie_content_block .= '<h4 class="schedule-halls-in-clubs"><span>' . $hall->post_title . '</span><a href="javascript:void(0)" class="add-new-schedule-row"> ' . __('Add New Schedule') . '</a></h4>';
                                 $Citie_content_block .= '<table class="schedule-table">';
                                 $Citie_content_block .= $schedule_header;
 

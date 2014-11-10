@@ -1,5 +1,4 @@
 <?php
-
 return array(
     'required_php_version' => '5.3.0',
     'sdam_folder' => 'scheduleplugin',

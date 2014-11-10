@@ -113,8 +113,8 @@ jQuery(document).ready(function($) {
             },
             success: function(data) {
                 var i = 0;
-                $('#add-new-chedule-row').css('display', 'inline-block');
-                $('#schedule_table1').html(data);
+                //$('#add-new-chedule-row').css('display', 'inline-block');
+              //  $('#schedule_table1').html(data);
             }
         });
     }).click(function() {

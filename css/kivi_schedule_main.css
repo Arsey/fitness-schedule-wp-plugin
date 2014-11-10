@@ -91,9 +91,9 @@
 
 .schedule-halls-in-clubs  span{
     background: #FAD646;
-    border-radius: 2px 24px;
-    padding: 5px 24px;
-    border: 1px solid #898989;
+    border-radius: 10px;
+    padding: 5px 25px;
+    border: 1px solid #D7D7D7;
 }
 
 .schedule-table{
@@ -104,8 +104,8 @@
 }
 
 .add-new-schedule-row{
-    position: absolute;
-    right:20px;
+    display: inline-block;
+    margin: 0 0 0 35px;
 }
 .delete-schedule-row{
     display:inline-block;

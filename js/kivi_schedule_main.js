@@ -113,8 +113,8 @@ jQuery(document).ready(function($) {
             },
             success: function(data) {
                 var i = 0;
-                $('#add-new-chedule-row').css('display', 'inline-block');
-                $('#schedule_table1').html(data);
+                //$('#add-new-chedule-row').css('display', 'inline-block');
+              //  $('#schedule_table1').html(data);
             }
         });
     }).click(function() {
@@ -187,7 +187,7 @@ jQuery(document).ready(function($) {
                 $table.trigger('update');
                 var sorting = [[0, 0]];
                 $table.trigger('sorton', [sorting]);
-                //$table.find('.headerSortDown').trigger('click');
+                $table.find('.headerSortDown').trigger('click');
             }
         });
     }

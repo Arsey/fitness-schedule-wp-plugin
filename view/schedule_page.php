@@ -26,7 +26,4 @@
         $data = WP_Kivi_Schedule_Plugin::fetch_schedule_data();
         ?>
     </div>
-    <table id="schedule_table1">
-    </table>
-</div>
 </div>

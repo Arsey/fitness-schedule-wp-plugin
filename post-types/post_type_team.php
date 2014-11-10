@@ -9,6 +9,7 @@ if (!class_exists('Post_Type_Team')) {
     {
 
         const POST_TYPE = "kivi_schedule_team";
+        const CAT_TAXONOMY = "kiwi_schedule_team_category";
 
         private $_meta = array(
             'team_group',
@@ -61,9 +62,9 @@ if (!class_exists('Post_Type_Team')) {
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
                     'supports' => array(
-                        'title'
+                        'title', 'thumbnail'
                     ),
-                    'taxonomies' => array('kiwi_schedule_team_category'),
+                    'taxonomies' => array(self::CAT_TAXONOMY),
                 )
             );
 

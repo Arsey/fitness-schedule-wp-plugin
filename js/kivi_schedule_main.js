@@ -163,6 +163,7 @@ jQuery(document).ready(function($) {
     $('.add-new-schedule-row').click(
             function() {
                 var scheduleTable = $(this).parents('.hall-schedule').find('.schedule-table');
+                scheduleTable.css('display', 'table');
                 var template = scheduleTable.find('.schedule-template');
                 var templateToInsert = template.clone(true).removeClass('schedule-template');
                 var table_row_first = $(this).parents('.hall-schedule').find('.schedule-table tbody tr:first-child');
@@ -248,8 +249,10 @@ jQuery(document).ready(function($) {
                 }
             }
     )
-    $('#add-new-chedule-row').click(function() {
-        //var table_row = '<tr> <td><input type="text" name="program_time"></td> <td><input type="text" name="mon_programm"></td> <td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-        $('.db_add_row').css('display', 'table-row');
-    });
+  
+    $('.schedule-table').each(function(){
+        if($(this).find('tbody tr').length ==1){
+            $(this).css('display','none');
+        }
+    })
 });

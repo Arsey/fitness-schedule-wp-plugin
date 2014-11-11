@@ -1,125 +1,168 @@
-#schedule_table,#schedule_table1{
+#schedule_table, #schedule_table1 {
     position: relative;
-    width:100%;
+    width: 100%;
 }
 
-#schedule_table th,#schedule_table1 th, .schedule-table th{
+#schedule_table th, #schedule_table1 th, .schedule-table th {
     background: #F7F7F7;
-    padding: 5px 10px;
+    padding: 5px 10px 5px 2px;
     font-size: 16px;
     border-color: #000;
     width: 100px;
-}
-#schedule_table td, #schedule_table1 td, .schedule-table td{
-    border-bottom:1px dotted #CACACA;
-    background:#fff;
-    font-size:14px;
-    width:15%;
-}
-.schedule-table td select{
-    width:100%;
+    text-align: left;
 }
 
-#schedule_table td:first-child, #schedule_table1 td:first-child , .schedule-table td:first-child{
-    font-weight: bold;
-    width:60px;
+#schedule_table td, #schedule_table1 td, .schedule-table td {
+    border-bottom: 1px dotted #CACACA;
+    background: #fff;
+    font-size: 14px;
+    width: 15%;
+    padding-right: 20px;
+    position: relative;
 }
-.schedule-table input.timePicker{
+
+#schedule_table td:nth-child(even), #schedule_table1 td:nth-child(even), .schedule-table td:nth-child(even) {
+    background: #F7F7F7;
+    padding-left: 3px;
+}
+
+#schedule_table td:nth-child(odd), #schedule_table1 td:nth-child(odd), .schedule-table td:nth-child(odd) {
+
+}
+
+#schedule_table td:first-child, #schedule_table1 td:first-child, .schedule-table td:first-child,
+#schedule_table td:last-child, #schedule_table1 td:last-child, .schedule-table td:last-child {
+    padding-right: 0 !important;
+}
+
+.schedule-table td select {
+    width: 100%;
+}
+
+#schedule_table td:first-child, #schedule_table1 td:first-child, .schedule-table td:first-child {
+    font-weight: bold;
+    width: 60px;
+}
+
+.schedule-table input.timePicker {
     width: 80px;
 }
 
-.schedule-table .schedule_program_select{
+.schedule-table .schedule_program_select {
     font-size: 12px;
+    float: left;
+    width: 100px;
 }
 
-.schedule-table td:last-child{
+.schedule-table td input.program-status {
+    position: absolute;
+    top: 50%;
+    margin: -8px 0 0 2px;
+}
+
+.schedule-table td:last-child {
     text-align: center;
 }
-.db_add_row{
+
+.db_add_row {
     display: none;
 }
-#add-new-chedule-row{
+
+#add-new-chedule-row {
     display: none;
 }
-/*wp styles-fixes*/ 
+
+/*wp styles-fixes*/
 .post-type-post-type-team #normal-sortables,
 .post-type-post-type-hall #normal-sortables,
 .post-type-post-type-club #normal-sortables,
-.post-type-post-type-program #normal-sortables{
+.post-type-post-type-program #normal-sortables {
     display: none;
 }
+
 /*Simple ajax spinner*/
 
-#ajaxBusy{
+#ajaxBusy {
     position: absolute;
-    top:0;
-    left:0;
-    background:#333;
-    opacity:0.5;
-    width:100%;
-    height:100%;
+    top: 0;
+    left: 0;
+    background: #333;
+    opacity: 0.5;
+    width: 100%;
+    height: 100%;
     z-index: 1000;
-    display:none;
+    display: none;
 }
-#ajaxBusy img{
+
+#ajaxBusy img {
     position: absolute;
-    width:20px;
-    height:20px;
-    top:0;left:0;bottom:0;right:0;
-    margin:auto;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
 }
+
 .current_page_item, .current-post-parent {
     font-weight: bold;
 
 }
+
 /*Schedule styles*/
-.schedule-club-name{
-    margin-left: 15px;
+.schedule-club-name {
+    margin-left: -10px;
     background: white;
     padding: 1px 0px 10px 10px;
     border-radius: 2px;
 }
+
 .hall-schedule {
-    margin-left:25px;
-}
-.schedule-template{
-    display:none;
-}
-.schedule-halls-in-clubs {
-    position:relative;
+    margin-left: 15px;
+    padding-right: 10px;
 }
 
-.schedule-halls-in-clubs  span{
+.schedule-template {
+    display: none;
+}
+
+.schedule-halls-in-clubs {
+    position: relative;
+}
+
+.schedule-halls-in-clubs span {
     background: #FAD646;
     border-radius: 10px;
     padding: 5px 25px;
     border: 1px solid #D7D7D7;
 }
 
-.schedule-table{
+.schedule-table {
     border-collapse: collapse;
-    width: 1000px;
     margin-bottom: 10px;
     box-shadow: 2px 2px 12px rgb(218, 218, 218);
 }
 
-.add-new-schedule-row{
+.add-new-schedule-row {
     display: inline-block;
     margin: 0 0 0 35px;
 }
-.delete-schedule-row{
-    display:inline-block;
-    width:30px;
-    height:30px;
-    margin:2px;
-    background:#eee url(../img/editing-delete-icon.png) no-repeat 50% 50%;
-    background-size:20px;
-}
-.delete-schedule-row:hover{
-    background-color:#ddd;
+
+.delete-schedule-row {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+    background: #eee url(../img/editing-delete-icon.png) no-repeat 50% 50%;
+    background-size: 20px;
 }
 
-#shcedule .schedule-city{
+.delete-schedule-row:hover {
+    background-color: #ddd;
+}
+
+#shcedule .schedule-city {
     padding: 1px 10px 5px 9px;
     margin: 10px auto;
     border-radius: 2px;

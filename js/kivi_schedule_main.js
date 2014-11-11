@@ -5,6 +5,7 @@ jQuery(document).ready(function($) {
     });
 
     $('.schedule-table').tablesorter({
+        sortInitialOrder: 'asc',
         textExtraction: function(node) {
             var $node = $(node);
             if ($node.parents('tr').hasClass('schedule-template'))
@@ -24,6 +25,7 @@ jQuery(document).ready(function($) {
             return 0;
         }
     });
+
 
     $('#advanced-sortables .inside').append('<div id="ajaxBusy"><img src="' + img_path.template_url + '/ajax-loader.gif"></div>');
 
@@ -55,7 +57,7 @@ jQuery(document).ready(function($) {
             success: function(data) {
                 var i = 0;
                 var date = JSON.parse(data);
-                var select_club_content;
+                var select_club_content = '<option value="" selected></option>';
                 for (i in date) {
                     select_club_content += '<option value = "' + date[i]['club_id'] + '">' + date[i]['club_name'] + '</option>'
                 }
@@ -98,7 +100,7 @@ jQuery(document).ready(function($) {
             success: function(data) {
                 var i = 0;
                 var date = JSON.parse(data);
-                var select_club_content;
+                var select_club_content = ' <option value="" selected></option>';
                 for (i in date) {
                     select_club_content += '<option value = "' + date[i]['hall_id'] + '">' + date[i]['hall_name'] + '</option>'
                 }
@@ -162,7 +164,6 @@ jQuery(document).ready(function($) {
     });
     $('.program-status').change(
             function() {
-        console.log('changed');
                 var rowToSave = $(this).parents('tr');
                 saveSchedule(rowToSave);
             });
@@ -177,6 +178,17 @@ jQuery(document).ready(function($) {
             });
 
     function saveSchedule(current_row) {
+
+        //sorting
+        var $table = current_row.parents('.schedule-table');
+        $table.trigger('update');
+        var sorting = [[0, 0]];
+        var sorting = $table.find('.headerSortDown');
+        sorting.addClass('headerSortUp');
+        sorting.removeClass('.headerSortDown');
+        $table.trigger('sorton', [sorting]);
+        $table.find('.headerSortUp').trigger('click');
+
         var schedule_id = current_row.attr('data-schedule-id');
         var hall_id = current_row.attr('data-hall-id');
 
@@ -197,13 +209,7 @@ jQuery(document).ready(function($) {
         var status_4 = current_row.find('.thursday_program_status').is(':checked') ? 1 : 0;
         var status_5 = current_row.find('.friday_program_status').is(':checked') ? 1 : 0;
         var status_6 = current_row.find('.saturday_program_status').is(':checked') ? 1 : 0;
-        var status_7 = current_row.find('.sunday_program_status').is(':checked') ? 1 : 0; 
-        var $table = current_row.parents('.schedule-table');
-        //sorting
-       /* $table.trigger('update');
-        var sorting = [[0, 0]];
-        $table.trigger('sorton', [sorting]);
-        $table.find('.headerSortDown').trigger('click'); */
+        var status_7 = current_row.find('.sunday_program_status').is(':checked') ? 1 : 0;
 
         $.ajax({
             type: "POST",
@@ -225,7 +231,7 @@ jQuery(document).ready(function($) {
                 kivischedule_sched_status_4: status_4,
                 kivischedule_sched_status_5: status_5,
                 kivischedule_sched_status_6: status_6,
-                kivischedule_sched_status_7: status_7 
+                kivischedule_sched_status_7: status_7
             },
             url: ajaxurl,
             error: function(jqXHR, textStatus, errorThrown, response) {

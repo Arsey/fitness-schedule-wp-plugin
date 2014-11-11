@@ -160,6 +160,12 @@ jQuery(document).ready(function($) {
         var rowToSave = $(this).parents('tr');
         saveSchedule(rowToSave);
     });
+    $('.program-status').change(
+            function() {
+        console.log('changed');
+                var rowToSave = $(this).parents('tr');
+                saveSchedule(rowToSave);
+            });
     $('.add-new-schedule-row').click(
             function() {
                 var scheduleTable = $(this).parents('.hall-schedule').find('.schedule-table');
@@ -185,12 +191,19 @@ jQuery(document).ready(function($) {
         var sched_5 = current_row.find('.sched_5 option:selected').val();
         var sched_6 = current_row.find('.sched_6 option:selected').val();
         var sched_7 = current_row.find('.sched_7 option:selected').val();
+        var status_1 = current_row.find('.monday_program_status').is(':checked') ? 1 : 0;
+        var status_2 = current_row.find('.tuesday_program_status').is(':checked') ? 1 : 0;
+        var status_3 = current_row.find('.wednesday_program_status').is(':checked') ? 1 : 0;
+        var status_4 = current_row.find('.thursday_program_status').is(':checked') ? 1 : 0;
+        var status_5 = current_row.find('.friday_program_status').is(':checked') ? 1 : 0;
+        var status_6 = current_row.find('.saturday_program_status').is(':checked') ? 1 : 0;
+        var status_7 = current_row.find('.sunday_program_status').is(':checked') ? 1 : 0; 
         var $table = current_row.parents('.schedule-table');
         //sorting
-        $table.trigger('update');
+       /* $table.trigger('update');
         var sorting = [[0, 0]];
         $table.trigger('sorton', [sorting]);
-        $table.find('.headerSortDown').trigger('click');
+        $table.find('.headerSortDown').trigger('click'); */
 
         $.ajax({
             type: "POST",
@@ -205,7 +218,14 @@ jQuery(document).ready(function($) {
                 kivischedule_sched_4: sched_4,
                 kivischedule_sched_5: sched_5,
                 kivischedule_sched_6: sched_6,
-                kivischedule_sched_7: sched_7
+                kivischedule_sched_7: sched_7,
+                kivischedule_sched_status_1: status_1,
+                kivischedule_sched_status_2: status_2,
+                kivischedule_sched_status_3: status_3,
+                kivischedule_sched_status_4: status_4,
+                kivischedule_sched_status_5: status_5,
+                kivischedule_sched_status_6: status_6,
+                kivischedule_sched_status_7: status_7 
             },
             url: ajaxurl,
             error: function(jqXHR, textStatus, errorThrown, response) {
@@ -249,10 +269,10 @@ jQuery(document).ready(function($) {
                 }
             }
     )
-  
-    $('.schedule-table').each(function(){
-        if($(this).find('tbody tr').length ==1){
-            $(this).css('display','none');
+
+    $('.schedule-table').each(function() {
+        if ($(this).find('tbody tr').length == 1) {
+            $(this).css('display', 'none');
         }
     })
 });

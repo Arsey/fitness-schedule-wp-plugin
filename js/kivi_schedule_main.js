@@ -1,11 +1,7 @@
 jQuery(document).ready(function($) {
-    $('.timePicker').timepicker({'timeFormat': 'H:i:s'}).on('changeTime', function() {
-        var rowToSave = $(this).parents('tr');
-        saveSchedule(rowToSave);
-    });
+
 
     $('.schedule-table').tablesorter({
-        sortInitialOrder: 'asc',
         textExtraction: function(node) {
             var $node = $(node);
             if ($node.parents('tr').hasClass('schedule-template'))
@@ -25,8 +21,26 @@ jQuery(document).ready(function($) {
             return 0;
         }
     });
+    function sorter(tableToSort) {
+        // set sorting column and direction, this will sort on the first and third column the column index starts at zero 
+        var sorting = [[0, 0]];
+        // sort on the first column 
+        tableToSort.trigger('update');
+        tableToSort.trigger("sorton", [sorting]);
+        // return false to stop default link action 
+        return false;
+    }
+    ;
+    $('.timePicker').timepicker({'timeFormat': 'H:i:s'}).on('changeTime', function() {
+        var rowToSave = $(this).parents('tr');
+        var tableToSort = rowToSave.parents('.schedule-table');
+        var sorting = [[0, 0]];
+        // sort on the first column 
 
-
+        tableToSort.trigger("sorton", [sorting]);
+        sorter(tableToSort);
+        saveSchedule(rowToSave);
+    });
     $('#advanced-sortables .inside').append('<div id="ajaxBusy"><img src="' + img_path.template_url + '/ajax-loader.gif"></div>');
 
     $('#select_cities').change(function() {
@@ -72,8 +86,7 @@ jQuery(document).ready(function($) {
             $('#select_cities').change();
         }
     });
-    $('#select_clubs').change(function() {
-        $('#ajaxBusy').css('display', 'block');
+    $('#select_clubs:not(.hall-clubs-meta)').change(function() {
         $('.schedule-club-name, .hall-schedule ').css('display', 'block');
         var club_id = $(this).find('option:selected').val();
         var club_blocks = $('#kivischedule .schedule-club-name');
@@ -109,7 +122,6 @@ jQuery(document).ready(function($) {
                 }
                 $('#select_halls').html("");
                 $('#select_halls').html(select_club_content);
-                $('#ajaxBusy').css('display', 'none');
             }
         });
     }).click(function() {
@@ -126,25 +138,6 @@ jQuery(document).ready(function($) {
                 $(this).css('display', 'block')
             } else {
                 $(this).css('display', 'none');
-            }
-        });
-        $.ajax({
-            type: "POST",
-            data: {
-                action: 'fetch_schedule_data',
-                kivischedule_hall_id: hall_id
-            },
-            url: ajaxurl,
-            error: function(jqXHR, textStatus, errorThrown, response) {
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(errorThrown);
-                console.log(response);
-            },
-            success: function(data) {
-                var i = 0;
-                //$('#add-new-chedule-row').css('display', 'inline-block');
-                //  $('#schedule_table1').html(data);
             }
         });
     }).click(function() {
@@ -179,15 +172,6 @@ jQuery(document).ready(function($) {
 
     function saveSchedule(current_row) {
 
-        //sorting
-        var $table = current_row.parents('.schedule-table');
-        $table.trigger('update');
-        var sorting = [[0, 0]];
-        var sorting = $table.find('.headerSortDown');
-        sorting.addClass('headerSortUp');
-        sorting.removeClass('.headerSortDown');
-        $table.trigger('sorton', [sorting]);
-        $table.find('.headerSortUp').trigger('click');
 
         var schedule_id = current_row.attr('data-schedule-id');
         var hall_id = current_row.attr('data-hall-id');

@@ -38,7 +38,7 @@ while ($query_club->have_posts()) {
             <label for="hall_group"><?php echo __('Group '); ?></label>
         </th>
         <td>
-            <select id = "select_clubs" name="hall_club_id">
+            <select class="hall-clubs-meta" id = "select_clubs" name="hall_club_id">
                 <?php isset($clubs [@get_post_meta($post->ID, 'hall_club_id', true)]) ? $selected_city = $clubs [@get_post_meta($post->ID, 'hall_club_id', true)]:$selected_city =''?>
                 <option><?php echo $selected_city ; ?></option>
             </select>

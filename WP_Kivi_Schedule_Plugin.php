@@ -473,7 +473,6 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                     'sunday_program_status' => $status_7
                         ), array('id' => $schedule_id), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
                 );
-                echo $schedule_id;
             } else {
                 $wpdb->insert($kivi_schedule_settings['kivi_schedule_table'], array(
                     'time' => $time,
@@ -506,10 +505,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             global $kivi_schedule_settings;
             if (isset($_REQUEST['schedule_id'])) {
                 $schedule_id = $_REQUEST['schedule_id'];
-                echo $wpdb->prepare(
-                        "
-    DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
-                        " WHERE id = %d", $schedule_id);
+                
                 $wpdb->query(
                         $wpdb->prepare(
                                 "

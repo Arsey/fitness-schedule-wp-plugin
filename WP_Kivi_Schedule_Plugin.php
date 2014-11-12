@@ -388,13 +388,13 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                                 $Citie_content_block .= '<tbody>';
                                 $Citie_content_block .= '<tr class="schedule-template" data-schedule-id = "" data-hall-id="' . $hall_id . '" >';
                                 $Citie_content_block .= '<td><input type="text"name="sched_time" class="timePicker" value="" /></td>';
-                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_1') . '</td>';
-                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_2') . '</td>';
-                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_3') . '</td>';
-                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_4') . '</td>';
-                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_5') . '</td>';
-                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_6') . '</td>';
-                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_7') . '</td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_1') . '<input type="checkbox" class="program-status monday_program_status" /></td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_2') . '<input type="checkbox" class="program-status tuesday_program_status" /></td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_3') . '<input type="checkbox" class="program-status wednesday_program_status" /></td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_4') . '<input type="checkbox" class="program-status thursda_program_status" /></td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_5') . '<input type="checkbox" class="program-status friday_program_status" /></td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_6') . '<input type="checkbox" class="program-status saturday_program_status" /></td>';
+                                $Citie_content_block .= '<td>' . self::create_select_program(0, $programs, 'sched_7') . '<input type="checkbox" class="program-status sunday_program_status" /></td>';
                                 $Citie_content_block .= '<td><a href="javascript:void(0)" class="delete-schedule-row"></a></td></tr>';
 
                                 //Schedule rendering

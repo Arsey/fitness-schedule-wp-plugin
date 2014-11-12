@@ -100,7 +100,7 @@ jQuery(document).ready(function($) {
             success: function(data) {
                 var i = 0;
                 var date = JSON.parse(data);
-                var select_club_content = ' <option value="" selected></option>';
+                var select_club_content = '<option value="" selected></option>';
                 for (i in date) {
                     select_club_content += '<option value = "' + date[i]['hall_id'] + '">' + date[i]['hall_name'] + '</option>'
                 }

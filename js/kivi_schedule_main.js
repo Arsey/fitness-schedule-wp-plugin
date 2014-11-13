@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
         // sort on the first column 
         tableToSort.trigger('update');
         var $firstTh = tableToSort.find('th:first-child');
-        if ($firstTh.hasClass('headerSortUp')) {           
+        if ($firstTh.hasClass('headerSortUp')) {
             $firstTh.trigger('click');
         } else {
             $firstTh.trigger('click').trigger('click');
@@ -52,13 +52,17 @@ jQuery(document).ready(function($) {
         $('#ajaxBusy').css('display', 'block');
         $('.schedule-city, .schedule-club-name, .hall-schedule ').css('display', 'block');
         var city_blocks = $('#kivischedule .schedule-city');
-        $.each(city_blocks, function() {
-            if ($(this).attr('data-city-id') == city_id) {
-                $(this).css('display', 'block')
-            } else {
-                $(this).css('display', 'none');
-            }
-        });
+        if (city_id == "") {
+            city_blocks.css('display', 'block');
+        } else {
+            $.each(city_blocks, function() {
+                if ($(this).attr('data-city-id') == city_id) {
+                    $(this).css('display', 'block')
+                } else {
+                    $(this).css('display', 'none');
+                }
+            });
+        }
         $.ajax({
             type: "POST",
             data: {
@@ -94,13 +98,17 @@ jQuery(document).ready(function($) {
         $('.schedule-club-name, .hall-schedule ').css('display', 'block');
         var club_id = $(this).find('option:selected').val();
         var club_blocks = $('#kivischedule .schedule-club-name');
-        $.each(club_blocks, function() {
-            if ($(this).attr('data-club-id') == club_id) {
-                $(this).css('display', 'block')
-            } else {
-                $(this).css('display', 'none');
-            }
-        });
+        if (club_id == "") {
+            club_blocks.css('display', 'block');
+        } else {
+            $.each(club_blocks, function() {
+                if ($(this).attr('data-club-id') == club_id) {
+                    $(this).css('display', 'block')
+                } else {
+                    $(this).css('display', 'none');
+                }
+            });
+        }
         $.ajax({
             type: "POST",
             data: {
@@ -137,13 +145,17 @@ jQuery(document).ready(function($) {
         $('.hall-schedule ').css('display', 'block');
         var hall_id = $(this).find('option:selected').val();
         var city_blocks = $('#kivischedule .hall-schedule');
-        $.each(city_blocks, function() {
-            if ($(this).attr('data-hall-id') == hall_id) {
-                $(this).css('display', 'block')
-            } else {
-                $(this).css('display', 'none');
-            }
-        });
+        if (hall_id == "") {
+            city_blocks.css('display', 'block');
+        } else {
+            $.each(city_blocks, function() {
+                if ($(this).attr('data-hall-id') == hall_id) {
+                    $(this).css('display', 'block')
+                } else {
+                    $(this).css('display', 'none');
+                }
+            });
+        }
     }).click(function() {
         if ($('#select_halls option').length == 1) {
             $('#select_halls').change();
@@ -238,7 +250,6 @@ jQuery(document).ready(function($) {
     $('.delete-schedule-row').click(
             function() {
                 if (confirm('Вы действительно желаете удалить расписание?')) {
-                    console.log('here');
                     var current_row = $(this).parents('tr');
                     var schedule_id = current_row.attr('data-schedule-id');
                     current_row.remove();

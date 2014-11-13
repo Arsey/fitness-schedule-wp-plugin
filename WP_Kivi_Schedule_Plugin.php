@@ -348,7 +348,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
             $programs = self::fetch_programs();
 
-            $schedule_header .= '<thead><tr> <th>' . __('Time') . '</th>';
+            $schedule_header .= '<thead><tr> <th class="headerSortUp">' . __('Time') . '</th>';
             $schedule_header .= '<th>' . __('Monday') . '</th>';
             $schedule_header .= '<th>' . __('Tuesday') . '</th>';
             $schedule_header .= '<th>' . __('Wednesday') . '</th>';
@@ -473,7 +473,9 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                     'sunday_program_status' => $status_7
                         ), array('id' => $schedule_id), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
                 );
+                echo $schedule_id;
             } else {
+                echo 
                 $wpdb->insert($kivi_schedule_settings['kivi_schedule_table'], array(
                     'time' => $time,
                     'hall_id' => $hall_id,

@@ -34,11 +34,15 @@ jQuery(document).ready(function($) {
     $('.timePicker').timepicker({'timeFormat': 'H:i:s'}).on('changeTime', function() {
         var rowToSave = $(this).parents('tr');
         var tableToSort = rowToSave.parents('.schedule-table');
-        var sorting = [[0, 0]];
-        // sort on the first column 
 
-        tableToSort.trigger("sorton", [sorting]);
-        sorter(tableToSort);
+        // sort on the first column 
+        tableToSort.trigger('update');
+        var $firstTh = tableToSort.find('th:first-child');
+        if ($firstTh.hasClass('headerSortUp')) {           
+            $firstTh.trigger('click');
+        } else {
+            $firstTh.trigger('click').trigger('click');
+        }
         saveSchedule(rowToSave);
     });
     $('#advanced-sortables .inside').append('<div id="ajaxBusy"><img src="' + img_path.template_url + '/ajax-loader.gif"></div>');
@@ -226,7 +230,6 @@ jQuery(document).ready(function($) {
             },
             success: function(data) {
                 current_row.attr('data-schedule-id', data);
-
                 // TODO: trigger sort
 
             }

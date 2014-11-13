@@ -475,7 +475,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 );
                 echo $schedule_id;
             } else {
-                echo 
+                echo
                 $wpdb->insert($kivi_schedule_settings['kivi_schedule_table'], array(
                     'time' => $time,
                     'hall_id' => $hall_id,
@@ -507,13 +507,39 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             global $kivi_schedule_settings;
             if (isset($_REQUEST['schedule_id'])) {
                 $schedule_id = $_REQUEST['schedule_id'];
-                
+
                 $wpdb->query(
                         $wpdb->prepare(
                                 "
         DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
                                 " WHERE id = %d", $schedule_id)
                 );
+            }
+        }
+
+        public function cleanData(&$str) {
+            $str = preg_replace("/\t/", "\\t", $str);
+            $str = preg_replace("/\r?\n/", "\\n", $str);
+            if (strstr($str, '"'))
+                $str = '"' . str_replace('"', '""', $str) . '"';
+        }
+
+        public function convert_data_to_excel($data) {
+            $filename = "schrdule_data_" . date('Ymd') . ".xls";
+
+            header("Content-Disposition: attachment; filename=\"$filename\"");
+            header("Content-Type: application/vnd.ms-excel");
+
+            $flag = false;
+            $result = $data;
+            while (false !== ($row = pg_fetch_assoc($result))) {
+                if (!$flag) {
+                    // display field/column names as first row
+                    echo implode("\t", array_keys($row)) . "\r\n";
+                    $flag = true;
+                }
+                array_walk($row, 'cleanData');
+                echo implode("\t", array_values($row)) . "\r\n";
             }
         }
 

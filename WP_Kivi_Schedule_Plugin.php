@@ -614,8 +614,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                     $sheet->setCellValue("E" . $row_index, __('Wednesday'));
                     $sheet->setCellValue("F" . $row_index, __('Thursday'));
                     $sheet->setCellValue("G" . $row_index, __('Friday'));
-                    $sheet->setCellValue("H" . $row_index, __('saturday'));
-                    $sheet->setCellValue("I" . $row_index, __('sunday'));
+                    $sheet->setCellValue("H" . $row_index, __('Saturday'));
+                    $sheet->setCellValue("I" . $row_index, __('Sunday'));
                     
                     $row_index++;
 

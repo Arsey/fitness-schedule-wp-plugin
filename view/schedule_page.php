@@ -27,7 +27,7 @@
         
         $new_url = add_query_arg($params, admin_url('admin.php'));
         ?>
-        <a href="<?php echo $new_url; ?>" class="download-excel-file"><?php echo __('Downoad report'); ?></a>
+        <a href="<?php echo $new_url; ?>" class="download-excel-file"><?php echo __('Export'); ?></a>
     </div>
     <div id="kivischedule">
         <?php

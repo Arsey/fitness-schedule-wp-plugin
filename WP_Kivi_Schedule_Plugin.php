@@ -18,6 +18,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         public function __construct() {
 
             include_once 'functions.php';
+
             error_reporting(E_ALL);
             global $kivi_schedule_settings;
             $kivi_schedule_settings = require_once 'settings.php';
@@ -51,6 +52,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             /* ajax action that returns the list of cities */
             add_action("wp_ajax_nopriv_ksp_fetch_cities", array(&$this, "fetch_cities"));
             add_action("wp_ajax_ksp_fetch_cities", array(&$this, "ajax_fetch_cities"));
+
+            //filters
         }
 
         function add_style_js() {
@@ -89,7 +92,10 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         }
 
         function function_init() {
-            
+            if (isset($_REQUEST['wp_kivischedule_excel'])) {
+                self::convert_data_to_excel();
+                die();
+            }
         }
 
         function special_nav_class($css_class = array(), $page = false) {
@@ -255,6 +261,27 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
                 $programs[] = $program;
             }
+
+            return $programs;
+        }
+
+        static function fetch_programs_dictionary() {
+            $programs = array();
+            $query = new WP_Query(array('post_type' => Post_Type_Program::POST_TYPE));
+            while ($query->have_posts()) {
+                $query->the_post();
+
+                $program = array(
+                    'id' => get_the_ID(),
+                    'title' => get_the_title()
+                );
+
+                $programs[get_the_ID()] = $program;
+            }
+            $programs[0] = array(
+                'id' => 0,
+                'title' => ''
+            );
 
             return $programs;
         }
@@ -517,30 +544,112 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             }
         }
 
-        public function cleanData(&$str) {
-            $str = preg_replace("/\t/", "\\t", $str);
-            $str = preg_replace("/\r?\n/", "\\n", $str);
-            if (strstr($str, '"'))
-                $str = '"' . str_replace('"', '""', $str) . '"';
-        }
+        static function convert_data_to_excel() {
+            global $wpdb;
+            global $kivi_schedule_settings;
 
-        public function convert_data_to_excel($data) {
-            $filename = "schrdule_data_" . date('Ymd') . ".xls";
+            include_once 'PHPExcel/Classes/PHPExcel.php';
+            include_once 'PHPExcel/Classes/PHPExcel/Writer/Excel5.php';
 
-            header("Content-Disposition: attachment; filename=\"$filename\"");
-            header("Content-Type: application/vnd.ms-excel");
+            $clubs = self :: fetch_clubs_by_city();
+            $schedule_data = $wpdb->get_results('SELECT * FROM ' . $kivi_schedule_settings['kivi_schedule_table'] . ' ORDER BY time', ARRAY_A);
+            $programs = self:: fetch_programs_dictionary();
 
-            $flag = false;
-            $result = $data;
-            while (false !== ($row = pg_fetch_assoc($result))) {
-                if (!$flag) {
-                    // display field/column names as first row
-                    echo implode("\t", array_keys($row)) . "\r\n";
-                    $flag = true;
+            $xls = new PHPExcel();
+
+            for ($club_index = 0; $club_index < count($clubs); $club_index++) {
+                $club = $clubs[$club_index];
+                $row_index = 1;
+                
+                $xls->createSheet(NULL, $club_index);
+                $xls->setActiveSheetIndex($club_index);
+
+                $sheet = $xls->getActiveSheet();
+                $sheet->setTitle($club['club_name']);
+                $sheet->mergeCells('A' . $row_index . ':I' . $row_index);
+                $sheet->setCellValue("A" . $row_index, $club['club_name']);
+                $sheet->getRowDimension($row_index)->setRowHeight(20);
+                
+                $sheet->getStyle('A' . $row_index)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                $sheet->getStyle('A' . $row_index)->getFill()->getStartColor()->setRGB('EEEEEE');          
+                $sheet->getStyle('A' . $row_index)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('A' . $row_index)->getFont()->setBold(true);
+                $sheet->getStyle('A' . $row_index)->getFont()->setSize(14);    
+                
+                $sheet->getColumnDimension('A')->setAutoSize(true);
+                $sheet->getColumnDimension('B')->setAutoSize(true);
+                $sheet->getColumnDimension('C')->setAutoSize(true);
+                $sheet->getColumnDimension('D')->setAutoSize(true);
+                $sheet->getColumnDimension('E')->setAutoSize(true);
+                $sheet->getColumnDimension('F')->setAutoSize(true);
+                $sheet->getColumnDimension('G')->setAutoSize(true);
+                $sheet->getColumnDimension('H')->setAutoSize(true);
+                $sheet->getColumnDimension('I')->setAutoSize(true);
+                
+                $row_index++;
+
+                $halls = self ::fetch_hall_by_club($club['club_id']);
+
+                for ($hall_index = 0; $hall_index < count($halls); $hall_index++) {
+                    $hall = $halls[$hall_index];
+
+                    $sheet->mergeCells('A' . $row_index . ':I' . $row_index);
+                    $sheet->setCellValue("A" . $row_index, $hall['hall_name']);
+                    
+                    $sheet->getStyle('A' . $row_index)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+                    $sheet->getStyle('A' . $row_index)->getFill()->getStartColor()->setRGB('FAD646');            
+                    $sheet->getStyle('A' . $row_index)->getFont()->setBold(true);
+                    $sheet->getStyle('A' . $row_index)->getFont()->setSize(12);
+                    $sheet->getStyle('A' . $row_index)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    
+                    $row_index++;
+
+                    $sheet->getStyle('A' . $row_index . ':I' . $row_index)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('A' . $row_index . ':I' . $row_index)->getFont()->setBold(true);
+                    
+                    $sheet->setCellValue("A" . $row_index, '#');
+                    $sheet->setCellValue("B" . $row_index, __('Time'));
+                    $sheet->setCellValue("C" . $row_index, __('Monday'));
+                    $sheet->setCellValue("D" . $row_index, __('Tuesday'));
+                    $sheet->setCellValue("E" . $row_index, __('Wednesday'));
+                    $sheet->setCellValue("F" . $row_index, __('Thursday'));
+                    $sheet->setCellValue("G" . $row_index, __('Friday'));
+                    $sheet->setCellValue("H" . $row_index, __('saturday'));
+                    $sheet->setCellValue("I" . $row_index, __('sunday'));
+                    
+                    $row_index++;
+
+                    $schedule_counter = 1;
+
+                    foreach ($schedule_data as $value) {
+                        if ($value['hall_id'] == $hall['hall_id']) {
+                            $sheet->getStyle('A' . $row_index)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                            
+                            $sheet->setCellValue("A" . $row_index, $schedule_counter);
+                            $sheet->setCellValue("B" . $row_index, $value['time']);
+                            $sheet->setCellValue("C" . $row_index, $programs[$value['monday_program_id']]['title']);
+                            $sheet->setCellValue("D" . $row_index, $programs[$value['tuesday_program_id']]['title']);
+                            $sheet->setCellValue("E" . $row_index, $programs[$value['wednesday_program_id']]['title']);
+                            $sheet->setCellValue("F" . $row_index, $programs[$value['thursday_program_id']]['title']);
+                            $sheet->setCellValue("G" . $row_index, $programs[$value['friday_program_id']]['title']);
+                            $sheet->setCellValue("H" . $row_index, $programs[$value['saturday_program_id']]['title']);
+                            $sheet->setCellValue("I" . $row_index, $programs[$value['sunday_program_id']]['title']);
+
+                            $schedule_counter++;
+                            
+                            $row_index++;
+                        }
+                    }
+                    
+                    $row_index++;
                 }
-                array_walk($row, 'cleanData');
-                echo implode("\t", array_values($row)) . "\r\n";
             }
+
+            header("Content-type: application/vnd.ms-excel");
+            header("Content-Disposition: attachment; filename=kivi_schedule.xls");
+
+            $objWriter = new PHPExcel_Writer_Excel5($xls, "Excel5");
+            $objWriter->save('php://output');
         }
 
         /**

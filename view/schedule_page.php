@@ -20,6 +20,14 @@
 
         <label for="select_clubs"> <?php echo __('Club filter'); ?> </label> <select name="" id="select_clubs"></select>
         <label for="select_hall"> <?php echo __('Hall filter'); ?> </label> <select name="" id="select_halls"></select>
+        <?php
+        $params = array(
+            'page' => 'kivi_schedule_city',
+            'wp_kivischedule_excel' => true);
+        
+        $new_url = add_query_arg($params, admin_url('admin.php'));
+        ?>
+        <a href="<?php echo $new_url; ?>" class="download-excel-file"><?php echo __('Downoad report'); ?></a>
     </div>
     <div id="kivischedule">
         <?php

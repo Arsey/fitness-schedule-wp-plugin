@@ -22,11 +22,27 @@ while ($query_club->have_posts()) {
             <select id = "select_cities" name="hall_city_id">
                 <?php
                 if (isset($towns)) {
+                    $selected_town = 0;
+                    $counter = 0;
+                    $selected_item = @get_post_meta($post->ID, 'hall_city_id', true);
                     foreach ($towns as $town => $town_id) {
-                        @get_post_meta($post->ID, 'hall_city_id', true) == $town ? $selected = 'selected' : $selected = '';
+                        if (isset($selected_item) && $selected_item != 0) {
+                            if (@get_post_meta($post->ID, 'hall_city_id', true) == $town) {
+                                $selected = 'selected';
+                                $selected_town = $town;
+                            } else {
+                                $selected = '';
+                            }
+                        } else {
+                            if ($counter < 1) {
+                                $selected_town = $town;
+                                $counter++;
+                                $selected = '';
+                            }
+                        }
                         ?>
                         <option value="<?php echo $town; ?>" <?php echo $selected; ?> > <?php echo $town_id; ?> </option>
-                    <?php
+                        <?php
                     }
                 }
                 ?>
@@ -35,12 +51,24 @@ while ($query_club->have_posts()) {
     </tr>
     <tr valign="top">
         <th  width="30%" class="metabox_label_column">
-            <label for="hall_group"><?php echo __('Group '); ?></label>
+            <label for="hall_group"><?php echo __('Club'); ?></label>
         </th>
         <td>
             <select class="hall-clubs-meta" id = "select_clubs" name="hall_club_id">
-                <?php isset($clubs [@get_post_meta($post->ID, 'hall_club_id', true)]) ? $selected_city = $clubs [@get_post_meta($post->ID, 'hall_club_id', true)]:$selected_city =''?>
-                <option><?php echo $selected_city ; ?></option>
+                <?php
+                if (isset($clubs)) {
+
+                    foreach ($clubs as $club_id => $club) {
+                        $club_city_id = get_post_meta($club_id, 'club_city_id', true);
+                        if ($club_city_id == $selected_town) {
+                            @get_post_meta($post->ID, 'hall_club_id', true) == $club_id ? $selected_city = 'selected' : $selected_city = ''
+                            ?>
+                            <option value='<?php echo $club; ?>' <?php echo $selected_city ?>><?php echo $club; ?></option>
+                            <?php
+                        }
+                    }
+                }
+                ?>
             </select>
         </td>
     </tr> 

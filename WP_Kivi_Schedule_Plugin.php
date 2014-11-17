@@ -255,12 +255,14 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         /**
          * return full information about programs including meta
          */
-        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail', $per_page = 10)
+        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail', $per_page = 100)
         {
             $programs = array();
             $query = new WP_Query(array(
                 'post_type' => Post_Type_Program::POST_TYPE,
                 'posts_per_page' => $per_page,
+                'orderby' => 'title',
+                'order' => 'ASC'
             ));
             while ($query->have_posts()) {
                 $query->the_post();
@@ -317,10 +319,20 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 LEFT OUTER JOIN wp_terms t ON t.term_id = x.term_id
                 WHERE p.post_status = 'publish'
                 AND p.post_type = '" . Post_Type_Program::POST_TYPE . "'
-                AND x.taxonomy = '" . Post_Type_Program::CAT_TAXONOMY . "'", ARRAY_A);
+                AND x.taxonomy = '" . Post_Type_Program::CAT_TAXONOMY . "' LIMIT 0,1000", ARRAY_A);
+
 
             $taxonomies = array();
             if ($results) {
+
+                $postsIds = array();
+                foreach ($results as $r) {
+                    $postsIds[] = $r['post_id'];
+                }
+
+                $sql = "SELECT p.ID as post_id,p.post_title FROM wp_posts p WHERE p.ID NOT IN('" . implode("','", $postsIds) . "') AND p.post_status = 'publish' AND p.post_type = '" . Post_Type_Program::POST_TYPE . "'";
+                $posts_not_in_categories = $wpdb->get_results($sql, ARRAY_A);
+
                 foreach ($results as $r) {
                     if (!isset($taxonomies[$r['term_id']]))
                         $taxonomies[$r['term_id']] = array(
@@ -333,6 +345,20 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
                     $taxonomies[$r['term_id']]['programs'][] = $program;
                 }
+
+                if ($posts_not_in_categories) {
+                    $taxonomies[0] = array(
+                        'term_id' => 0,
+                        'name' => _x('Not in category', 'kiwi_schedule_programs'),
+                        'programs' => array()
+                    );
+                    foreach ($posts_not_in_categories as $p) {
+                        $program = array('ID' => $p['post_id'], 'post_title' => $p['post_title']);
+                        $taxonomies[0]['programs'][] = $program;
+                    }
+
+                }
+
             }
 
             return $taxonomies;

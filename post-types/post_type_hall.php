@@ -54,6 +54,7 @@ if (!class_exists('Post_Type_Hall')) {
                         'search_items' => __('Find Hall'),
                         'add_new_item' => __('Add Hall')
                     ),
+                    'hierarchical' => true,
                     'public' => true,
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
@@ -106,6 +107,7 @@ if (!class_exists('Post_Type_Hall')) {
             return array(
                 'cb' => $columns['cb'],
                 'title' => $columns['title'],
+                'city' => __('City', 'kiwi_schedule_cities'),
                 'club' => __('Club', 'kiwi_schedule_clubs'),
                 'date' => $columns['date']
             );
@@ -113,9 +115,13 @@ if (!class_exists('Post_Type_Hall')) {
 
         function custom_column($column, $post_id)
         {
+            $meta = get_post_meta($post_id);
             switch ($column) {
-                case 'club' :
-                    echo get_the_title(get_post_meta($post_id, 'hall_city_id', true));
+                case 'city' :
+                    echo get_the_title($meta['hall_city_id'][0]);
+                    break;
+                case 'club':
+                    echo get_the_title($meta['hall_club_id'][0]);
                     break;
             }
         }

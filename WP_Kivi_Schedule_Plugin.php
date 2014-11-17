@@ -13,9 +13,11 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
     /* the main class */
 
-    class WP_Kivi_Schedule_Plugin {
+    class WP_Kivi_Schedule_Plugin
+    {
 
-        public function __construct() {
+        public function __construct()
+        {
 
             include_once 'functions.php';
 
@@ -56,7 +58,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             //filters
         }
 
-        function add_style_js() {
+        function add_style_js()
+        {
             wp_enqueue_script('jquery');
             wp_enqueue_script('jquery-ui-core');
             wp_enqueue_script('jquery-ui', plugins_url('/js/jquery-ui-1.11.2/jquery-ui.min.js', __FILE__), array('jquery'));
@@ -76,29 +79,34 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             wp_localize_script('imgicons-config', 'img_path', $img_path);
         }
 
-        function add_menu() {
+        function add_menu()
+        {
             //menu
 
             add_menu_page(__('Schedule'), __('Schedule'), 'switch_themes', 'time_table', array(&$this, 'menu_kivi_schedule'));
             add_submenu_page('time_table', __('Schedule'), __('Schedule'), 'manage_options', 'kivi_schedule_city', array(&$this, 'menu_kivi_schedule'));
         }
 
-        function menu_kivi_schedule() {
+        function menu_kivi_schedule()
+        {
             include_once 'view/schedule_page.php';
         }
 
-        function menu_kivi_schedule_post_types() {
+        function menu_kivi_schedule_post_types()
+        {
             include_once 'view/schedule_post_types.php';
         }
 
-        function function_init() {
+        function function_init()
+        {
             if (isset($_REQUEST['wp_kivischedule_excel'])) {
                 self::convert_data_to_excel();
                 die();
             }
         }
 
-        function special_nav_class($css_class = array(), $page = false) {
+        function special_nav_class($css_class = array(), $page = false)
+        {
             if (get_post_type() == 'kivi_schedule_city') {
                 if ($page->ID == get_option('page_for_posts')) {
                     foreach ($css_class as $k => $v) {
@@ -110,7 +118,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $css_class;
         }
 
-        static function fetch_cities() {
+        static function fetch_cities()
+        {
             $query = new WP_Query(array('post_type' => Post_Type_City::POST_TYPE, 'orderby' => 'title', 'order' => 'ASC'));
             $cities = array();
             while ($query->have_posts()) {
@@ -123,12 +132,14 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $cities;
         }
 
-        function ajax_fetch_cities() {
+        function ajax_fetch_cities()
+        {
             echo json_encode(self::fetch_cities());
             exit();
         }
 
-        static function fetch_clubs_by_city($city_id = null) {
+        static function fetch_clubs_by_city($city_id = null)
+        {
             /* get city_id from request if it is AJAX request */
             if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_city_id']))
                 $city_id = $_REQUEST['kivischedule_city_id'];
@@ -172,10 +183,11 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $clubs_array;
         }
 
-        static function fetch_club_schedule($club_id) {
+        static function fetch_club_schedule($club_id)
+        {
             global $wpdb;
             global $kivi_schedule_settings;
-            $halls = self::fetch_hall_by_club($club_id);
+            $halls = self::fetch_hall_by_club($club_id, 'menu_order', 'ASC');
 
             if ($halls) {
                 $halls_ids = array();
@@ -202,14 +214,19 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return null;
         }
 
-        static function fetch_hall_by_club($club_id = null) {
+        static function fetch_hall_by_club($club_id = null, $orderby = 'title', $order = 'DESC')
+        {
             /* get city_id from request if it is AJAX request */
             if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_club_id']))
                 $club_id = $_REQUEST['kivischedule_club_id'];
 
             $halls_array = array();
 
-            $args = array('post_type' => Post_Type_Hall::POST_TYPE);
+            $args = array(
+                'post_type' => Post_Type_Hall::POST_TYPE,
+                'orderby' => $orderby,
+                'order' => $order
+            );
             /* add query by club_city_id meta key */
             if ($club_id) {
                 $args['meta_query'] = array(
@@ -238,7 +255,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         /**
          * return full information about programs including meta
          */
-        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail',$per_page=10) {
+        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail', $per_page = 10)
+        {
             $programs = array();
             $query = new WP_Query(array(
                 'post_type' => Post_Type_Program::POST_TYPE,
@@ -268,7 +286,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $programs;
         }
 
-        static function fetch_programs_dictionary() {
+        static function fetch_programs_dictionary()
+        {
             $programs = array();
             $query = new WP_Query(array('post_type' => Post_Type_Program::POST_TYPE));
             while ($query->have_posts()) {
@@ -289,7 +308,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $programs;
         }
 
-        static function get_programs_in_categories() {
+        static function get_programs_in_categories()
+        {
             global $wpdb;
             $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM wp_posts p
                 LEFT OUTER JOIN wp_term_relationships r ON r.object_id = p.ID
@@ -318,7 +338,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $taxonomies;
         }
 
-        static function create_select_program($selected_value, $data, $select_class) {
+        static function create_select_program($selected_value, $data, $select_class)
+        {
             $select = '<select class="schedule_program_select ' . $select_class . '"><option value="0"></option>';
             foreach ($data as $value) {
                 if ($selected_value == $value['id']) {
@@ -331,7 +352,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $select;
         }
 
-        static function get_team_in_categories() {
+        static function get_team_in_categories()
+        {
             global $wpdb;
             $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM wp_posts p
                 LEFT OUTER JOIN wp_term_relationships r ON r.object_id = p.ID
@@ -360,7 +382,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $taxonomies;
         }
 
-        static function checkbox_status($value) {
+        static function checkbox_status($value)
+        {
             if (is_null($value) || $value == 0) {
                 return '';
             } else {
@@ -368,11 +391,12 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             }
         }
 
-        static function fetch_schedule_data() {
+        static function fetch_schedule_data()
+        {
             global $wpdb;
             global $kivi_schedule_settings;
             if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_city_id'])) {
-                
+
             }
             $schedule_header = '';
 
@@ -462,7 +486,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             // die();
         }
 
-        function save_schedule_data() {
+        function save_schedule_data()
+        {
             global $wpdb;
             global $kivi_schedule_settings;
 
@@ -486,44 +511,44 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
             if ($schedule_id != "") {
                 $wpdb->update($kivi_schedule_settings['kivi_schedule_table'], array(
-                    'time' => $time,
-                    'monday_program_id' => $sched_1,
-                    'monday_program_status' => $status_1,
-                    'tuesday_program_id' => $sched_2,
-                    'tuesday_program_status' => $status_2,
-                    'wednesday_program_id' => $sched_3,
-                    'wednesday_program_status' => $status_3,
-                    'thursday_program_id' => $sched_4,
-                    'thursday_program_status' => $status_4,
-                    'friday_program_id' => $sched_5,
-                    'friday_program_status' => $status_5,
-                    'saturday_program_id' => $sched_6,
-                    'saturday_program_status' => $status_6,
-                    'sunday_program_id' => $sched_7,
-                    'sunday_program_status' => $status_7
-                        ), array('id' => $schedule_id), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
+                        'time' => $time,
+                        'monday_program_id' => $sched_1,
+                        'monday_program_status' => $status_1,
+                        'tuesday_program_id' => $sched_2,
+                        'tuesday_program_status' => $status_2,
+                        'wednesday_program_id' => $sched_3,
+                        'wednesday_program_status' => $status_3,
+                        'thursday_program_id' => $sched_4,
+                        'thursday_program_status' => $status_4,
+                        'friday_program_id' => $sched_5,
+                        'friday_program_status' => $status_5,
+                        'saturday_program_id' => $sched_6,
+                        'saturday_program_status' => $status_6,
+                        'sunday_program_id' => $sched_7,
+                        'sunday_program_status' => $status_7
+                    ), array('id' => $schedule_id), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
                 );
                 echo $schedule_id;
             } else {
                 echo
                 $wpdb->insert($kivi_schedule_settings['kivi_schedule_table'], array(
-                    'time' => $time,
-                    'hall_id' => $hall_id,
-                    'monday_program_id' => $sched_1,
-                    'monday_program_status' => $status_1,
-                    'tuesday_program_id' => $sched_2,
-                    'tuesday_program_status' => $status_2,
-                    'wednesday_program_id' => $sched_3,
-                    'wednesday_program_status' => $status_3,
-                    'thursday_program_id' => $sched_4,
-                    'thursday_program_status' => $status_4,
-                    'friday_program_id' => $sched_5,
-                    'friday_program_status' => $status_5,
-                    'saturday_program_id' => $sched_6,
-                    'saturday_program_status' => $status_6,
-                    'sunday_program_id' => $sched_7,
-                    'sunday_program_status' => $status_7
-                        ), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
+                        'time' => $time,
+                        'hall_id' => $hall_id,
+                        'monday_program_id' => $sched_1,
+                        'monday_program_status' => $status_1,
+                        'tuesday_program_id' => $sched_2,
+                        'tuesday_program_status' => $status_2,
+                        'wednesday_program_id' => $sched_3,
+                        'wednesday_program_status' => $status_3,
+                        'thursday_program_id' => $sched_4,
+                        'thursday_program_status' => $status_4,
+                        'friday_program_id' => $sched_5,
+                        'friday_program_status' => $status_5,
+                        'saturday_program_id' => $sched_6,
+                        'saturday_program_status' => $status_6,
+                        'sunday_program_id' => $sched_7,
+                        'sunday_program_status' => $status_7
+                    ), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
                 );
 
                 echo $wpdb->insert_id;
@@ -532,22 +557,24 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             die();
         }
 
-        function remove_schedule() {
+        function remove_schedule()
+        {
             global $wpdb;
             global $kivi_schedule_settings;
             if (isset($_REQUEST['schedule_id'])) {
                 $schedule_id = $_REQUEST['schedule_id'];
 
                 $wpdb->query(
-                        $wpdb->prepare(
-                                "
-        DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
-                                " WHERE id = %d", $schedule_id)
+                    $wpdb->prepare(
+                        "
+DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
+                        " WHERE id = %d", $schedule_id)
                 );
             }
         }
 
-        static function convert_data_to_excel() {
+        static function convert_data_to_excel()
+        {
             global $wpdb;
             global $kivi_schedule_settings;
 
@@ -563,7 +590,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             for ($club_index = 0; $club_index < count($clubs); $club_index++) {
                 $club = $clubs[$club_index];
                 $row_index = 1;
-                
+
                 $xls->createSheet(NULL, $club_index);
                 $xls->setActiveSheetIndex($club_index);
 
@@ -572,13 +599,13 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 $sheet->mergeCells('A' . $row_index . ':I' . $row_index);
                 $sheet->setCellValue("A" . $row_index, $club['club_name']);
                 $sheet->getRowDimension($row_index)->setRowHeight(20);
-                
+
                 $sheet->getStyle('A' . $row_index)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-                $sheet->getStyle('A' . $row_index)->getFill()->getStartColor()->setRGB('EEEEEE');          
+                $sheet->getStyle('A' . $row_index)->getFill()->getStartColor()->setRGB('EEEEEE');
                 $sheet->getStyle('A' . $row_index)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle('A' . $row_index)->getFont()->setBold(true);
-                $sheet->getStyle('A' . $row_index)->getFont()->setSize(14);    
-                
+                $sheet->getStyle('A' . $row_index)->getFont()->setSize(14);
+
                 $sheet->getColumnDimension('A')->setAutoSize(true);
                 $sheet->getColumnDimension('B')->setAutoSize(true);
                 $sheet->getColumnDimension('C')->setAutoSize(true);
@@ -588,7 +615,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 $sheet->getColumnDimension('G')->setAutoSize(true);
                 $sheet->getColumnDimension('H')->setAutoSize(true);
                 $sheet->getColumnDimension('I')->setAutoSize(true);
-                
+
                 $row_index++;
 
                 $halls = self ::fetch_hall_by_club($club['club_id']);
@@ -598,18 +625,18 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
                     $sheet->mergeCells('A' . $row_index . ':I' . $row_index);
                     $sheet->setCellValue("A" . $row_index, $hall['hall_name']);
-                    
+
                     $sheet->getStyle('A' . $row_index)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-                    $sheet->getStyle('A' . $row_index)->getFill()->getStartColor()->setRGB('FAD646');            
+                    $sheet->getStyle('A' . $row_index)->getFill()->getStartColor()->setRGB('FAD646');
                     $sheet->getStyle('A' . $row_index)->getFont()->setBold(true);
                     $sheet->getStyle('A' . $row_index)->getFont()->setSize(12);
                     $sheet->getStyle('A' . $row_index)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-                    
+
                     $row_index++;
 
                     $sheet->getStyle('A' . $row_index . ':I' . $row_index)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $sheet->getStyle('A' . $row_index . ':I' . $row_index)->getFont()->setBold(true);
-                    
+
                     $sheet->setCellValue("A" . $row_index, '#');
                     $sheet->setCellValue("B" . $row_index, __('Time'));
                     $sheet->setCellValue("C" . $row_index, __('Monday'));
@@ -619,7 +646,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                     $sheet->setCellValue("G" . $row_index, __('Friday'));
                     $sheet->setCellValue("H" . $row_index, __('Saturday'));
                     $sheet->setCellValue("I" . $row_index, __('Sunday'));
-                    
+
                     $row_index++;
 
                     $schedule_counter = 1;
@@ -627,7 +654,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                     foreach ($schedule_data as $value) {
                         if ($value['hall_id'] == $hall['hall_id']) {
                             $sheet->getStyle('A' . $row_index)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-                            
+
                             $sheet->setCellValue("A" . $row_index, $schedule_counter);
                             $sheet->setCellValue("B" . $row_index, $value['time']);
                             $sheet->setCellValue("C" . $row_index, $programs[$value['monday_program_id']]['title']);
@@ -639,11 +666,11 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                             $sheet->setCellValue("I" . $row_index, $programs[$value['sunday_program_id']]['title']);
 
                             $schedule_counter++;
-                            
+
                             $row_index++;
                         }
                     }
-                    
+
                     $row_index++;
                 }
             }
@@ -658,7 +685,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         /**
          * Plugin activation function
          */
-        public static function activate() {
+        public static function activate()
+        {
             global $kivi_schedule_settings;
             $path_to_installiation_file = $kivi_schedule_settings['path_to_kivi_schedule_folder'] . '/install.php';
             include_once($path_to_installiation_file);

@@ -360,8 +360,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 LEFT OUTER JOIN wp_term_taxonomy x ON x.term_taxonomy_id = r.term_taxonomy_id
                 LEFT OUTER JOIN wp_terms t ON t.term_id = x.term_id
                 WHERE p.post_status = 'publish'
-                AND p.post_type = '" . Post_Type_Program::POST_TYPE . "'
-                AND x.taxonomy = '" . Post_Type_Program::CAT_TAXONOMY . "'", ARRAY_A);
+                AND p.post_type = '" . Post_Type_Team::POST_TYPE . "'
+                AND x.taxonomy = '" . Post_Type_Team::CAT_TAXONOMY . "'", ARRAY_A);
 
             $taxonomies = array();
             if ($results) {

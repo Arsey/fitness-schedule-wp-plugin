@@ -1,6 +1,6 @@
 <?php
 global $wpdb;
-$query = new WP_Query(array('post_type' => 'kivi_schedule_city'));
+$query = new WP_Query(array('post_type' => Post_Type_City::POST_TYPE));
 $towns = array();
 
 while ($query->have_posts()) {
@@ -21,9 +21,7 @@ while ($query->have_posts()) {
                     @get_post_meta($post->ID, 'club_city_id', true) == $town ? $selected = 'selected' : $selected = '';
                     ?>
                     <option value="<?php echo $town; ?>" <?php echo $selected ?> > <?php echo $town_id; ?> </option>
-                <?php
-                }
-                ?>
+                <?php } ?>
             </select>
         </td>
     </tr>

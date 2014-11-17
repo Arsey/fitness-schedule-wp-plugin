@@ -12,6 +12,7 @@ if (!class_exists('Post_Type_Team')) {
         const CAT_TAXONOMY = "kiwi_schedule_team_category";
 
         private $_meta = array(
+            'team_club_id',
             'team_group',
             'team_description',
             'team_is_active'

@@ -42,6 +42,7 @@ while ($query->have_posts()) {
             <label for="club_map_link"> <?php echo __('Map Link'); ?> </label>
         </th>
         <td>
+            <p style="color:#DD0238">Do not put here a shortened link! Only link for an iframe is acceptable!</p>
             <input id="club_map_link" name="club_map_link" type="text"
                    value="<?php echo @get_post_meta($post->ID, 'club_map_link', true); ?>"/>
         </td>
@@ -52,6 +53,7 @@ while ($query->have_posts()) {
             <label for="club_video_link"> <?php echo __('Video Link'); ?> </label>
         </th>
         <td>
+            <p style="color:#DD0238">Put here only the video code like "UmJ5tHqpk_I"</p>
             <input id="club_video_link" name="club_video_link" type="text"
                    value="<?php echo @get_post_meta($post->ID, 'club_video_link', true); ?>"/>
         </td>

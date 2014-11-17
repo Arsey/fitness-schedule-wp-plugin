@@ -58,7 +58,7 @@ if (!class_exists('Post_Type_Club')) {
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
                     'supports' => array(
-                        'title'
+                        'title','editor'
                     )
                 )
             );

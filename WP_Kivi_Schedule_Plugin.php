@@ -502,7 +502,6 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 );
                 echo $schedule_id;
             } else {
-                echo
                 $wpdb->insert($kivi_schedule_settings['kivi_schedule_table'], array(
                     'time' => $time,
                     'hall_id' => $hall_id,

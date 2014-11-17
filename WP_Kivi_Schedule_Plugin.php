@@ -238,9 +238,12 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         /**
          * return full information about programs including meta
          */
-        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail') {
+        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail',$per_page=10) {
             $programs = array();
-            $query = new WP_Query(array('post_type' => Post_Type_Program::POST_TYPE));
+            $query = new WP_Query(array(
+                'post_type' => Post_Type_Program::POST_TYPE,
+                'posts_per_page' => $per_page,
+            ));
             while ($query->have_posts()) {
                 $query->the_post();
 
@@ -373,7 +376,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             }
             $schedule_header = '';
 
-            $programs = self::fetch_programs();
+            $programs = self::fetch_programs(false, 'thumbnail', 1000);
 
             $schedule_header .= '<thead><tr> <th class="headerSortUp">' . __('Time') . '</th>';
             $schedule_header .= '<th>' . __('Monday') . '</th>';

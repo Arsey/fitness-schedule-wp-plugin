@@ -168,21 +168,24 @@
     border-radius: 2px;
 }
 .download-excel-file{
+    border: 1px solid rgb(190, 190, 190);
     display: inline-block;
-    border-radius:10px;
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
-    padding:10px;
-    padding-left:25px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 4px;
+    padding: 2px 5px;
+    padding-left: 25px;
     text-align: center;
-    color:#16770A;
+    color: #16770A;
     text-decoration: none;
     font-weight: bold;
-    background:#EDF6D2 url(../img/xl.png) no-repeat 5px 50%;
+    background: #F5FFD6 url(../img/xl.png) no-repeat 5px 50%;
     background-size: 15px;
-    box-shadow:inset 0 -8px 4px rgba(102, 179, 64, 0.3);
-    -moz-box-shadow:inset 0 -8px 4px rgba(102, 179, 64, 0.3);
-    -webkit-box-shadow:inset 0 -8px 4px rgba(102, 179, 64, 0.3);
+    box-shadow: inset 0 -8px 4px rgba(102, 179, 64, 0.3);
+    -moz-box-shadow: inset 0 -8px 4px rgba(102, 179, 64, 0.3);
+    -webkit-box-shadow: inset 0 -8px 4px rgba(102, 179, 64, 0.3);
+    margin: 0 0 0 30px;
+    vertical-align: middle;
 }
 .download-excel-file:hover{
     color:#16770A;

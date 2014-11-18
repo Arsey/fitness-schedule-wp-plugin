@@ -18,8 +18,6 @@ if (!class_exists('Post_Type_Team')) {
             'team_is_active',
             'team_facebook_link',
             'team_vk_link',
-            'team_first_name',
-            'team_last_name'
         );
 
         /**

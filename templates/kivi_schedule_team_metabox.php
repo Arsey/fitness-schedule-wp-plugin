@@ -34,26 +34,6 @@ $team_is_active = (isset($post_meta['team_is_active']) && $post_meta['team_is_ac
         </td>
     </tr>
 
-    <!--First Name-->
-    <tr valign="top">
-        <th width="30%">
-            <label for="team_first_name"><?php echo __('First Name', 'scheduleplugin'); ?></label>
-        </th>
-        <td>
-            <input type="text" id="team_first_name" name="team_first_name" value="<?php echo $first_name; ?>">
-        </td>
-    </tr>
-
-    <!--Last Name-->
-    <tr valign="top">
-        <th width="30%">
-            <label for="team_last_name"><?php echo __('Last Name', 'scheduleplugin'); ?></label>
-        </th>
-        <td>
-            <input type="text" id="team_last_name" name="team_last_name" value="<?php echo $team_last_name; ?>">
-        </td>
-    </tr>
-
     <!--Description-->
     <tr>
         <th>

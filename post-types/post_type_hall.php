@@ -47,12 +47,12 @@ if (!class_exists('Post_Type_Hall')) {
         {
             register_post_type(self::POST_TYPE, array(
                     'labels' => array(
-                        'name' => __('Halls'),
-                        'singular_name' => __('Hall'),
-                        'add_new' => __('Add Hall'),
-                        'view_item' => __('View'),
-                        'search_items' => __('Find Hall'),
-                        'add_new_item' => __('Add Hall')
+                        'name' => __('Halls', 'scheduleplugin'),
+                        'singular_name' => __('Hall', 'scheduleplugin'),
+                        'add_new' => __('Add Hall', 'scheduleplugin'),
+                        'view_item' => __('View', 'scheduleplugin'),
+                        'search_items' => __('Find Hall', 'scheduleplugin'),
+                        'add_new_item' => __('Add Hall', 'scheduleplugin')
                     ),
                     'hierarchical' => true,
                     'public' => true,
@@ -107,8 +107,8 @@ if (!class_exists('Post_Type_Hall')) {
             return array(
                 'cb' => $columns['cb'],
                 'title' => $columns['title'],
-                'city' => __('City', 'kiwi_schedule_cities'),
-                'club' => __('Club', 'kiwi_schedule_clubs'),
+                'city' => __('City', 'scheduleplugin'),
+                'club' => __('Club', 'scheduleplugin'),
                 'date' => $columns['date']
             );
         }
@@ -134,7 +134,7 @@ if (!class_exists('Post_Type_Hall')) {
         {
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Hall'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Hall', 'scheduleplugin'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

@@ -50,12 +50,12 @@ if (!class_exists('Post_Type_Program')) {
                 self::POST_TYPE,
                 array(
                     'labels' => array(
-                        'name' => __('Programs'),
-                        'singular_name' => __('Program'),
-                        'add_new' => __('Add Program'),
-                        'view_item' => __('View'),
-                        'search_items' => __('Find Program'),
-                        'add_new_item' => __('Add Program')
+                        'name' => __('Programs', 'scheduleplugin'),
+                        'singular_name' => __('Program', 'scheduleplugin'),
+                        'add_new' => __('Add Program', 'scheduleplugin'),
+                        'view_item' => __('View', 'scheduleplugin'),
+                        'search_items' => __('Find Program', 'scheduleplugin'),
+                        'add_new_item' => __('Add Program', 'scheduleplugin')
                     ),
                     'public' => true,
                     'has_archive' => true,
@@ -140,7 +140,7 @@ if (!class_exists('Post_Type_Program')) {
         {
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional program info'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info', 'scheduleplugin'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

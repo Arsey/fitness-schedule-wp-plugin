@@ -15,7 +15,9 @@ if (!class_exists('Post_Type_Team')) {
             'team_club_id',
             'team_group',
             'team_description',
-            'team_is_active'
+            'team_is_active',
+            'team_facebook_link',
+            'team_vk_link',
         );
 
         /**
@@ -52,18 +54,19 @@ if (!class_exists('Post_Type_Team')) {
                 self::POST_TYPE,
                 array(
                     'labels' => array(
-                        'name' => __('Teams'),
-                        'singular_name' => __('Team'),
-                        'add_new' => __('Add team'),
-                        'view_item' => __('View'),
-                        'search_items' => __('Find team'),
-                        'add_new_item' => __('Add team')
+                        'name' => __('Teams','scheduleplugin'),
+                        'singular_name' => __('Team','scheduleplugin'),
+                        'add_new' => __('Add team','scheduleplugin'),
+                        'view_item' => __('View','scheduleplugin'),
+                        'search_items' => __('Find team','scheduleplugin'),
+                        'add_new_item' => __('Add team','scheduleplugin'),
+                        'edit_item' => __('Edit Team Member', 'scheduleplugin'),
                     ),
                     'public' => true,
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
                     'supports' => array(
-                        'title', 'thumbnail'
+                        'title', 'thumbnail','editor'
                     ),
                     'taxonomies' => array(self::CAT_TAXONOMY),
                 )
@@ -141,7 +144,7 @@ if (!class_exists('Post_Type_Team')) {
         {
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional team info'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info','scheduleplugin'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

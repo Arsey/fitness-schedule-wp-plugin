@@ -79,8 +79,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         function add_menu() {
             //menu
 
-            add_menu_page(__('Schedule'), __('Schedule'), 'switch_themes', 'time_table', array(&$this, 'menu_kivi_schedule'));
-            add_submenu_page('time_table', __('Schedule'), __('Schedule'), 'manage_options', 'kivi_schedule_city', array(&$this, 'menu_kivi_schedule'));
+            add_menu_page(__('Schedule','scheduleplugin'), __('Schedule','scheduleplugin'), 'switch_themes', 'time_table', array(&$this, 'menu_kivi_schedule'));
+            add_submenu_page('time_table', __('Schedule','scheduleplugin'), __('Schedule','scheduleplugin'), 'manage_options', 'kivi_schedule_city', array(&$this, 'menu_kivi_schedule'));
         }
 
         function menu_kivi_schedule() {
@@ -406,15 +406,15 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
             $programs = self::fetch_programs(false, 'thumbnail', 1000);
 
-            $schedule_header .= '<thead><tr> <th class="headerSortUp">' . __('Time') . '</th>';
-            $schedule_header .= '<th>' . __('Monday') . '</th>';
-            $schedule_header .= '<th>' . __('Tuesday') . '</th>';
-            $schedule_header .= '<th>' . __('Wednesday') . '</th>';
-            $schedule_header .= '<th>' . __('Thursday') . '</th>';
-            $schedule_header .= '<th>' . __('Friday') . '</th>';
-            $schedule_header .= '<th>' . __('Saturday') . '</th>';
-            $schedule_header .= '<th>' . __('Sunday') . '</th>';
-            $schedule_header .= '<th>' . __('Delete') . '</th></tr></thead>';
+            $schedule_header .= '<thead><tr> <th class="headerSortUp">' . __('Time','scheduleplugin') . '</th>';
+            $schedule_header .= '<th>' . __('Monday','scheduleplugin') . '</th>';
+            $schedule_header .= '<th>' . __('Tuesday','scheduleplugin') . '</th>';
+            $schedule_header .= '<th>' . __('Wednesday','scheduleplugin') . '</th>';
+            $schedule_header .= '<th>' . __('Thursday','scheduleplugin') . '</th>';
+            $schedule_header .= '<th>' . __('Friday','scheduleplugin') . '</th>';
+            $schedule_header .= '<th>' . __('Saturday','scheduleplugin') . '</th>';
+            $schedule_header .= '<th>' . __('Sunday','scheduleplugin') . '</th>';
+            $schedule_header .= '<th>' . __('Delete','scheduleplugin') . '</th></tr></thead>';
 
             $Cities = new WP_Query(array('post_type' => Post_Type_City::POST_TYPE));
             $Cities_posts = $Cities->get_posts();
@@ -438,7 +438,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                             $hall_id = $hall->ID;
                             if ($club_id == $hall_club_id[0]) {
                                 $Citie_content_block .= '<div class="hall-schedule" data-hall-id="' . $hall_id . '">';
-                                $Citie_content_block .= '<h4 class="schedule-halls-in-clubs"><span>' . $hall->post_title . '</span><a href="javascript:void(0)" class="add-new-schedule-row"> ' . __('Add New Schedule') . '</a></h4>';
+                                $Citie_content_block .= '<h4 class="schedule-halls-in-clubs"><span>' . $hall->post_title . '</span><a href="javascript:void(0)" class="add-new-schedule-row"> ' . __('Add New Schedule','scheduleplugin') . '</a></h4>';
                                 $Citie_content_block .= '<table class="schedule-table">';
                                 $Citie_content_block .= $schedule_header;
 
@@ -605,8 +605,6 @@ DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
             if ($city_id != null) {
                 if ($club_id != null) {
                     $club_id_to_fetch = $club_id;
-                    echo $club_id_to_fetch;
-                    die();
                     for ($club_index = 0; $club_index < count($clubs); $club_index++) {
                         $club = $clubs[$club_index];
                         if ($club['club_id'] == $club_id) {
@@ -692,14 +690,14 @@ DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
                     $sheet->getStyle('A' . $row_index . ':I' . $row_index)->getFont()->setBold(true);
 
                     $sheet->setCellValue("A" . $row_index, '#');
-                    $sheet->setCellValue("B" . $row_index, __('Time'));
-                    $sheet->setCellValue("C" . $row_index, __('Monday'));
-                    $sheet->setCellValue("D" . $row_index, __('Tuesday'));
-                    $sheet->setCellValue("E" . $row_index, __('Wednesday'));
-                    $sheet->setCellValue("F" . $row_index, __('Thursday'));
-                    $sheet->setCellValue("G" . $row_index, __('Friday'));
-                    $sheet->setCellValue("H" . $row_index, __('Saturday'));
-                    $sheet->setCellValue("I" . $row_index, __('Sunday'));
+                    $sheet->setCellValue("B" . $row_index, __('Time','scheduleplugin'));
+                    $sheet->setCellValue("C" . $row_index, __('Monday','scheduleplugin'));
+                    $sheet->setCellValue("D" . $row_index, __('Tuesday','scheduleplugin'));
+                    $sheet->setCellValue("E" . $row_index, __('Wednesday','scheduleplugin'));
+                    $sheet->setCellValue("F" . $row_index, __('Thursday','scheduleplugin'));
+                    $sheet->setCellValue("G" . $row_index, __('Friday','scheduleplugin'));
+                    $sheet->setCellValue("H" . $row_index, __('Saturday','scheduleplugin'));
+                    $sheet->setCellValue("I" . $row_index, __('Sunday','scheduleplugin'));
 
                     $row_index++;
 

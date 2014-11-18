@@ -276,7 +276,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
         static function fetch_programs_dictionary() {
             $programs = array();
-            $query = new WP_Query(array('post_type' => Post_Type_Program::POST_TYPE));
+            $query = new WP_Query(array('post_type' => Post_Type_Program::POST_TYPE,'posts_per_page'=>1000));
             while ($query->have_posts()) {
                 $query->the_post();
 

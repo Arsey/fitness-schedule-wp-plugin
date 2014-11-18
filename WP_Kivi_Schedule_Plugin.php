@@ -401,7 +401,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
                     $program = array('ID' => $r['post_id'], 'post_title' => $r['post_title']);
 
-                    $taxonomies[$r['term_id']]['programs'][] = $program;
+                    $taxonomies[$r['term_id']]['team'][] = $program;
                 }
             }
 

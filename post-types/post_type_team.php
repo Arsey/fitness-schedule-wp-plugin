@@ -59,7 +59,8 @@ if (!class_exists('Post_Type_Team')) {
                         'add_new' => __('Add team','scheduleplugin'),
                         'view_item' => __('View','scheduleplugin'),
                         'search_items' => __('Find team','scheduleplugin'),
-                        'add_new_item' => __('Add team','scheduleplugin')
+                        'add_new_item' => __('Add team','scheduleplugin'),
+                        'edit_item' => __('Edit Team Member', 'scheduleplugin'),
                     ),
                     'public' => true,
                     'has_archive' => true,

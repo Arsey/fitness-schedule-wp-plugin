@@ -79,7 +79,7 @@ jQuery(document).ready(function($) {
             success: function(data) {
                 var i = 0;
                 var date = JSON.parse(data);
-                var select_club_content = '';
+                var select_club_content = '<option value="" selected></option>';
                 for (i in date) {
                     select_club_content += '<option value = "' + date[i]['club_id'] + '">' + date[i]['club_name'] + '</option>'
                 }

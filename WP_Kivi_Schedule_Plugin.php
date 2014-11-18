@@ -580,18 +580,19 @@ DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
 
             include_once 'PHPExcel/Classes/PHPExcel.php';
             include_once 'PHPExcel/Classes/PHPExcel/Writer/Excel5.php';
-            if (isset($_POST['kivi_schedule_cities_filter']) && ($_POST['kivi_schedule_cities_filter'] != "")) {
-                $city_id = $_POST['kivi_schedule_cities_filter'];
+
+            if (isset($_REQUEST['kivi_schedule_cities_filter']) && ($_REQUEST['kivi_schedule_cities_filter'] != "")) {
+                $city_id = trim($_REQUEST['kivi_schedule_cities_filter']);
             } else {
                 $city_id = null;
             }
-            if (isset($_POST['kivi_schedule_clubs_filter']) && ($_POST['kivi_schedule_clubs_filter'] != "")) {
-                $club_id = $_POST['kivi_schedule_clubs_filter'];
+            if (isset($_REQUEST['kivi_schedule_clubs_filter']) && ($_REQUEST['kivi_schedule_clubs_filter'] != "")) {
+                $club_id = trim($_REQUEST['kivi_schedule_clubs_filter']);
             } else {
                 $club_id = null;
             }
-            if (isset($_POST['kivi_schedule_halls_filter']) && ($_POST['kivi_schedule_halls_filter'] != "")) {
-                $hall_id = $_POST['kivi_schedule_halls_filter'];
+            if (isset($_REQUEST['kivi_schedule_halls_filter']) && ($_REQUEST['kivi_schedule_halls_filter'] != "")) {
+                $hall_id = trim($_REQUEST['kivi_schedule_halls_filter']);
             } else {
                 $hall_id = null;
             }

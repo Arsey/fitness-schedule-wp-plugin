@@ -15,11 +15,11 @@ while ($query_club->have_posts()) {
 ?>
 <table class="form-table">
     <tr valign="top">
-        <th  width="30%" class="metabox_label_column">
-            <label for="hall_city"> <?php echo __('City '); ?> </label>
+        <th width="30%" class="metabox_label_column">
+            <label for="hall_city"> <?php echo __('City', 'scheduleplugin'); ?></label>
         </th>
         <td>
-            <select id = "select_cities" name="hall_city_id">
+            <select id="select_cities" name="hall_city_id">
                 <?php
                 if (isset($towns)) {
                     $selected_town = 0;
@@ -41,8 +41,9 @@ while ($query_club->have_posts()) {
                             }
                         }
                         ?>
-                        <option value="<?php echo $town; ?>" <?php echo $selected; ?> > <?php echo $town_id; ?> </option>
-                        <?php
+                        <option
+                            value="<?php echo $town; ?>" <?php echo $selected; ?> > <?php echo $town_id; ?> </option>
+                    <?php
                     }
                 }
                 ?>
@@ -50,11 +51,11 @@ while ($query_club->have_posts()) {
         </td>
     </tr>
     <tr valign="top">
-        <th  width="30%" class="metabox_label_column">
-            <label for="hall_group"><?php echo __('Club'); ?></label>
+        <th width="30%" class="metabox_label_column">
+            <label for="hall_group"><?php echo __('Club', 'scheduleplugin'); ?></label>
         </th>
         <td>
-            <select class="hall-clubs-meta" id = "select_clubs" name="hall_club_id">
+            <select class="hall-clubs-meta" id="select_clubs" name="hall_club_id">
                 <?php
                 if (isset($clubs)) {
 
@@ -63,13 +64,14 @@ while ($query_club->have_posts()) {
                         if ($club_city_id == $selected_town) {
                             @get_post_meta($post->ID, 'hall_club_id', true) == $club_id ? $selected_city = 'selected' : $selected_city = ''
                             ?>
-                            <option value='<?php echo $club; ?>' <?php echo $selected_city ?>><?php echo $club; ?></option>
-                            <?php
+                            <option
+                                value='<?php echo $club; ?>' <?php echo $selected_city ?>><?php echo $club; ?></option>
+                        <?php
                         }
                     }
                 }
                 ?>
             </select>
         </td>
-    </tr> 
+    </tr>
 </table>

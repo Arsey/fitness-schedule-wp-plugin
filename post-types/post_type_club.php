@@ -47,18 +47,18 @@ if (!class_exists('Post_Type_Club')) {
         {
             register_post_type(self::POST_TYPE, array(
                     'labels' => array(
-                        'name' => __('Clubs'),
-                        'singular_name' => __('Club'),
-                        'add_new' => __('Add Club'),
-                        'view_item' => __('View'),
-                        'search_items' => __('Find Club'),
-                        'add_new_item' => __('Add Club')
+                        'name' => __('Clubs', 'scheduleplugin'),
+                        'singular_name' => __('Club', 'scheduleplugin'),
+                        'add_new' => __('Add Club', 'scheduleplugin'),
+                        'view_item' => __('View', 'scheduleplugin'),
+                        'search_items' => __('Find Club', 'scheduleplugin'),
+                        'add_new_item' => __('Add Club', 'scheduleplugin')
                     ),
                     'public' => true,
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
                     'supports' => array(
-                        'title','editor'
+                        'title', 'editor'
                     )
                 )
             );
@@ -101,7 +101,7 @@ if (!class_exists('Post_Type_Club')) {
         {
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional  info'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info', 'scheduleplugin'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }// END public function add_meta_boxes()
 

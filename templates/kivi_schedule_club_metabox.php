@@ -12,7 +12,7 @@ while ($query->have_posts()) {
 <table class="form-table">
     <tr valign="top">
         <th width="30%">
-            <label for="meta_a"><?php echo __('City'); ?></label>
+            <label for="meta_a"><?php echo __('City', 'scheduleplugin'); ?></label>
         </th>
         <td>
             <select id="club_city_id" name="club_city_id">
@@ -27,7 +27,7 @@ while ($query->have_posts()) {
     </tr>
     <tr>
         <th>
-            <label for="club_phone"> <?php echo __('Phone'); ?> </label>
+            <label for="club_phone"> <?php echo __('Phone', 'scheduleplugin'); ?> </label>
         </th>
         <td>
             <input id="club_phone" name="club_phone" type="text"
@@ -37,7 +37,7 @@ while ($query->have_posts()) {
     <!--club_map_link-->
     <tr>
         <th>
-            <label for="club_map_link"> <?php echo __('Map Link'); ?> </label>
+            <label for="club_map_link"> <?php echo __('Map Link', 'scheduleplugin'); ?> </label>
         </th>
         <td>
             <p style="color:#DD0238">Do not put here a shortened link! Only link for an iframe is acceptable!</p>
@@ -48,7 +48,7 @@ while ($query->have_posts()) {
     <!--club_video_link-->
     <tr>
         <th>
-            <label for="club_video_link"> <?php echo __('Video Link'); ?> </label>
+            <label for="club_video_link"> <?php echo __('Video Link', 'scheduleplugin'); ?> </label>
         </th>
         <td>
             <p style="color:#DD0238">Put here only the video code like "UmJ5tHqpk_I"</p>
@@ -59,7 +59,7 @@ while ($query->have_posts()) {
     <!--club_tour_link-->
     <tr>
         <th>
-            <label for="club_tour_link"> <?php echo __('Virtual Tour Link'); ?> </label>
+            <label for="club_tour_link"> <?php echo __('Virtual Tour Link', 'scheduleplugin'); ?> </label>
         </th>
         <td>
             <input id="club_tour_link" name="club_tour_link" type="text"
@@ -69,7 +69,7 @@ while ($query->have_posts()) {
     <!--club_slider_shortcode-->
     <tr>
         <th>
-            <label for="club_slider_shortcode"> <?php echo __('Meta Slider Short Code'); ?> </label>
+            <label for="club_slider_shortcode"> <?php echo __('Meta Slider Short Code', 'scheduleplugin'); ?> </label>
         </th>
         <td>
             <input id="club_slider_shortcode" name="club_slider_shortcode" type="text"
@@ -78,7 +78,7 @@ while ($query->have_posts()) {
     </tr>
     <tr>
         <th>
-            <label for="club_is_active"> <?php echo __('Is Active '); ?>  </label>
+            <label for="club_is_active"><?php echo __('Is Active', 'scheduleplugin'); ?></label>
         </th>
         <td>
             <?php @get_post_meta($post->ID, 'club_is_active', true) !== "" ? $selected = 'checked' : $selected = ''; ?>

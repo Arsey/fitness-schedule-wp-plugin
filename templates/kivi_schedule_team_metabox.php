@@ -1,17 +1,36 @@
 <?php
-global $wpdb;
-
-$query = new WP_Query(array('post_type' => Post_Type_Club::POST_TYPE));
-
 $post_meta = get_post_meta($post->ID);
 
-$team_club_id = isset($post_meta['team_club_id']) ? $post_meta['team_club_id'][0] : null;;
+$team_club_id = isset($post_meta['team_club_id']) ? $post_meta['team_club_id'][0] : null;
+$team_clubs = explode(Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER, $team_club_id);
+
 $first_name = isset($post_meta['team_first_name']) ? $post_meta['team_first_name'][0] : '';
 $team_last_name = isset($post_meta['team_last_name']) ? $post_meta['team_last_name'][0] : '';
 $team_description = isset($post_meta['team_description']) ? $post_meta['team_description'][0] : '';
 $team_facebook_link = isset($post_meta['team_facebook_link']) ? $post_meta['team_facebook_link'][0] : '';
 $team_vk_link = isset($post_meta['team_vk_link']) ? $post_meta['team_vk_link'][0] : '';
 $team_is_active = (isset($post_meta['team_is_active']) && $post_meta['team_is_active'][0] !== '') ? $selected = 'checked' : $selected = '';
+
+
+$cities = WP_Kivi_Schedule_Plugin::fetch_cities();
+$cities_ids = array();
+foreach ($cities as $city) {
+    $cities_ids[] = $city['id'];
+}
+
+$clubs = WP_Kivi_Schedule_Plugin::fetch_clubs_by_city($cities_ids);
+
+if ($clubs) {
+    foreach ($clubs as $club) {
+        if (!$default_club) {
+            $default_club = $club;
+        } else if ($default_club == $club['club_id']) {
+            $default_club = $club;
+        }
+    }
+}
+
+wp_reset_postdata();
 ?>
 <table class="form-table">
 
@@ -22,15 +41,34 @@ $team_is_active = (isset($post_meta['team_is_active']) && $post_meta['team_is_ac
             <label for="team_club_id"><?php echo __('Club', 'scheduleplugin'); ?></label>
         </th>
         <td>
-            <select id="team_club_id" name="team_club_id">
-                <?php while ($query->have_posts()) { ?>
-                    <?php
-                    $query->the_post();
-                    $selected = get_the_ID() == $team_club_id ? 'selected' : '';
+            <?php
+            if ($cities) {
+                foreach ($cities as $city) {
                     ?>
-                    <option value="<?php the_ID(); ?>" <?php echo $selected ?> > <?php echo the_title(); ?></option>
+                    <div class="one-city-list">
+                                <span>
+                                    <?php echo $city['name']; ?>
+                                </span>
+                        <?php if ($clubs) { ?>
+                            <ul>
+                                <?php foreach ($clubs as $club) { ?>
+                                    <?php if ($club['club_city_id'] == $city['id']) { ?>
+                                        <li>
+                                            <?php $checked = (is_array($team_clubs) && in_array($club['club_id'], $team_clubs)) ? 'checked' : ''; ?>
+
+                                            <label>
+                                                <input type="checkbox" name="team_club_id_part"
+                                                       value="<?php echo $club['club_id']; ?>" <?php echo $checked; ?>/><?php echo $club['club_name']; ?>
+                                            </label>
+                                        </li>
+                                    <?php } ?>
+                                <?php } ?>
+                            </ul>
+                        <?php } ?>
+                    </div>
                 <?php } ?>
-            </select>
+            <?php } ?>
+            <input type="hidden" name="team_club_id" id="team_club_id" value="<?php echo $team_club_id; ?>"/>
         </td>
     </tr>
 
@@ -76,3 +114,32 @@ $team_is_active = (isset($post_meta['team_is_active']) && $post_meta['team_is_ac
         </td>
     </tr>
 </table>
+
+<script>
+    (function ($) {
+        $(function () {
+            $('input[name="team_club_id_part"]').change(function () {
+                updateTeamClubIds();
+            });
+
+            function updateTeamClubIds() {
+                var isAnyChecked = false;
+                var ids = [];
+                $('input[name="team_club_id_part"]').each(function () {
+                    var $el = $(this);
+                    if ($el.is(':checked')) {
+                        ids.push($el.val());
+                        isAnyChecked = true;
+                    }
+                });
+                if (isAnyChecked) {
+                    $('#team_club_id').val('##' + ids.join('<?php echo Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER;?>') + '##');
+                } else {
+                    $('#team_club_id').val('');
+                }
+            }
+
+            updateTeamClubIds();
+        })
+    })(jQuery)
+</script>

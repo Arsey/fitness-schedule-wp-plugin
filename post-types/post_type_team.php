@@ -10,6 +10,7 @@ if (!class_exists('Post_Type_Team')) {
 
         const POST_TYPE = "kivi_schedule_team";
         const CAT_TAXONOMY = "kiwi_schedule_team_category";
+        const TEAM_MEMBER_CLUB_ID_DELIMITER='##';
 
         private $_meta = array(
             'team_club_id',

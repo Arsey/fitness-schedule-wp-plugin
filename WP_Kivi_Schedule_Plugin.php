@@ -359,15 +359,24 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $select;
         }
 
-        static function get_team_in_categories() {
+        static function get_team_in_categories($club_id=null) {
             global $wpdb;
+
+            $club_where_sql='';
+            if($club_id){
+                $club_where_sql=" AND p.ID IN(SELECT post_id FROM `wp_postmeta` WHERE meta_key='team_club_id'
+AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER."%')";
+            }
+
             $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM wp_posts p
                 LEFT OUTER JOIN wp_term_relationships r ON r.object_id = p.ID
                 LEFT OUTER JOIN wp_term_taxonomy x ON x.term_taxonomy_id = r.term_taxonomy_id
                 LEFT OUTER JOIN wp_terms t ON t.term_id = x.term_id
                 WHERE p.post_status = 'publish'
                 AND p.post_type = '" . Post_Type_Team::POST_TYPE . "'
-                AND x.taxonomy = '" . Post_Type_Team::CAT_TAXONOMY . "'", ARRAY_A);
+                AND x.taxonomy = '" . Post_Type_Team::CAT_TAXONOMY . "'".$club_where_sql, ARRAY_A);
+
+
 
             $taxonomies = array();
             if ($results) {
@@ -379,9 +388,9 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                             'programs' => array()
                         );
 
-                    $program = array('ID' => $r['post_id'], 'post_title' => $r['post_title']);
+                    $team_member = array('ID' => $r['post_id'], 'post_title' => $r['post_title'],'permalink'=>get_the_permalink($r['post_id']));
 
-                    $taxonomies[$r['term_id']]['team'][] = $program;
+                    $taxonomies[$r['term_id']]['team'][] = $team_member;
                 }
             }
 
@@ -400,7 +409,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             global $wpdb;
             global $kivi_schedule_settings;
             if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_city_id'])) {
-                
+
             }
             $schedule_header = '';
 

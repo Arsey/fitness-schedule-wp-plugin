@@ -69,11 +69,11 @@ if (!class_exists('Post_Type_Program')) {
             );
 
             $labels = array(
-                'name' => _x('Categories', 'kiwi_schedule_program'),
-                'singular_name' => _x('Category', 'kiwi_schedule_program'),
-                'search_items' => _x('Search Categories', 'kiwi_schedule_program'),
+                'name' => _x('Program Categories', 'kiwi_schedule_program'),
+                'singular_name' => _x('Program Category', 'kiwi_schedule_program'),
+                'search_items' => _x('Search Programs Categories', 'kiwi_schedule_program'),
                 'popular_items' => _x('Popular Categories', 'kiwi_schedule_program'),
-                'all_items' => _x('All Categories', 'kiwi_schedule_program'),
+                'all_items' => _x('All Programs Categories', 'kiwi_schedule_program'),
                 'parent_item' => _x('Parent Category', 'kiwi_schedule_program'),
                 'parent_item_colon' => _x('Parent Category:', 'kiwi_schedule_program'),
                 'edit_item' => _x('Edit Category', 'kiwi_schedule_program'),
@@ -83,7 +83,7 @@ if (!class_exists('Post_Type_Program')) {
                 'separate_items_with_commas' => _x('Separate categories with commas', 'kiwi_schedule_program'),
                 'add_or_remove_items' => _x('Add or remove categories', 'kiwi_schedule_program'),
                 'choose_from_most_used' => _x('Choose from the most used categories', 'kiwi_schedule_program'),
-                'menu_name' => _x('Categories', 'kiwi_schedule_program'),
+                'menu_name' => _x('Programs Categories', 'kiwi_schedule_program'),
             );
 
             $args = array(

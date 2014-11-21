@@ -74,21 +74,21 @@ if (!class_exists('Post_Type_Team')) {
             );
 
             $labels = array(
-                'name' => _x('Categories', 'kiwi_schedule_team'),
+                'name' => _x('Team Categories', 'kiwi_schedule_team'),
                 'singular_name' => _x('Category', 'kiwi_schedule_team'),
-                'search_items' => _x('Search Categories', 'kiwi_schedule_team'),
-                'popular_items' => _x('Popular Categories', 'kiwi_schedule_team'),
-                'all_items' => _x('All Categories', 'kiwi_schedule_team'),
+                'search_items' => _x('Search Team Categories', 'kiwi_schedule_team'),
+                'popular_items' => _x('Popular Team Categories', 'kiwi_schedule_team'),
+                'all_items' => _x('All Team Categories', 'kiwi_schedule_team'),
                 'parent_item' => _x('Parent Category', 'kiwi_schedule_team'),
                 'parent_item_colon' => _x('Parent Category:', 'kiwi_schedule_team'),
                 'edit_item' => _x('Edit Category', 'kiwi_schedule_team'),
                 'update_item' => _x('Update Category', 'kiwi_schedule_team'),
                 'add_new_item' => _x('Add New Category', 'kiwi_schedule_team'),
                 'new_item_name' => _x('New Category Name', 'kiwi_schedule_team'),
-                'separate_items_with_commas' => _x('Separate categories with commas', 'kiwi_schedule_team'),
-                'add_or_remove_items' => _x('Add or remove categories', 'kiwi_schedule_team'),
-                'choose_from_most_used' => _x('Choose from the most used categories', 'kiwi_schedule_team'),
-                'menu_name' => _x('Categories', 'kiwi_schedule_team'),
+                'separate_items_with_commas' => _x('Separate team categories with commas', 'kiwi_schedule_team'),
+                'add_or_remove_items' => _x('Add or remove team categories', 'kiwi_schedule_team'),
+                'choose_from_most_used' => _x('Choose from the most used team categories', 'kiwi_schedule_team'),
+                'menu_name' => _x('Team Categories', 'kiwi_schedule_team'),
             );
 
             $args = array(

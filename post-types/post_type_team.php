@@ -10,13 +10,15 @@ if (!class_exists('Post_Type_Team')) {
 
         const POST_TYPE = "kivi_schedule_team";
         const CAT_TAXONOMY = "kiwi_schedule_team_category";
-        const TEAM_MEMBER_CLUB_ID_DELIMITER='##';
+        const TEAM_MEMBER_CLUB_ID_DELIMITER = '##';
 
         private $_meta = array(
             'team_club_id',
             'team_group',
             'team_description',
             'team_is_active',
+            'team_is_methodist',
+            'team_methodist_description',
             'team_facebook_link',
             'team_vk_link',
         );
@@ -55,40 +57,40 @@ if (!class_exists('Post_Type_Team')) {
                 self::POST_TYPE,
                 array(
                     'labels' => array(
-                        'name' => __('Teams','scheduleplugin'),
-                        'singular_name' => __('Team','scheduleplugin'),
-                        'add_new' => __('Add team','scheduleplugin'),
-                        'view_item' => __('View','scheduleplugin'),
-                        'search_items' => __('Find team','scheduleplugin'),
-                        'add_new_item' => __('Add team','scheduleplugin'),
-                        'edit_item' => __('Edit Team Member', 'scheduleplugin'),
+                        'name' => __('Teams', WP_Kivi_Schedule_Plugin::textdomain),
+                        'singular_name' => __('Team', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new' => __('Add team', WP_Kivi_Schedule_Plugin::textdomain),
+                        'view_item' => __('View', WP_Kivi_Schedule_Plugin::textdomain),
+                        'search_items' => __('Find team', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new_item' => __('Add team', WP_Kivi_Schedule_Plugin::textdomain),
+                        'edit_item' => __('Edit Team Member', WP_Kivi_Schedule_Plugin::textdomain),
                     ),
                     'public' => true,
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
                     'supports' => array(
-                        'title', 'thumbnail','editor'
+                        'title', 'thumbnail', 'editor'
                     ),
                     'taxonomies' => array(self::CAT_TAXONOMY),
                 )
             );
 
             $labels = array(
-                'name' => _x('Team Categories', 'kiwi_schedule_team'),
-                'singular_name' => _x('Category', 'kiwi_schedule_team'),
-                'search_items' => _x('Search Team Categories', 'kiwi_schedule_team'),
-                'popular_items' => _x('Popular Team Categories', 'kiwi_schedule_team'),
-                'all_items' => _x('All Team Categories', 'kiwi_schedule_team'),
-                'parent_item' => _x('Parent Category', 'kiwi_schedule_team'),
-                'parent_item_colon' => _x('Parent Category:', 'kiwi_schedule_team'),
-                'edit_item' => _x('Edit Category', 'kiwi_schedule_team'),
-                'update_item' => _x('Update Category', 'kiwi_schedule_team'),
-                'add_new_item' => _x('Add New Category', 'kiwi_schedule_team'),
-                'new_item_name' => _x('New Category Name', 'kiwi_schedule_team'),
-                'separate_items_with_commas' => _x('Separate team categories with commas', 'kiwi_schedule_team'),
-                'add_or_remove_items' => _x('Add or remove team categories', 'kiwi_schedule_team'),
-                'choose_from_most_used' => _x('Choose from the most used team categories', 'kiwi_schedule_team'),
-                'menu_name' => _x('Team Categories', 'kiwi_schedule_team'),
+                'name' => __('Team Categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'singular_name' => __('Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'search_items' => __('Search Team Categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'popular_items' => __('Popular Team Categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'all_items' => __('All Team Categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'parent_item' => __('Parent Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'parent_item_colon' => __('Parent Category:', WP_Kivi_Schedule_Plugin::textdomain),
+                'edit_item' => __('Edit Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'update_item' => __('Update Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'add_new_item' => __('Add New Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'new_item_name' => __('New Category Name', WP_Kivi_Schedule_Plugin::textdomain),
+                'separate_items_with_commas' => __('Separate team categories with commas', WP_Kivi_Schedule_Plugin::textdomain),
+                'add_or_remove_items' => __('Add or remove team categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'choose_from_most_used' => __('Choose from the most used team categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'menu_name' => __('Team Categories', WP_Kivi_Schedule_Plugin::textdomain),
             );
 
             $args = array(
@@ -115,6 +117,8 @@ if (!class_exists('Post_Type_Team')) {
                 return;
             }
 
+            if (defined('DOING_AJAX')) return;//to prevent deleting the post meta on quick edit
+
             if (isset($_POST['post_type']) && $_POST['post_type'] == self::POST_TYPE && current_user_can('edit_post', $post_id)) {
                 foreach ($this->_meta as $field_name) {
                     // Update the post's meta field
@@ -134,6 +138,7 @@ if (!class_exists('Post_Type_Team')) {
         {
             // Add metaboxes
             add_action('add_meta_boxes', array(&$this, 'add_meta_boxes'));
+            add_action('pre_get_posts', array(&$this, 'alter_posts_query'));
         }
 
 // END public function admin_init()
@@ -145,11 +150,28 @@ if (!class_exists('Post_Type_Team')) {
         {
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info','scheduleplugin'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info', WP_Kivi_Schedule_Plugin::textdomain), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 
 // END public function add_meta_boxes()
+
+        /**
+         * hook into WP's pre_get_posts
+         */
+        public function alter_posts_query($query)
+        {
+            $screen = get_current_screen();
+            $user = wp_get_current_user();
+            $user_club = esc_attr(get_the_author_meta('user_manages_club', $user->ID));
+            if ($screen->id === 'edit-kivi_schedule_team' && in_array('club_editor', $user->roles) && is_numeric($user_club)) {
+                $query->set('author', $user->ID);
+
+            }
+            return $query;
+        }
+
+// END public function alter_posts_query()
 
         /**
          * called off of the add meta box

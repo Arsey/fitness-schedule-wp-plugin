@@ -47,12 +47,12 @@ if (!class_exists('Post_Type_Hall')) {
         {
             register_post_type(self::POST_TYPE, array(
                     'labels' => array(
-                        'name' => __('Halls', 'scheduleplugin'),
-                        'singular_name' => __('Hall', 'scheduleplugin'),
-                        'add_new' => __('Add Hall', 'scheduleplugin'),
-                        'view_item' => __('View', 'scheduleplugin'),
-                        'search_items' => __('Find Hall', 'scheduleplugin'),
-                        'add_new_item' => __('Add Hall', 'scheduleplugin')
+                        'name' => __('Halls', WP_Kivi_Schedule_Plugin::textdomain),
+                        'singular_name' => __('Hall', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new' => __('Add Hall', WP_Kivi_Schedule_Plugin::textdomain),
+                        'view_item' => __('View', WP_Kivi_Schedule_Plugin::textdomain),
+                        'search_items' => __('Find Hall', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new_item' => __('Add Hall', WP_Kivi_Schedule_Plugin::textdomain)
                     ),
                     'hierarchical' => true,
                     'public' => true,
@@ -77,11 +77,24 @@ if (!class_exists('Post_Type_Hall')) {
                 return;
             }
 
+            if (defined('DOING_AJAX')) return;//to prevent deleting the post meta on quick edit
+
             if (isset($_POST['post_type']) && $_POST['post_type'] == self::POST_TYPE && current_user_can('edit_post', $post_id)) {
                 foreach ($this->_meta as $field_name) {
                     // Update the post's meta field
                     update_post_meta($post_id, $field_name, $_POST[$field_name]);
                 }
+
+                /**
+                 * if current user is club manager,
+                 * update club id and city id forced
+                 */
+                if ($data = WP_Kivi_Schedule_Plugin::is_user_current_club_manager()) {
+                    $city_id = get_post_meta($data['user_club'], 'club_city_id', true);
+                    update_post_meta($post_id, 'hall_club_id', $data['user_club']);
+                    update_post_meta($post_id, 'hall_city_id', $city_id);
+                }
+
             } else {
                 return;
             } // if($_POST['post_type'] == self::POST_TYPE && current_user_can('edit_post', $post_id))
@@ -100,15 +113,40 @@ if (!class_exists('Post_Type_Hall')) {
 
             add_filter('manage_edit-' . self::POST_TYPE . '_columns', array(&$this, 'set_custom_edit_columns'));
             add_action('manage_' . self::POST_TYPE . '_posts_custom_column', array(&$this, 'custom_column'), 10, 2);
+
+            add_action('pre_get_posts', array(&$this, 'alter_posts_query'));
         }
+
+        /**
+         * hook into WP's pre_get_posts
+         */
+        public function alter_posts_query($query)
+        {
+            $screen = get_current_screen();
+            $user = wp_get_current_user();
+            $user_club = esc_attr(get_the_author_meta('user_manages_club', $user->ID));
+            if ($screen->id === 'edit-' . self::POST_TYPE && in_array('club_editor', $user->roles) && is_numeric($user_club)) {
+                $meta_query = $query->get('meta_query');
+
+                $meta_query[] = array(
+                    'key' => 'hall_club_id',
+                    'value' => $user_club,
+                );
+
+                $query->set('meta_query', $meta_query);
+            }
+            return $query;
+        }
+
+// END public function alter_posts_query()
 
         function set_custom_edit_columns($columns)
         {
             return array(
                 'cb' => $columns['cb'],
                 'title' => $columns['title'],
-                'city' => __('City', 'scheduleplugin'),
-                'club' => __('Club', 'scheduleplugin'),
+                'city' => __('City', WP_Kivi_Schedule_Plugin::textdomain),
+                'club' => __('Club', WP_Kivi_Schedule_Plugin::textdomain),
                 'date' => $columns['date']
             );
         }
@@ -132,9 +170,11 @@ if (!class_exists('Post_Type_Hall')) {
          */
         public function add_meta_boxes()
         {
+            if (WP_Kivi_Schedule_Plugin::is_user_current_club_manager())
+                return;
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Hall', 'scheduleplugin'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Hall', WP_Kivi_Schedule_Plugin::textdomain), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

@@ -50,12 +50,12 @@ if (!class_exists('Post_Type_Program')) {
                 self::POST_TYPE,
                 array(
                     'labels' => array(
-                        'name' => __('Programs', 'scheduleplugin'),
-                        'singular_name' => __('Program', 'scheduleplugin'),
-                        'add_new' => __('Add Program', 'scheduleplugin'),
-                        'view_item' => __('View', 'scheduleplugin'),
-                        'search_items' => __('Find Program', 'scheduleplugin'),
-                        'add_new_item' => __('Add Program', 'scheduleplugin')
+                        'name' => __('Programs', WP_Kivi_Schedule_Plugin::textdomain),
+                        'singular_name' => __('Program', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new' => __('Add Program', WP_Kivi_Schedule_Plugin::textdomain),
+                        'view_item' => __('View', WP_Kivi_Schedule_Plugin::textdomain),
+                        'search_items' => __('Find Program', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new_item' => __('Add Program', WP_Kivi_Schedule_Plugin::textdomain)
                     ),
                     'public' => true,
                     'has_archive' => true,
@@ -69,21 +69,21 @@ if (!class_exists('Post_Type_Program')) {
             );
 
             $labels = array(
-                'name' => _x('Program Categories', 'kiwi_schedule_program'),
-                'singular_name' => _x('Program Category', 'kiwi_schedule_program'),
-                'search_items' => _x('Search Programs Categories', 'kiwi_schedule_program'),
-                'popular_items' => _x('Popular Categories', 'kiwi_schedule_program'),
-                'all_items' => _x('All Programs Categories', 'kiwi_schedule_program'),
-                'parent_item' => _x('Parent Category', 'kiwi_schedule_program'),
-                'parent_item_colon' => _x('Parent Category:', 'kiwi_schedule_program'),
-                'edit_item' => _x('Edit Category', 'kiwi_schedule_program'),
-                'update_item' => _x('Update Category', 'kiwi_schedule_program'),
-                'add_new_item' => _x('Add New Category', 'kiwi_schedule_program'),
-                'new_item_name' => _x('New Category Name', 'kiwi_schedule_program'),
-                'separate_items_with_commas' => _x('Separate categories with commas', 'kiwi_schedule_program'),
-                'add_or_remove_items' => _x('Add or remove categories', 'kiwi_schedule_program'),
-                'choose_from_most_used' => _x('Choose from the most used categories', 'kiwi_schedule_program'),
-                'menu_name' => _x('Programs Categories', 'kiwi_schedule_program'),
+                'name' => __('Program Categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'singular_name' => __('Program Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'search_items' => __('Search Programs Categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'popular_items' => __('Popular Categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'all_items' => __('All Programs Categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'parent_item' => __('Parent Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'parent_item_colon' => __('Parent Category:', WP_Kivi_Schedule_Plugin::textdomain),
+                'edit_item' => __('Edit Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'update_item' => __('Update Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'add_new_item' => __('Add New Category', WP_Kivi_Schedule_Plugin::textdomain),
+                'new_item_name' => __('New Category Name', WP_Kivi_Schedule_Plugin::textdomain),
+                'separate_items_with_commas' => __('Separate categories with commas', WP_Kivi_Schedule_Plugin::textdomain),
+                'add_or_remove_items' => __('Add or remove categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'choose_from_most_used' => __('Choose from the most used categories', WP_Kivi_Schedule_Plugin::textdomain),
+                'menu_name' => __('Programs Categories', WP_Kivi_Schedule_Plugin::textdomain),
             );
 
             $args = array(
@@ -109,6 +109,8 @@ if (!class_exists('Post_Type_Program')) {
             if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
                 return;
             }
+
+            if (defined('DOING_AJAX')) return;//to prevent deleting the post meta on quick edit
 
             if (isset($_POST['post_type']) && $_POST['post_type'] == self::POST_TYPE && current_user_can('edit_post', $post_id)) {
                 foreach ($this->_meta as $field_name) {
@@ -140,7 +142,7 @@ if (!class_exists('Post_Type_Program')) {
         {
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info', 'scheduleplugin'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info', WP_Kivi_Schedule_Plugin::textdomain), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }
 

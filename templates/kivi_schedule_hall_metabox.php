@@ -1,22 +1,30 @@
 <?php
-global $wpdb;
+/**
+ * fetch the cities
+ */
 $query = new WP_Query(array('post_type' => 'kivi_schedule_city'));
 $towns = array();
-while ($query->have_posts()) {
-    $query->the_post();
-    $towns[get_the_id()] = get_the_title();
+if (count($query->posts)) {
+    foreach ($query->posts as $post)
+        $towns[$post->ID] = $post->post_title;
 }
-$query_club = new WP_Query(array('post_type' => 'kivi_schedule_club'));
+wp_reset_query();
+
+/**
+ * fetch the clubs
+ */
+$query_club = new WP_Query(array('post_type' => Post_Type_Club::POST_TYPE));
 $clubs = array();
-while ($query_club->have_posts()) {
-    $query_club->the_post();
-    $clubs[get_the_id()] = get_the_title();
+if (count($query_club->posts)) {
+    foreach ($query_club->posts as $post)
+        $clubs[$post->ID] = $post->post_title;
 }
+wp_reset_query();
 ?>
 <table class="form-table">
     <tr valign="top">
         <th width="30%" class="metabox_label_column">
-            <label for="hall_city"> <?php echo __('City', 'scheduleplugin'); ?></label>
+            <label for="hall_city"> <?php echo __('City', WP_Kivi_Schedule_Plugin::textdomain); ?></label>
         </th>
         <td>
             <select id="select_cities" name="hall_city_id">
@@ -52,7 +60,7 @@ while ($query_club->have_posts()) {
     </tr>
     <tr valign="top">
         <th width="30%" class="metabox_label_column">
-            <label for="hall_group"><?php echo __('Club', 'scheduleplugin'); ?></label>
+            <label for="hall_group"><?php echo __('Club', WP_Kivi_Schedule_Plugin::textdomain); ?></label>
         </th>
         <td>
             <select class="hall-clubs-meta" id="select_clubs" name="hall_club_id">

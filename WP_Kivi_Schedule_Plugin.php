@@ -1,21 +1,25 @@
 <?php
+/*
+Plugin Name: WP_Kivi_Schedule_Plugin
+Version: 1.0
+Author: Arsey
+Text Domain: scheduleplugin
+*/
 
-//exit;
-// kivi_schedule -for tables;
 defined('ABSPATH') OR exit;
-/**
- * Plugin Name: WP_Kivi_Schedule_Plugin
- * Plugin URI:
- */
 if (!class_exists('WP_Kivi_Schedule_Plugin')) {
     /* define the constants plugin_id and plugin folder */
     define('WP_Kivi_Schedule_Plugin_id', 'WP_Kivi_Schedule_Plugin'); // plugin id
 
     /* the main class */
 
-    class WP_Kivi_Schedule_Plugin {
+    class WP_Kivi_Schedule_Plugin
+    {
 
-        public function __construct() {
+        const textdomain = 'scheduleplugin';
+
+        public function __construct()
+        {
 
             include_once 'functions.php';
 
@@ -53,10 +57,11 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             add_action("wp_ajax_nopriv_ksp_fetch_cities", array(&$this, "fetch_cities"));
             add_action("wp_ajax_ksp_fetch_cities", array(&$this, "ajax_fetch_cities"));
 
-            //filters
+            load_plugin_textdomain(self::textdomain, false, dirname(plugin_basename(__FILE__)) . '/languages/');
         }
 
-        function add_style_js() {
+        function add_style_js()
+        {
             wp_enqueue_script('jquery');
             wp_enqueue_script('jquery-ui-core');
             wp_enqueue_script('jquery-ui', plugins_url('/js/jquery-ui-1.11.2/jquery-ui.min.js', __FILE__), array('jquery'));
@@ -76,29 +81,49 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             wp_localize_script('imgicons-config', 'img_path', $img_path);
         }
 
-        function add_menu() {
-            //menu
+        function add_menu()
+        {
+            $capability = apply_filters('scheduleplugin_capability', 'edit_others_posts');
 
-            add_menu_page(__('Schedule','scheduleplugin'), __('Schedule','scheduleplugin'), 'switch_themes', 'time_table', array(&$this, 'menu_kivi_schedule'));
-            add_submenu_page('time_table', __('Schedule','scheduleplugin'), __('Schedule','scheduleplugin'), 'manage_options', 'kivi_schedule_city', array(&$this, 'menu_kivi_schedule'));
+            //menu
+            add_menu_page(
+                __('Schedule', self::textdomain),
+                __('Schedule', self::textdomain),
+                $capability,
+                'time_table',
+                array(&$this, 'menu_kivi_schedule')
+            );
+
+            add_submenu_page(
+                'time_table',
+                __('Schedule', self::textdomain),
+                __('Schedule', self::textdomain),
+                $capability,
+                'kivi_schedule_city',
+                array(&$this, 'menu_kivi_schedule')
+            );
         }
 
-        function menu_kivi_schedule() {
+        function menu_kivi_schedule()
+        {
             include_once 'view/schedule_page.php';
         }
 
-        function menu_kivi_schedule_post_types() {
+        function menu_kivi_schedule_post_types()
+        {
             include_once 'view/schedule_post_types.php';
         }
 
-        function function_init() {
+        function function_init()
+        {
             if (isset($_REQUEST['wp_kivischedule_excel'])) {
                 self::convert_data_to_excel();
                 die();
             }
         }
 
-        function special_nav_class($css_class = array(), $page = false) {
+        function special_nav_class($css_class = array(), $page = false)
+        {
             if (get_post_type() == 'kivi_schedule_city') {
                 if ($page->ID == get_option('page_for_posts')) {
                     foreach ($css_class as $k => $v) {
@@ -110,25 +135,33 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $css_class;
         }
 
-        static function fetch_cities() {
+        static function fetch_cities()
+        {
             $query = new WP_Query(array('post_type' => Post_Type_City::POST_TYPE, 'orderby' => 'title', 'order' => 'ASC'));
             $cities = array();
-            while ($query->have_posts()) {
-                $query->the_post();
-                $cities[] = array(
-                    'id' => get_the_ID(),
-                    'name' => get_the_title()
-                );
+
+            if (count($query->posts)) {
+                foreach ($query->posts as $post) {
+                    $query->the_post();
+                    $cities[] = array(
+                        'id' => $post->ID,
+                        'name' => $post->post_title
+                    );
+                }
             }
+            wp_reset_query();
+
             return $cities;
         }
 
-        function ajax_fetch_cities() {
+        function ajax_fetch_cities()
+        {
             echo json_encode(self::fetch_cities());
             exit();
         }
 
-        static function fetch_clubs_by_city($city_id = null) {
+        static function fetch_clubs_by_city($city_id = null)
+        {
             /* get city_id from request if it is AJAX request */
             if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_city_id']))
                 $city_id = $_REQUEST['kivischedule_city_id'];
@@ -150,21 +183,24 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             }
 
             $query = new WP_Query($args);
-            while ($query->have_posts()) {
-                $query->the_post();
 
-                $this_post_id = get_the_id();
-                $meta = get_post_meta($this_post_id);
+            if (count($query->posts)) {
+                foreach ($query->posts as $post) {
 
-                $club = array(
-                    'club_id' => $this_post_id,
-                    'club_name' => get_the_title(),
-                );
-                foreach ($meta as $key => $arr) {
-                    $club[$key] = $arr[0];
+                    $this_post_id = $post->ID;
+                    $meta = get_post_meta($this_post_id);
+
+                    $club = array(
+                        'club_id' => $this_post_id,
+                        'club_name' => $post->post_title,
+                    );
+                    foreach ($meta as $key => $arr) {
+                        $club[$key] = $arr[0];
+                    }
+                    $clubs_array[] = $club;
                 }
-                $clubs_array[] = $club;
             }
+            wp_reset_query();
 
             if (defined('DOING_AJAX') && DOING_AJAX)
                 exit(json_encode($clubs_array));
@@ -172,7 +208,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $clubs_array;
         }
 
-        static function fetch_club_schedule($club_id) {
+        static function fetch_club_schedule($club_id)
+        {
             global $wpdb;
             global $kivi_schedule_settings;
             $halls = self::fetch_hall_by_club($club_id, 'menu_order', 'ASC');
@@ -202,7 +239,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return null;
         }
 
-        static function fetch_hall_by_club($club_id = null, $orderby = 'title', $order = 'DESC') {
+        static function fetch_hall_by_club($club_id = null, $orderby = 'title', $order = 'DESC')
+        {
             /* get city_id from request if it is AJAX request */
             if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_club_id']))
                 $club_id = $_REQUEST['kivischedule_club_id'];
@@ -225,12 +263,13 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             }
 
             $query = new WP_Query($args);
-            while ($query->have_posts()) {
-                $query->the_post();
-                $halls_array[] = array(
-                    'hall_name' => get_the_title(),
-                    'hall_id' => get_the_id()
-                );
+            if (count($query->posts)) {
+                foreach ($query->posts as $post) {
+                    $halls_array[] = array(
+                        'hall_name' => $post->post_title,
+                        'hall_id' => $post->ID
+                    );
+                }
             }
 
             if (defined('DOING_AJAX') && DOING_AJAX)
@@ -242,7 +281,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         /**
          * return full information about programs including meta
          */
-        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail', $per_page = 100) {
+        static function fetch_programs($with_thumbnails = false, $thumbnail_size = 'thumbnail', $per_page = 100)
+        {
             $programs = array();
             $query = new WP_Query(array(
                 'post_type' => Post_Type_Program::POST_TYPE,
@@ -250,43 +290,48 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 'orderby' => 'title',
                 'order' => 'ASC'
             ));
-            while ($query->have_posts()) {
-                $query->the_post();
 
-                $program = array(
-                    'id' => get_the_ID(),
-                    'title' => get_the_title()
-                );
+            if (count($query->posts)) {
+                foreach ($query->posts as $post) {
 
-                $meta = get_post_meta(get_the_ID());
-                if ($meta) {
-                    foreach ($meta as $key => $arr) {
-                        $program[$key] = $arr[0];
+                    $program = array(
+                        'id' => $post->ID,
+                        'title' => $post->post_title
+                    );
+
+                    $meta = get_post_meta($post->ID);
+                    if ($meta) {
+                        foreach ($meta as $key => $arr) {
+                            $program[$key] = $arr[0];
+                        }
                     }
+
+                    if ($with_thumbnails)
+                        $program['thumbnail'] = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), $thumbnail_size);
+
+                    $programs[] = $program;
                 }
-
-                if ($with_thumbnails)
-                    $program['thumbnail'] = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), $thumbnail_size);
-
-                $programs[] = $program;
             }
+            wp_reset_query();
 
             return $programs;
         }
 
-        static function fetch_programs_dictionary() {
+        static function fetch_programs_dictionary()
+        {
             $programs = array();
-            $query = new WP_Query(array('post_type' => Post_Type_Program::POST_TYPE,'posts_per_page'=>1000));
-            while ($query->have_posts()) {
-                $query->the_post();
+            $query = new WP_Query(array('post_type' => Post_Type_Program::POST_TYPE, 'posts_per_page' => 1000));
+            if (count($query->posts)) {
+                foreach ($query as $post) {
+                    $program = array(
+                        'id' => $post->ID,
+                        'title' => $post->post_title
+                    );
 
-                $program = array(
-                    'id' => get_the_ID(),
-                    'title' => get_the_title()
-                );
-
-                $programs[get_the_ID()] = $program;
+                    $programs[$post->ID] = $program;
+                }
             }
+
             $programs[0] = array(
                 'id' => 0,
                 'title' => ''
@@ -295,7 +340,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $programs;
         }
 
-        static function get_programs_in_categories() {
+        static function get_programs_in_categories()
+        {
             global $wpdb;
             $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM wp_posts p
                 LEFT OUTER JOIN wp_term_relationships r ON r.object_id = p.ID
@@ -333,7 +379,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                 if ($posts_not_in_categories) {
                     $taxonomies[0] = array(
                         'term_id' => 0,
-                        'name' => _x('Not in category', 'kiwi_schedule_programs'),
+                        'name' => __('Not in category', self::textdomain),
                         'programs' => array()
                     );
                     foreach ($posts_not_in_categories as $p) {
@@ -346,7 +392,8 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $taxonomies;
         }
 
-        static function create_select_program($selected_value, $data, $select_class) {
+        static function create_select_program($selected_value, $data, $select_class)
+        {
             $select = '<select class="schedule_program_select ' . $select_class . '"><option value="0"></option>';
             foreach ($data as $value) {
                 if ($selected_value == $value['id']) {
@@ -359,13 +406,54 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
             return $select;
         }
 
-        static function get_team_in_categories($club_id=null) {
+        static function get_methodists($per_page = 100, $with_thumbnails = false, $thumbnail_size = 'full')
+        {
+            $methodists = array();
+
+            $query = new WP_Query(array(
+                'post_type' => Post_Type_Team::POST_TYPE,
+                'posts_per_page' => $per_page,
+                'orderby' => 'title',
+                'order' => 'ASC',
+                'meta_query' => array(
+                    array(
+                        'key' => 'team_is_methodist',
+                        'value' => 'on'
+                    )
+                )
+            ));
+            if (count($query->posts)) {
+                foreach ($query->posts as $post) {
+                    $methodist = array(
+                        'id' => $post->ID,
+                        'title' => $post->post_title
+                    );
+
+                    $meta = get_post_meta($post->ID);
+                    if ($meta) {
+                        foreach ($meta as $key => $arr)
+                            $methodist[$key] = $arr[0];
+                    }
+
+                    if ($with_thumbnails)
+                        $methodist['thumbnail'] = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), $thumbnail_size);
+
+                    $methodists[] = $methodist;
+                }
+            }
+            wp_reset_query();
+
+            return $methodists;
+        }
+
+        static function get_team_in_categories($club_id = null)
+        {
             global $wpdb;
 
-            $club_where_sql='';
-            if($club_id){
-                $club_where_sql=" AND p.ID IN(SELECT post_id FROM `wp_postmeta` WHERE meta_key='team_club_id'
-AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER."%')";
+            $club_where_sql = '';
+            if ($club_id) {
+                $club_where_sql = " AND p.ID IN(SELECT post_id FROM `wp_postmeta` WHERE meta_key='team_club_id'
+AND meta_value LIKE '%" . Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER . $club_id . Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER . "%')";
             }
 
             $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM wp_posts p
@@ -374,8 +462,7 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
                 LEFT OUTER JOIN wp_terms t ON t.term_id = x.term_id
                 WHERE p.post_status = 'publish'
                 AND p.post_type = '" . Post_Type_Team::POST_TYPE . "'
-                AND x.taxonomy = '" . Post_Type_Team::CAT_TAXONOMY . "'".$club_where_sql, ARRAY_A);
-
+                AND x.taxonomy = '" . Post_Type_Team::CAT_TAXONOMY . "'" . $club_where_sql, ARRAY_A);
 
 
             $taxonomies = array();
@@ -388,7 +475,7 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
                             'programs' => array()
                         );
 
-                    $team_member = array('ID' => $r['post_id'], 'post_title' => $r['post_title'],'permalink'=>get_the_permalink($r['post_id']));
+                    $team_member = array('ID' => $r['post_id'], 'post_title' => $r['post_title'], 'permalink' => get_the_permalink($r['post_id']));
 
                     $taxonomies[$r['term_id']]['team'][] = $team_member;
                 }
@@ -397,7 +484,32 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
             return $taxonomies;
         }
 
-        static function checkbox_status($value) {
+        static function get_team()
+        {
+            $query = new WP_Query(array(
+                'post_type' => Post_Type_Team::POST_TYPE,
+                'posts_per_page' => 1000,
+                'orderby' => 'title',
+                'order' => 'ASC',
+            ));
+
+            $team = array();
+            if (count($query->posts)) {
+                foreach ($query->posts as $post) {
+                    $team[] = array(
+                        'ID' => $post->ID,
+                        'post_title' => $post->post_title
+                    );
+                }
+            }
+
+            wp_reset_query();
+
+            return $team;
+        }
+
+        static function checkbox_status($value)
+        {
             if (is_null($value) || $value == 0) {
                 return '';
             } else {
@@ -405,7 +517,8 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
             }
         }
 
-        static function fetch_schedule_data() {
+        static function fetch_schedule_data()
+        {
             global $wpdb;
             global $kivi_schedule_settings;
             if (defined('DOING_AJAX') && DOING_AJAX && isset($_REQUEST['kivischedule_city_id'])) {
@@ -415,39 +528,66 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
 
             $programs = self::fetch_programs(false, 'thumbnail', 1000);
 
-            $schedule_header .= '<thead><tr> <th class="headerSortUp">' . __('Time','scheduleplugin') . '</th>';
-            $schedule_header .= '<th>' . __('Monday','scheduleplugin') . '</th>';
-            $schedule_header .= '<th>' . __('Tuesday','scheduleplugin') . '</th>';
-            $schedule_header .= '<th>' . __('Wednesday','scheduleplugin') . '</th>';
-            $schedule_header .= '<th>' . __('Thursday','scheduleplugin') . '</th>';
-            $schedule_header .= '<th>' . __('Friday','scheduleplugin') . '</th>';
-            $schedule_header .= '<th>' . __('Saturday','scheduleplugin') . '</th>';
-            $schedule_header .= '<th>' . __('Sunday','scheduleplugin') . '</th>';
-            $schedule_header .= '<th>' . __('Delete','scheduleplugin') . '</th></tr></thead>';
+            $schedule_header .= '<thead><tr> <th class="headerSortUp">' . __('Time', self::textdomain) . '</th>';
+            $schedule_header .= '<th>' . __('Monday', self::textdomain) . '</th>';
+            $schedule_header .= '<th>' . __('Tuesday', self::textdomain) . '</th>';
+            $schedule_header .= '<th>' . __('Wednesday', self::textdomain) . '</th>';
+            $schedule_header .= '<th>' . __('Thursday', self::textdomain) . '</th>';
+            $schedule_header .= '<th>' . __('Friday', self::textdomain) . '</th>';
+            $schedule_header .= '<th>' . __('Saturday', self::textdomain) . '</th>';
+            $schedule_header .= '<th>' . __('Sunday', self::textdomain) . '</th>';
+            $schedule_header .= '<th>' . __('Delete', self::textdomain) . '</th></tr></thead>';
 
             $Cities = new WP_Query(array('post_type' => Post_Type_City::POST_TYPE));
             $Cities_posts = $Cities->get_posts();
-            $Clubs = new WP_Query(array('post_type' => Post_Type_Club::POST_TYPE));
+
+            $is_current_user_club_manager = WP_Kivi_Schedule_Plugin::is_user_current_club_manager();
+
+
+            $clubs_query_args = array(
+                'post_type' => Post_Type_Club::POST_TYPE,
+            );
+            if ($is_current_user_club_manager) {
+                $clubs_query_args['p'] = $is_current_user_club_manager['user_club'];
+            }
+            $Clubs = new WP_Query($clubs_query_args);
             $Clubs_posts = $Clubs->get_posts();
-            $Halls = new WP_Query(array('post_type' => Post_Type_Hall::POST_TYPE));
+
+
+            $halls_query_args = array('post_type' => Post_Type_Hall::POST_TYPE);
+            if ($is_current_user_club_manager) {
+                $halls_query_args['meta_query'] = array(
+                    array(
+                        'key' => 'hall_club_id',
+                        'value' => $is_current_user_club_manager['user_club']
+                    )
+                );
+            }
+            $Halls = new WP_Query($halls_query_args);
             $Halls_posts = $Halls->get_posts();
+
+
             $Schedule_data = $wpdb->get_results('SELECT * FROM ' . $kivi_schedule_settings['kivi_schedule_table'] . ' ORDER BY time', ARRAY_A);
             $Citie_content_block = '';
 
             foreach ($Cities_posts as $city) {
                 $city_id = $city->ID;
-                $Citie_content_block .= '<section class="schedule-city" data-city-id="' . $city_id . '"><h2 class="schedule-cities">' . _x('City', 'kiwi_schedule_cities') . ' ' . $city->post_title . '</h2>';
+
+                $Citie_content_block .= '<section class="schedule-city" data-city-id="' . $city_id . '"><h2 class="schedule-cities">' . __('City', self::textdomain) . ' ' . $city->post_title . '</h2>';
+
                 foreach ($Clubs_posts as $club) {
                     $club_id = $club->ID;
                     $club_city_id = get_post_meta($club_id, 'club_city_id');
                     if ($club_city_id[0] == $city_id) {
-                        $Citie_content_block .= '<article class="schedule-club-name" data-club-id ="' . $club_id . '"><h3 class="schedule-clubs-in-city"> ' . _x('Club', 'kiwi_schedule_clubs') . ' ' . $club->post_title . '</h3>';
+
+                        $Citie_content_block .= '<article class="schedule-club-name" data-club-id ="' . $club_id . '"><h3 class="schedule-clubs-in-city"> ' . __('Club', self::textdomain) . ' ' . $club->post_title . '</h3>';
+
                         foreach ($Halls_posts as $hall) {
                             $hall_club_id = get_post_meta($hall->ID, 'hall_club_id');
                             $hall_id = $hall->ID;
                             if ($club_id == $hall_club_id[0]) {
                                 $Citie_content_block .= '<div class="hall-schedule" data-hall-id="' . $hall_id . '">';
-                                $Citie_content_block .= '<h4 class="schedule-halls-in-clubs"><span>' . $hall->post_title . '</span><a href="javascript:void(0)" class="add-new-schedule-row"> ' . __('Add New Schedule','scheduleplugin') . '</a></h4>';
+                                $Citie_content_block .= '<h4 class="schedule-halls-in-clubs"><span>' . $hall->post_title . '</span><a href="javascript:void(0)" class="add-new-schedule-row"> ' . __('Add New Schedule', self::textdomain) . '</a></h4>';
                                 $Citie_content_block .= '<table class="schedule-table">';
                                 $Citie_content_block .= $schedule_header;
 
@@ -499,7 +639,8 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
             // die();
         }
 
-        function save_schedule_data() {
+        function save_schedule_data()
+        {
             global $wpdb;
             global $kivi_schedule_settings;
 
@@ -538,7 +679,7 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
                     'saturday_program_status' => $status_6,
                     'sunday_program_id' => $sched_7,
                     'sunday_program_status' => $status_7
-                        ), array('id' => $schedule_id), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
+                ), array('id' => $schedule_id), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
                 );
                 echo $schedule_id;
             } else {
@@ -559,7 +700,7 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
                     'saturday_program_status' => $status_6,
                     'sunday_program_id' => $sched_7,
                     'sunday_program_status' => $status_7
-                        ), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
+                ), array('%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d')
                 );
 
                 echo $wpdb->insert_id;
@@ -568,22 +709,31 @@ AND meta_value LIKE '%".Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER.$club_id.P
             die();
         }
 
-        function remove_schedule() {
+        function remove_schedule()
+        {
             global $wpdb;
             global $kivi_schedule_settings;
             if (isset($_REQUEST['schedule_id'])) {
                 $schedule_id = $_REQUEST['schedule_id'];
 
                 $wpdb->query(
-                        $wpdb->prepare(
-                                "
-DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
-                                " WHERE id = %d", $schedule_id)
+                    $wpdb->prepare(
+                        "DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] . " WHERE id = %d", $schedule_id)
                 );
             }
         }
 
-        static function convert_data_to_excel() {
+        static function is_user_current_club_manager()
+        {
+            $user = wp_get_current_user();
+            $user_club = esc_attr(get_the_author_meta('user_manages_club', $user->ID));
+            if (in_array('club_editor', $user->roles) && is_numeric($user_club))
+                return array('user' => $user, 'user_club' => $user_club);
+            return false;
+        }
+
+        static function convert_data_to_excel()
+        {
             global $wpdb;
             global $kivi_schedule_settings;
 
@@ -606,7 +756,7 @@ DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
                 $hall_id = null;
             }
 
-            $clubs = self :: fetch_clubs_by_city($city_id);
+            $clubs = self:: fetch_clubs_by_city($city_id);
             $schedule_data = $wpdb->get_results('SELECT * FROM ' . $kivi_schedule_settings['kivi_schedule_table'] . ' ORDER BY time', ARRAY_A);
             $programs = self:: fetch_programs_dictionary();
 
@@ -667,7 +817,7 @@ DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
                 } else {
                     $club_id_to_fetch = $club['club_id'];
                 }
-                $halls = self ::fetch_hall_by_club($club_id_to_fetch);
+                $halls = self::fetch_hall_by_club($club_id_to_fetch, 'menu_order', 'ASC');
 
                 if ($hall_id != null) {
                     for ($hall_index = 0; $hall_index < count($halls); $hall_index++) {
@@ -700,14 +850,14 @@ DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
                     $sheet->getStyle('A' . $row_index . ':I' . $row_index)->getFont()->setBold(true);
 
                     $sheet->setCellValue("A" . $row_index, '#');
-                    $sheet->setCellValue("B" . $row_index, __('Time','scheduleplugin'));
-                    $sheet->setCellValue("C" . $row_index, __('Monday','scheduleplugin'));
-                    $sheet->setCellValue("D" . $row_index, __('Tuesday','scheduleplugin'));
-                    $sheet->setCellValue("E" . $row_index, __('Wednesday','scheduleplugin'));
-                    $sheet->setCellValue("F" . $row_index, __('Thursday','scheduleplugin'));
-                    $sheet->setCellValue("G" . $row_index, __('Friday','scheduleplugin'));
-                    $sheet->setCellValue("H" . $row_index, __('Saturday','scheduleplugin'));
-                    $sheet->setCellValue("I" . $row_index, __('Sunday','scheduleplugin'));
+                    $sheet->setCellValue("B" . $row_index, __('Time', self::textdomain));
+                    $sheet->setCellValue("C" . $row_index, __('Monday', self::textdomain));
+                    $sheet->setCellValue("D" . $row_index, __('Tuesday', self::textdomain));
+                    $sheet->setCellValue("E" . $row_index, __('Wednesday', self::textdomain));
+                    $sheet->setCellValue("F" . $row_index, __('Thursday', self::textdomain));
+                    $sheet->setCellValue("G" . $row_index, __('Friday', self::textdomain));
+                    $sheet->setCellValue("H" . $row_index, __('Saturday', self::textdomain));
+                    $sheet->setCellValue("I" . $row_index, __('Sunday', self::textdomain));
 
                     $row_index++;
 
@@ -747,7 +897,8 @@ DELETE FROM " . $kivi_schedule_settings['kivi_schedule_table'] .
         /**
          * Plugin activation function
          */
-        public static function activate() {
+        public static function activate()
+        {
             global $kivi_schedule_settings;
             $path_to_installiation_file = $kivi_schedule_settings['path_to_kivi_schedule_folder'] . '/install.php';
             include_once($path_to_installiation_file);

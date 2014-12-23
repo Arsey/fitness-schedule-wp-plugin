@@ -9,15 +9,19 @@ if (!class_exists('Post_Type_Club')) {
     {
 
         const POST_TYPE = "kivi_schedule_club";
+        const CLUB_MULTI_META_DELIMITER = '##';
 
         private $_meta = array(
             'club_city_id',
             'club_is_active',
             'club_phone',
+            'club_email',
             'club_map_link',
             'club_video_link',
             'club_tour_link',
             'club_slider_shortcode',
+            'club_programs',
+            'club_services',
         );
 
         /**
@@ -26,7 +30,7 @@ if (!class_exists('Post_Type_Club')) {
         public function __construct()
         {
             // register actions
-            add_action('init', array(&$this, 'init'));
+            add_action('init', array(&$this, 'init'), 1);
             add_action('admin_init', array(&$this, 'admin_init'));
         }// END public function __construct()
 
@@ -47,18 +51,19 @@ if (!class_exists('Post_Type_Club')) {
         {
             register_post_type(self::POST_TYPE, array(
                     'labels' => array(
-                        'name' => __('Clubs', 'scheduleplugin'),
-                        'singular_name' => __('Club', 'scheduleplugin'),
-                        'add_new' => __('Add Club', 'scheduleplugin'),
-                        'view_item' => __('View', 'scheduleplugin'),
-                        'search_items' => __('Find Club', 'scheduleplugin'),
-                        'add_new_item' => __('Add Club', 'scheduleplugin')
+                        'name' => __('Clubs', WP_Kivi_Schedule_Plugin::textdomain),
+                        'singular_name' => __('Club', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new' => __('Add Club', WP_Kivi_Schedule_Plugin::textdomain),
+                        'view_item' => __('View', WP_Kivi_Schedule_Plugin::textdomain),
+                        'search_items' => __('Find Club', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new_item' => __('Add Club', WP_Kivi_Schedule_Plugin::textdomain)
                     ),
+                    'hierarchical' => true,
                     'public' => true,
                     'has_archive' => true,
                     'show_in_menu' => 'time_table',
                     'supports' => array(
-                        'title', 'editor'
+                        'title', 'editor', 'thumbnail'
                     )
                 )
             );
@@ -71,9 +76,10 @@ if (!class_exists('Post_Type_Club')) {
         {
             // verify if this is an auto save routine. 
             // If it is our form has not been submitted, so we dont want to do anything
-            if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
                 return;
-            }
+
+            if (defined('DOING_AJAX')) return;//to prevent deleting the post meta on quick edit
 
             if (isset($_POST['post_type']) && $_POST['post_type'] == self::POST_TYPE && current_user_can('edit_post', $post_id)) {
                 foreach ($this->_meta as $field_name) {
@@ -101,7 +107,7 @@ if (!class_exists('Post_Type_Club')) {
         {
             // Add this metabox to every selected post
             add_meta_box(
-                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info', 'scheduleplugin'), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
+                sprintf('wp_plugin_template_%s_section', self::POST_TYPE), __('Additional info', WP_Kivi_Schedule_Plugin::textdomain), array(&$this, 'add_inner_meta_boxes'), self::POST_TYPE
             );
         }// END public function add_meta_boxes()
 

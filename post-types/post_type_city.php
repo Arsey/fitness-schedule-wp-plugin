@@ -41,13 +41,13 @@ if (!class_exists('Post_Type_City')) {
         {
             register_post_type(self::POST_TYPE, array(
                     'labels' => array(
-                        'name' => __('Cities', 'scheduleplugin'),
-                        'singular_name' => __('City', 'scheduleplugin'),
-                        'title' => __('City Name', 'scheduleplugin'),
-                        'add_new' => __('Add City', 'scheduleplugin'),
-                        'view_item' => __('View', 'scheduleplugin'),
-                        'search_items' => __('Find City', 'scheduleplugin'),
-                        'add_new_item' => __('Add City', 'scheduleplugin')
+                        'name' => __('Cities', WP_Kivi_Schedule_Plugin::textdomain),
+                        'singular_name' => __('City', WP_Kivi_Schedule_Plugin::textdomain),
+                        'title' => __('City Name', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new' => __('Add City', WP_Kivi_Schedule_Plugin::textdomain),
+                        'view_item' => __('View', WP_Kivi_Schedule_Plugin::textdomain),
+                        'search_items' => __('Find City', WP_Kivi_Schedule_Plugin::textdomain),
+                        'add_new_item' => __('Add City', WP_Kivi_Schedule_Plugin::textdomain)
                     ),
                     'public' => true,
                     'has_archive' => true,
@@ -69,6 +69,8 @@ if (!class_exists('Post_Type_City')) {
             if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
                 return;
             }
+
+            if (defined('DOING_AJAX')) return;//to prevent deleting the post meta on quick edit
 
             if (isset($_POST['post_type']) && $_POST['post_type'] == self::POST_TYPE && current_user_can('edit_post', $post_id)) {
                 foreach ($this->_meta as $field_name) {

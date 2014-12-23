@@ -1,0 +1,346 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WP_Kivi_Schedule_Plugin\n"
+"POT-Creation-Date: 2014-12-09 12:14+0200\n"
+"PO-Revision-Date: 2014-12-09 13:05+0200\n"
+"Last-Translator: Alex <arseysensector@gmail.com>\n"
+"Language-Team: Alex <arseysensector@gmail.com>\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: js/jquery-ui-1.11.2/jquery-ui.min.js:8
+msgid "'"
+msgstr ""
+
+#: WP_Kivi_Schedule_Plugin.php:93 WP_Kivi_Schedule_Plugin.php:94
+#: WP_Kivi_Schedule_Plugin.php:102 WP_Kivi_Schedule_Plugin.php:103
+msgid "Schedule"
+msgstr "Расписание"
+
+#: WP_Kivi_Schedule_Plugin.php:372
+msgid "Not in category"
+msgstr "Не в категории"
+
+#: WP_Kivi_Schedule_Plugin.php:525 WP_Kivi_Schedule_Plugin.php:813
+msgid "Time"
+msgstr "Время"
+
+#: WP_Kivi_Schedule_Plugin.php:526 WP_Kivi_Schedule_Plugin.php:814
+msgid "Monday"
+msgstr "Понедельник"
+
+#: WP_Kivi_Schedule_Plugin.php:527 WP_Kivi_Schedule_Plugin.php:815
+msgid "Tuesday"
+msgstr "Вторник"
+
+#: WP_Kivi_Schedule_Plugin.php:528 WP_Kivi_Schedule_Plugin.php:816
+msgid "Wednesday"
+msgstr "Среда"
+
+#: WP_Kivi_Schedule_Plugin.php:529 WP_Kivi_Schedule_Plugin.php:817
+msgid "Thursday"
+msgstr "Четверг"
+
+#: WP_Kivi_Schedule_Plugin.php:530 WP_Kivi_Schedule_Plugin.php:818
+msgid "Friday"
+msgstr "Пятница"
+
+#: WP_Kivi_Schedule_Plugin.php:531 WP_Kivi_Schedule_Plugin.php:819
+msgid "Saturday"
+msgstr "Суббота"
+
+#: WP_Kivi_Schedule_Plugin.php:532 WP_Kivi_Schedule_Plugin.php:820
+msgid "Sunday"
+msgstr "Воскресенье"
+
+#: WP_Kivi_Schedule_Plugin.php:533
+msgid "Delete"
+msgstr "Удалить"
+
+#: WP_Kivi_Schedule_Plugin.php:546 post-types/post_type_city.php:45
+#: post-types/post_type_hall.php:110
+#: templates/kivi_schedule_club_metabox.php:28
+#: templates/kivi_schedule_hall_metabox.php:19
+msgid "City"
+msgstr "Город"
+
+#: WP_Kivi_Schedule_Plugin.php:551 post-types/post_type_club.php:53
+#: post-types/post_type_hall.php:111
+#: templates/kivi_schedule_hall_metabox.php:55
+#: templates/kivi_schedule_team_metabox.php:43
+msgid "Club"
+msgstr "Клуб"
+
+#: WP_Kivi_Schedule_Plugin.php:557
+msgid "Add New Schedule"
+msgstr "Добавить новое расписание"
+
+#: post-types/post_type_city.php:44
+msgid "Cities"
+msgstr "Города"
+
+#: post-types/post_type_city.php:46
+msgid "City Name"
+msgstr "Название города"
+
+#: post-types/post_type_city.php:47 post-types/post_type_city.php:50
+msgid "Add City"
+msgstr "Добавить город"
+
+#: post-types/post_type_city.php:48 post-types/post_type_club.php:55
+#: post-types/post_type_hall.php:53 post-types/post_type_program.php:56
+#: post-types/post_type_team.php:63
+msgid "View"
+msgstr "Просмотр"
+
+#: post-types/post_type_city.php:49
+msgid "Find City"
+msgstr "Найти город"
+
+#: post-types/post_type_club.php:52
+msgid "Clubs"
+msgstr "Клубы"
+
+#: post-types/post_type_club.php:54 post-types/post_type_club.php:57
+msgid "Add Club"
+msgstr "Добавить клуб"
+
+#: post-types/post_type_club.php:56
+msgid "Find Club"
+msgstr "Найти клуб"
+
+#: post-types/post_type_club.php:106 post-types/post_type_program.php:143
+#: post-types/post_type_team.php:150
+msgid "Additional info"
+msgstr "Дополнительная информация"
+
+#: post-types/post_type_hall.php:50
+msgid "Halls"
+msgstr "Залы"
+
+#: post-types/post_type_hall.php:51 post-types/post_type_hall.php:137
+msgid "Hall"
+msgstr "Зал"
+
+#: post-types/post_type_hall.php:52 post-types/post_type_hall.php:55
+msgid "Add Hall"
+msgstr "Добавить зал"
+
+#: post-types/post_type_hall.php:54
+msgid "Find Hall"
+msgstr "Найти зал"
+
+#: post-types/post_type_program.php:53
+#: templates/kivi_schedule_club_metabox.php:98
+msgid "Programs"
+msgstr "Программы"
+
+#: post-types/post_type_program.php:54
+msgid "Program"
+msgstr "Программа"
+
+#: post-types/post_type_program.php:55 post-types/post_type_program.php:58
+msgid "Add Program"
+msgstr "Добавить программу"
+
+#: post-types/post_type_program.php:57
+msgid "Find Program"
+msgstr "Найти программу"
+
+#: post-types/post_type_program.php:72
+msgid "Program Categories"
+msgstr "Категории программ"
+
+#: post-types/post_type_program.php:73
+msgid "Program Category"
+msgstr "Категория программы"
+
+#: post-types/post_type_program.php:74
+msgid "Search Programs Categories"
+msgstr "Поиск категории программ"
+
+#: post-types/post_type_program.php:75
+msgid "Popular Categories"
+msgstr "Популярные категории"
+
+#: post-types/post_type_program.php:76
+msgid "All Programs Categories"
+msgstr "Все категории программ"
+
+#: post-types/post_type_program.php:77 post-types/post_type_team.php:84
+msgid "Parent Category"
+msgstr "Родительская категория"
+
+#: post-types/post_type_program.php:78 post-types/post_type_team.php:85
+msgid "Parent Category:"
+msgstr "Родительская программ:"
+
+#: post-types/post_type_program.php:79 post-types/post_type_team.php:86
+msgid "Edit Category"
+msgstr "Редактировать категорию"
+
+#: post-types/post_type_program.php:80 post-types/post_type_team.php:87
+msgid "Update Category"
+msgstr "Обновить категорию"
+
+#: post-types/post_type_program.php:81 post-types/post_type_team.php:88
+msgid "Add New Category"
+msgstr "Добавить новую категорию"
+
+#: post-types/post_type_program.php:82 post-types/post_type_team.php:89
+msgid "New Category Name"
+msgstr "Имя новой категории"
+
+#: post-types/post_type_program.php:83
+msgid "Separate categories with commas"
+msgstr "Разделите категории запятыми"
+
+#: post-types/post_type_program.php:84
+msgid "Add or remove categories"
+msgstr "Добавить или удалить категории"
+
+#: post-types/post_type_program.php:85
+msgid "Choose from the most used categories"
+msgstr ""
+
+#: post-types/post_type_program.php:86
+msgid "Programs Categories"
+msgstr ""
+
+#: post-types/post_type_team.php:60
+msgid "Teams"
+msgstr "Команда"
+
+#: post-types/post_type_team.php:61
+msgid "Team"
+msgstr "Член команды"
+
+#: post-types/post_type_team.php:62 post-types/post_type_team.php:65
+msgid "Add team"
+msgstr "Добавить члена команды"
+
+#: post-types/post_type_team.php:64
+msgid "Find team"
+msgstr "Найти члена команды"
+
+#: post-types/post_type_team.php:66
+msgid "Edit Team Member"
+msgstr "Редактировать члена команды"
+
+#: post-types/post_type_team.php:79 post-types/post_type_team.php:93
+msgid "Team Categories"
+msgstr "Категории команды"
+
+#: post-types/post_type_team.php:80
+msgid "Category"
+msgstr "Категория"
+
+#: post-types/post_type_team.php:81
+msgid "Search Team Categories"
+msgstr "Поиск по категориям команды"
+
+#: post-types/post_type_team.php:82
+msgid "Popular Team Categories"
+msgstr "Популярные категории для команды"
+
+#: post-types/post_type_team.php:83
+msgid "All Team Categories"
+msgstr "Все категории"
+
+#: post-types/post_type_team.php:90
+msgid "Separate team categories with commas"
+msgstr ""
+
+#: post-types/post_type_team.php:91
+msgid "Add or remove team categories"
+msgstr ""
+
+#: post-types/post_type_team.php:92
+msgid "Choose from the most used team categories"
+msgstr ""
+
+#: templates/kivi_schedule_club_metabox.php:42
+msgid "Phone"
+msgstr "Телефон"
+
+#: templates/kivi_schedule_club_metabox.php:51
+msgid "Map Link"
+msgstr "Ссылка Google-карты"
+
+#: templates/kivi_schedule_club_metabox.php:61
+msgid "Video Link"
+msgstr "Видео-ссылка"
+
+#: templates/kivi_schedule_club_metabox.php:64
+msgid "Put here only the video code like \"UmJ5tHqpk_I\""
+msgstr ""
+"Нужно вписать только код видео, который похож по формату на \"UmJ5tHqpk_I\""
+
+#: templates/kivi_schedule_club_metabox.php:71
+msgid "Virtual Tour Link"
+msgstr "Ссылка на виртуальный тур"
+
+#: templates/kivi_schedule_club_metabox.php:80
+msgid "Meta Slider Short Code"
+msgstr "Шорт-код Meta Slider"
+
+#: templates/kivi_schedule_club_metabox.php:89
+#: templates/kivi_schedule_prog_metabox.php:22
+#: templates/kivi_schedule_team_metabox.php:134
+msgid "Is Active"
+msgstr "Активный"
+
+#: templates/kivi_schedule_prog_metabox.php:4
+msgid "Short Description"
+msgstr "Краткое описание"
+
+#: templates/kivi_schedule_prog_metabox.php:13
+msgid "Details Link"
+msgstr "Ссылка"
+
+#: templates/kivi_schedule_team_metabox.php:80
+msgid "Description"
+msgstr "Описание"
+
+#: templates/kivi_schedule_team_metabox.php:91
+msgid "Facebook Link"
+msgstr "Ссылка Facebook"
+
+#: templates/kivi_schedule_team_metabox.php:102
+msgid "VK Link"
+msgstr "Ссылка vk.com"
+
+#: templates/kivi_schedule_team_metabox.php:112
+msgid "Is Methodist"
+msgstr "Является ли методистом"
+
+#: templates/kivi_schedule_team_metabox.php:123
+msgid "Methodist Description"
+msgstr "Описание методиста"
+
+#: view/schedule_page.php:20
+msgid "City filter"
+msgstr "Фильтр города"
+
+#: view/schedule_page.php:29
+msgid "Club filter"
+msgstr "Фильтр клуба"
+
+#: view/schedule_page.php:30
+msgid "Hall filter"
+msgstr "Фильтр зала"
+
+#: view/schedule_page.php:31
+msgid "Export"
+msgstr "Экспорт"

@@ -7,9 +7,11 @@ $team_clubs = explode(Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER, $team_club_
 $first_name = isset($post_meta['team_first_name']) ? $post_meta['team_first_name'][0] : '';
 $team_last_name = isset($post_meta['team_last_name']) ? $post_meta['team_last_name'][0] : '';
 $team_description = isset($post_meta['team_description']) ? $post_meta['team_description'][0] : '';
+$team_methodist_description = isset($post_meta['team_methodist_description']) ? $post_meta['team_methodist_description'][0] : '';
 $team_facebook_link = isset($post_meta['team_facebook_link']) ? $post_meta['team_facebook_link'][0] : '';
 $team_vk_link = isset($post_meta['team_vk_link']) ? $post_meta['team_vk_link'][0] : '';
 $team_is_active = (isset($post_meta['team_is_active']) && $post_meta['team_is_active'][0] !== '') ? $selected = 'checked' : $selected = '';
+$team_is_methodist = (isset($post_meta['team_is_methodist']) && $post_meta['team_is_methodist'][0] !== '') ? $selected = 'checked' : $selected = '';
 
 
 $cities = WP_Kivi_Schedule_Plugin::fetch_cities();
@@ -29,8 +31,6 @@ if ($clubs) {
         }
     }
 }
-
-wp_reset_postdata();
 ?>
 <table class="form-table">
 
@@ -38,7 +38,7 @@ wp_reset_postdata();
     <!--Club-->
     <tr valign="top">
         <th width="30%">
-            <label for="team_club_id"><?php echo __('Club', 'scheduleplugin'); ?></label>
+            <label for="team_club_id"><?php echo __('Club', WP_Kivi_Schedule_Plugin::textdomain); ?></label>
         </th>
         <td>
             <?php
@@ -75,7 +75,7 @@ wp_reset_postdata();
     <!--Description-->
     <tr>
         <th>
-            <label for="program_description"><?php echo __('Description', 'scheduleplugin'); ?> </label>
+            <label for="program_description"><?php echo __('Description', WP_Kivi_Schedule_Plugin::textdomain); ?> </label>
         </th>
         <td>
             <textarea rows="5" cols="50" id="team_description"
@@ -86,7 +86,7 @@ wp_reset_postdata();
     <!--Facebook Link-->
     <tr valign="top">
         <th width="30%">
-            <label for="team_facebook_link"><?php echo __('Facebook Link', 'scheduleplugin'); ?></label>
+            <label for="team_facebook_link"><?php echo __('Facebook Link', WP_Kivi_Schedule_Plugin::textdomain); ?></label>
         </th>
         <td>
             <input type="text" id="team_facebook_link" name="team_facebook_link"
@@ -97,17 +97,39 @@ wp_reset_postdata();
     <!--Vk Link-->
     <tr valign="top">
         <th width="30%">
-            <label for="team_vk_link"><?php echo __('VK Link', 'scheduleplugin'); ?></label>
+            <label for="team_vk_link"><?php echo __('VK Link', WP_Kivi_Schedule_Plugin::textdomain); ?></label>
         </th>
         <td>
             <input type="text" id="team_vk_link" name="team_vk_link" value="<?php echo $team_vk_link; ?>">
         </td>
     </tr>
 
+    <!--Is Methodist-->
+    <tr>
+        <th>
+            <label for="team_is_methodist"><?php echo __('Is Methodist', WP_Kivi_Schedule_Plugin::textdomain); ?></label>
+        </th>
+        <td>
+            <input id="team_is_methodist" name="team_is_methodist" type="checkbox" <?php echo $team_is_methodist; ?>/>
+        </td>
+    </tr>
+
+    <!--Methodist Description-->
+    <tr id="team_methodist_description-row">
+        <th>
+            <label
+                for="team_methodist_description"><?php echo __('Methodist Description', WP_Kivi_Schedule_Plugin::textdomain); ?> </label>
+        </th>
+        <td>
+            <textarea rows="5" cols="50" id="team_methodist_description"
+                      name="team_methodist_description"><?php echo $team_methodist_description; ?></textarea>
+        </td>
+    </tr>
+
     <!--Is Active-->
     <tr>
         <th>
-            <label for="team_is_active"><?php echo __('Is Active', 'scheduleplugin'); ?></label>
+            <label for="team_is_active"><?php echo __('Is Active', WP_Kivi_Schedule_Plugin::textdomain); ?></label>
         </th>
         <td>
             <input id="team_is_active" name="team_is_active" type="checkbox" <?php echo $team_is_active; ?>/>
@@ -120,6 +142,10 @@ wp_reset_postdata();
         $(function () {
             $('input[name="team_club_id_part"]').change(function () {
                 updateTeamClubIds();
+            });
+
+            $('input[name="team_is_methodist"]').change(function () {
+                toggleMethodistDescription();
             });
 
             function updateTeamClubIds() {
@@ -138,6 +164,17 @@ wp_reset_postdata();
                     $('#team_club_id').val('');
                 }
             }
+
+            function toggleMethodistDescription() {
+                var $textareaRow = $('#team_methodist_description-row');
+                if ($('input[name="team_is_methodist"]').is(':checked')) {
+                    $textareaRow.show();
+                } else {
+                    $textareaRow.hide();
+                }
+            };
+
+            toggleMethodistDescription();
 
             updateTeamClubIds();
         })

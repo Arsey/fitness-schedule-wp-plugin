@@ -168,7 +168,11 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
             $clubs_array = array();
 
-            $args = array('post_type' => Post_Type_Club::POST_TYPE);
+            $args = array(
+                'post_type' => Post_Type_Club::POST_TYPE,
+                'orderby' => 'menu_order',
+                'order' => 'ASC'
+            );
             /* add query by club_city_id meta key */
             if ($city_id) {
                 $args['meta_query'] = array(
@@ -343,7 +347,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
         static function get_programs_in_categories()
         {
             global $wpdb;
-            $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM wp_posts p
+            $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM {$wpdb->prefix}posts p
                 LEFT OUTER JOIN wp_term_relationships r ON r.object_id = p.ID
                 LEFT OUTER JOIN wp_term_taxonomy x ON x.term_taxonomy_id = r.term_taxonomy_id
                 LEFT OUTER JOIN wp_terms t ON t.term_id = x.term_id
@@ -360,7 +364,7 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
                     $postsIds[] = $r['post_id'];
                 }
 
-                $sql = "SELECT p.ID as post_id,p.post_title FROM wp_posts p WHERE p.ID NOT IN('" . implode("','", $postsIds) . "') AND p.post_status = 'publish' AND p.post_type = '" . Post_Type_Program::POST_TYPE . "'";
+                $sql = "SELECT p.ID as post_id,p.post_title FROM {$wpdb->prefix}posts p WHERE p.ID NOT IN('" . implode("','", $postsIds) . "') AND p.post_status = 'publish' AND p.post_type = '" . Post_Type_Program::POST_TYPE . "'";
                 $posts_not_in_categories = $wpdb->get_results($sql, ARRAY_A);
 
                 foreach ($results as $r) {
@@ -452,11 +456,11 @@ if (!class_exists('WP_Kivi_Schedule_Plugin')) {
 
             $club_where_sql = '';
             if ($club_id) {
-                $club_where_sql = " AND p.ID IN(SELECT post_id FROM `wp_postmeta` WHERE meta_key='team_club_id'
+                $club_where_sql = " AND p.ID IN(SELECT post_id FROM `{$wpdb->prefix}postmeta` WHERE meta_key='team_club_id'
 AND meta_value LIKE '%" . Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER . $club_id . Post_Type_Team::TEAM_MEMBER_CLUB_ID_DELIMITER . "%')";
             }
 
-            $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM wp_posts p
+            $results = $wpdb->get_results("SELECT p.ID as post_id,p.post_title,x.term_taxonomy_id,t.term_id,t.name AS term_name FROM {$wpdb->prefix}posts p
                 LEFT OUTER JOIN wp_term_relationships r ON r.object_id = p.ID
                 LEFT OUTER JOIN wp_term_taxonomy x ON x.term_taxonomy_id = r.term_taxonomy_id
                 LEFT OUTER JOIN wp_terms t ON t.term_id = x.term_id

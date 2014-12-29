@@ -209,9 +209,9 @@ $programs = WP_Kivi_Schedule_Plugin::fetch_programs();
                                    class="club-service"
                                    name="dummy-club-service[]"
                                    value="<?php echo $post->ID; ?>"
-                                   id="dummy-club-service-<?php the_ID(); ?>"
+                                   id="dummy-club-service-<?php echo $post->ID; ?>"
                                 <?php echo $checked; ?>/>
-                            <?php the_title(); ?>
+                            <?php echo $post->post_title; ?>
                         </label>
                     <?php } ?>
                     <?php wp_reset_query(); ?>
